@@ -1,0 +1,338 @@
+<html>
+<head>
+    <style>
+
+        @font-face { font-family: roboto; src:url('../Roboto.woff2') format('woff'); }
+
+        *{ padding: 0px; margin: 0px; font-family: roboto; -webkit-user-select: none; }
+
+        header{ position: fixed; top: 0px; left: 0px; width: 100%; height: 80px; background-color: #445A65; z-index: 977; -webkit-transition: all 0.4s; }
+        .header-shadow{ -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); background-color: #ffffff; }
+        header h1{ line-height: 80px; margin-left: 27px; color: #ffffff; }
+        header p { line-height: 80px; color: #ffffff; }
+
+        header .info-toggle{ position: absolute; right: 3%; top: 27px; }
+        .info-toggle .MD-toggle{ float: left; }
+        .info-toggle p{ margin: 0px 17px; line-height: 30px; float: left; }
+
+        .contain{ position: absolute; margin: 77px 0px 120px 0px; width: 98%; height: auto; left: 50%; -webkit-transform: translateX(-50%); }
+        .contain section{ margin: 17px auto; }
+
+        .contain .info{ width: 1200px; height: auto; -webkit-transition: all 0.4s; overflow: hidden; }
+        .contain .info-hide{ height: 0px; }
+        .contain .info h3{ margin: 17px 0px; }
+        .contain .info p{ margin: 7px 0px; }
+
+        .code{ background-color: #E5E5E5; max-width: 600px; overflow-x: scroll; border: solid 1px #a9a9a9; margin: 17px 0px; padding: 7px 7px; color: #616161; }
+
+        .snakeGame{ width: 1200px; height: 461px; margin: 0px auto; padding: 1px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
+        .snakeGame-hide{ display: none; }
+        .snakeGame .score{ background-color: #ffffff; width: 100%; margin: 7px 0px; text-align: center; color: #000000; font-size: 2.7em; height: 47px; line-height: 47px; }
+        .snakeGame .cube{ width: 38px; height: 38px; margin: 1px; float: left; background-color: #a9a9a9; text-align: center; line-height: 38px; color: white; -webkit-transition: all 0.1s; }
+
+        .MD-toggle{ position: relative; width: 58px; height: 26px; border-radius: 13px; background-color: #E3E3E3; cursor: pointer; -webkit-transition: all 0.4s; }
+        .MD-toggle .toggler{ width: 30px; height: 30px; border-radius: 50%; background-color: #ffffff; position: absolute; top: -2px; left: -2px; -webkit-transition: all 0.4s; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
+        .MD-toggle .toggler-on{ background-color: #ffffff; -webkit-transform: translate(32px); }
+        .MD-toggle-on{ background-color: orangered; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Snake Game</h1>
+
+        <div class="info-toggle">
+            <p>SHOW INFO</p>
+            <div class="MD-toggle">
+                <div class="toggler"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="contain">
+        <section class="snakeGame">
+            <h2 class="score">1</h2>
+            <div class="board"></div>
+        </section>
+    </section>
+
+</body>
+<script>
+    var $ = function(obj){ return document.querySelector(obj) };
+
+    $('.MD-toggle').onclick = function(){
+        this.classList.toggle('MD-toggle-on');
+        $('.toggler').classList.toggle('toggler-on');
+    }
+</script>
+<script>
+var $  = function( obj ){ return document.querySelector( obj );                   };
+var $n = function( obj ){ return [].slice.call(document.querySelectorAll( obj )); };
+
+for(var i = 0; i<300; i++){
+    $('.snakeGame .board').innerHTML += '<div class="cube" data-tag="'+i+'"></div>';
+}
+
+var score = function(s){
+    this.s = s || 0;
+};
+score.prototype = {
+    plus : function(s)  { this.s += s; return this.s; },
+    minus: function( )  { this.s -= s; return this.s; },
+    clear: function( )  { this.s = 0;  return this.s;  }
+};
+
+var gameboard = function( size ){
+    var _ = this;
+
+    var size = size || { MAX_X: 0, MAX_Y: 0 };
+
+    var o = { NodeNumber: size.MAX_X * size.MAX_Y };
+
+    _.getPoint = function( tag ){
+        var tag = parseInt( tag );
+
+        if( tag >= o.NodeNumber ) return false;
+
+        var x = parseInt( tag % size.MAX_X ),
+                y = parseInt( tag / size.MAX_X );
+
+        var point = {
+            x: x,
+            y: y
+        };
+        return point;
+    };
+    _.AroundPosition = function( tag ){
+        var tag = parseInt( tag );
+
+        if( tag >= o.NodeNumber ) return false;
+
+        var point       = _.getPoint( tag),
+                x       = point.x,
+                y       = point.y,
+                lenghtX = size.MAX_X,
+                lenghtY = size.MAX_Y,
+                maxX    = lenghtX - 1,
+                maxY    = lenghtY - 1;
+
+        var leftTopPosition         = tag - lenghtX -1,
+                topPosition         = tag - lenghtX,
+                rightTopPosition    = tag - lenghtX + 1,
+                rightPosition       = tag + 1,
+                rightBottomPosition = tag + lenghtX + 1,
+                bottomPosition      = tag + lenghtX,
+                leftBottomPosition  = tag + lenghtX - 1,
+                leftPosition        = tag - 1;
+
+        switch (x){
+            case 0:
+                leftPosition        = null;
+                leftTopPosition     = null;
+                leftBottomPosition  = null;
+                break;
+            case maxX:
+                rightPosition       = null;
+                rightTopPosition    = null;
+                rightBottomPosition = null;
+                break;
+            default: break;
+        }
+
+        switch (y){
+            case 0:
+                topPosition         = null;
+                rightTopPosition    = null;
+                leftTopPosition     = null;
+                break;
+            case maxY:
+                bottomPosition      = null;
+                rightBottomPosition = null;
+                leftBottomPosition  = null;
+                break;
+            default: break;
+        }
+
+        var aroundPostion = {
+            leftTopPostion       : leftTopPosition,
+            topPosition          : topPosition,
+            rightTopPosition     : rightTopPosition,
+            rightPosition        : rightPosition,
+            rightBottomPosition  : rightBottomPosition,
+            bottomPosition       : bottomPosition,
+            leftBottomPosition   : leftBottomPosition,
+            leftPosition         : leftPosition
+        }
+
+        return aroundPostion;
+    }
+};
+
+var snakeBoard = new gameboard({ MAX_X: 30, MAX_Y: 10 });
+
+var enmu = {
+    snakeMoveDirection: { top  : 0, right: 1, down : 2, left : 3 },
+    CTSnakeAndCube    : { snakeTCUbe: 0, cubeTSnake: 1           }
+};
+
+var game = {
+    snake: [],
+    food: -1,
+    score: null,
+    gameStart: function(){
+        this.snakeInit();
+        this.foodInit();
+        this.newfood();
+
+        if(!this.score){
+            this.score = new score();
+        }else{
+            this.score.clear();
+        }
+    },
+    newfood: function(){
+
+        var p = parseInt( Math.random() * 300 );
+        if( this.snake.indexOf( p ) === -1 ){
+            this.food = p;
+            document.getElementsByClassName('cube')[p].style.backgroundColor = 'orangered';
+        }else{
+            this.newfood();
+        }
+
+    },
+    snakeInit: function(){
+        var s = parseInt( Math.random() * 150);
+
+        document.getElementsByClassName('cube')[s].style.backgroundColor = 'orangered';
+        this.snake.push( s );
+    },
+    foodInit: function(){
+
+    },
+    snakeAddNode: function( node ){
+        this.snake.push( node );
+
+        var snake = this.snake,
+                l = snake.length;
+
+        for(var i = 0; i<l; i++){
+            this.CTsnakeAndCube( snake[i], enmu.CTSnakeAndCube.cubeTSnake );
+        }
+
+        var s = this.score.plus(1);
+        $('.score').innerText = s+1;
+    },
+    CTsnakeAndCube: function( tag, CT ){
+        var cube = document.getElementsByClassName('cube');
+
+        if( CT === enmu.CTSnakeAndCube.cubeTSnake ){
+            cube[tag].style.backgroundColor = 'orangered';
+        }else if( CT === enmu.CTSnakeAndCube.snakeTCUbe ){
+            cube[tag].style.backgroundColor = '#a9a9a9';
+        }
+    },
+    Move: function( from, to ){
+
+        if( from.length !== to.length )
+            return false;
+
+        for( var i= 0, l = from.length; i<l; i++ ){
+            if( from[i] !== to[i] ){
+                this.CTsnakeAndCube( from[i], enmu.CTSnakeAndCube.snakeTCUbe );
+                this.CTsnakeAndCube( to[i], enmu.CTSnakeAndCube.cubeTSnake );
+            }
+        }
+
+        this.snake = to.slice();
+
+    },
+    snakeMove: function( direction ){
+
+        var     snake       = this.snake,
+                food        = this.food,
+                snakeHead   = snake[0],
+                snakeLenght = snake.length,
+                ap          = snakeBoard.AroundPosition( snakeHead ),
+                from        = snake.slice(),
+                to          = [],
+                lastTag     = snake[snakeLenght - 1];
+
+        if( direction === enmu.snakeMoveDirection.top ){
+            var t = ap.topPosition;
+            if( t !== null ){
+                snakeHead = t;
+            }
+        }else if( direction === enmu.snakeMoveDirection.right ){
+            var r = ap.rightPosition;
+            if( r !== null ){
+                snakeHead = r;
+            }
+        }else if( direction === enmu.snakeMoveDirection.down ){
+            var d = ap.bottomPosition;
+            if( d !== null ){
+                snakeHead = d;
+            }
+        }else if( direction === enmu.snakeMoveDirection.left ){
+            var l = ap.leftPosition;
+            if( l !== null ){
+                snakeHead = l;
+            }
+        }
+
+        if( snakeHead === snake[0] ){
+            this.gameOver();
+            return false;
+        }
+
+        if( snake.indexOf( snakeHead ) !== -1 ){
+            this.gameOver();
+            return false;
+        }
+
+        if( snakeLenght > 1 ){
+            for(var i=1; i<snakeLenght; i++ ){
+                to[i] = from[i - 1];
+            }
+        }
+
+        this.snake[0] = to[0] = snakeHead;
+        this.Move( from, to );
+
+        if( snakeHead === food ){
+            this.snakeAddNode( lastTag );
+            this.newfood();
+        }
+
+    },
+    gameOver: function(){
+        alert('gameOver');
+        this.snake.length = 0;
+        this.food = -1;
+        $n('.cube').forEach(function(cube, i){ cube.style.backgroundColor = '#a9a9a9'; });
+        $('.score').innerText = 1;
+        game.gameStart();
+    },
+    gameWin: function(){
+
+    }
+};
+
+game.gameStart();
+
+</script>
+<script>
+    (function(){
+        var BKCODE = { left :  37, top  :  38, right:  39, down :  40 };
+        document.onkeydown = function(e){
+            var KC = e.keyCode;
+            switch (KC){
+                case (BKCODE.left) : game.snakeMove(enmu.snakeMoveDirection.left) ; break;
+                case (BKCODE.top)  : game.snakeMove(enmu.snakeMoveDirection.top)  ; break;
+                case (BKCODE.right): game.snakeMove(enmu.snakeMoveDirection.right); break;
+                case (BKCODE.down) : game.snakeMove(enmu.snakeMoveDirection.down) ; break;
+            }
+        };
+    })();
+</script>
+</html>
