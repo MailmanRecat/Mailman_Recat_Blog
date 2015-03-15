@@ -17,9 +17,11 @@
         header{ position: fixed; top: 0px; left: 0px; width: 100%; height: 80px; background-color: #1573BD; z-index: 977; -webkit-transition: all 0.4s; }
         .header-shadow{ -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); background-color: #ffffff }
 
-        #setting{ position: absolute; left: 7px; top: 20px; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
+        header .setting{ top: 24px; left: 7px; }
+
+        .setting{ position: absolute; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
         .cycleBtn, .cycleBtn:before, .cycleBtn:after{ position: absolute; width: 4px; height: 4px; border-radius: 50%; background-color: #a9a9a9; }
-        .cycleBtn{ top: 10px; left: 12px; }
+        .cycleBtn{ top: 6px; left: 7px; }
         .cycleBtn:before{ content: ''; left: 0px; top: 8px; }
         .cycleBtn:after{ content: ''; left: 0px; top: 16px; }
 
@@ -27,6 +29,7 @@
         .settingBox-show{ height: 570px; width: 270px; }
         .settingBox ul{ list-style: none; }
         .settingBox ul li{ width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
+        .settingBox ul li a{ color: orangered; }
         .settingBox ul li a:visited{ color: orangered; }
         .settingBox .settingBox-hide{ position: absolute; left: 0px; bottom: 0px; height: 35px; width: 100%; background-color: #1573BD; border: none; outline: none; color: #ffffff; cursor: pointer; }
 
@@ -34,7 +37,7 @@
         .footer-show{ bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
         footer p{ color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
 
-        #search input{ position: fixed; font-size: 1.8em; outline: none; padding: 0px 7px; width: 60%; height: 48px; border: solid 1px #1573BD; border-radius: 4px; top: 16px; left: 50%; -webkit-transform: translatex(-50%); z-index: 999 }
+        #search input{ position: fixed; font-size: 1.8em; outline: none; padding: 0px 7px; width: 60%; height: 48px; border: none; border-radius: 4px; top: 16px; left: 50%; -webkit-transform: translatex(-50%); z-index: 999; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
         #searchBox{ display: none; position: fixed; width: 100%; height: 100%; left: 0px; top: 0px; background-color: #ffffff; opacity: 0.98; z-index: 998; }
         #searchBox .searchSuggest{ position: absolute; top: 80px; margin: 17px 17px; line-height: 16px; }
         #searchBox .searchRes{ position: absolute; width: 100%; bottom: 80px; top: 144px; left: 0px; overflow-y: scroll; list-style: none; border-bottom: solid 1px #1573BD; border-top: solid 1px #1573BD; }
@@ -50,7 +53,7 @@
         .icon-up{ top: 10px; width: 60px; height: 60px; }
 
         .contain{ position: absolute; margin: 120px 0px; width: 100%; height: auto; }
-        .contain section{ position: relative; margin: 27px 0px; width: 60%; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); left: 50%; -webkit-transform: translateX(-50%); }
+        .contain section{ position: relative; margin: 27px 0px; width: 60%; min-height: 77px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); left: 50%; -webkit-transform: translateX(-50%); }
         .contain section h1{ text-align: center; line-height: 77px }
         .contain section p{ text-align: center; margin: 0px 17px; }
         .contain section .normal-btn{ position: absolute; left: 50%; -webkit-transform: translateX(-50%); bottom: 17px; border: none; outline: none; border-radius: 2px; cursor: pointer; width: auto; padding: 0px 17px; height: 37px; font-size: 1.7em; }
@@ -68,12 +71,24 @@
         .info p{ color: #55DCBF; }
         .info button{ background-color: #55DCBF; color: #445A65; }
 
+        .hatejavascript{ height: 177px; background-color: #000000; }
+        .hatejavascript h1{ color: #ffffff; }
+        .hatejavascript p{ color: #ffffff; }
+
         .game-snake{ position: relative; background-color: #ffffff; height: 300px; }
         .game-snake p{ color: #616161; }
         .game-snake .snake{ list-style: none; width: 80%; margin: 17px auto; }
         .game-snake .snake li{ width: 4.8%; padding-top: 4.8%; background-color: #a9a9a9; float: left; margin: 0.2%; }
         .game-snake button{ background-color: #1573BD; color: #ffffff; }
         .game-snake button a:visited{ color: #ffffff; }
+
+        .zhihupaper{ background-color: #0098CE; height: 177px; }
+        .zhihupaper h1{ color: #ffffff; }
+        .zhihupaper p{ color: #ffffff; }
+        .zhihupaper button{ background-color: #ffffff; border: none; color: #0098CE; }
+        .zhihupaper button:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+        .zhihupaper button a{ color: orangered; }
+        .zhihupaper button a:visited{ color: orangered; }
 
         .RHC{ position: relative; height: 300px; background-color: orangered }
         .RHC h1{ color: #ffffff }
@@ -97,28 +112,30 @@
     <section class="ANIMATIONBG"></section>
 
     <header>
-        <div id="setting">
+        <div class="setting" id="mainSetting">
             <div class="cycleBtn"></div>
         </div>
     </header>
 
     <section class="settingBox animation-fast">
         <ul>
+            <li>Saying:</li>
+            <li>FUCK JAVASCRIPT!!!</li>
             <li><a href="#">Author:</a></li>
             <li><a href="#">Mailman_Recat</a></li>
+            <li>Email:</li>
             <li><a href="#">MailmanRecat@gmail.com</a></li>
             <li><a href="#">Github</a></li>
             <li><a href="#">Twitter</a></li>
         </ul>
-        <button class="settingBox-hide">hide</button>
+        <button class="settingBox-hide">Hide</button>
     </section>
 
     <section class="icon">
-        <!--<img src="icont.jpg">-->
     </section>
 
     <section class="contain">
-        <section class="chrome">
+        <section class="chrome card">
 
             <!--<div class="toggle"></div>-->
 
@@ -127,13 +144,25 @@
             <button class="normal-btn"><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">download</a></button>
         </section>
 
-        <section class="info">
+        <section class="info card">
             <h1>Library</h1>
             <p>This website is some kind of my personal Library, but call it personal blog is fine. sure u can browse what ever u like at here. lots of UIaction will be add or remove in the future.</p>
             <button class="normal-btn">Welcome</button>
         </section>
 
-        <section class="game-snake">
+        <section class="zhihupaper card">
+            <h1>zhihupaper</h1>
+            <p>New project.</p>
+            <button class="normal-btn"><a href="project/zhihupaper">Visit</a></button>
+        </section>
+
+        <section class="hatejavascript card" data-index="2">
+            <h1>Hate Javascript!</h1>
+            <p>FUCK javascript!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+            <button class="normal-btn">HATE!!</button>
+        </section>
+
+        <section class="game-snake card">
             <!--<div class="toggle"></div>-->
 
             <h1>A snake game</h1>
@@ -199,7 +228,7 @@
                 <li></li>
             </ul>
 
-            <button class="normal-btn">play</button>
+            <button class="normal-btn"><a href="project/snake.html">play</a></button>
         </section>
 
         <!--<section class="RHC">-->
@@ -211,7 +240,7 @@
     </section>
 
     <footer>
-        <p>Author: Mailman_Recat | mailmenrecat@gmail.com | <a>github</a> | <a>Twitter</a></p>
+        <p>Author: Mailman_Recat | MailmenRecat@gmail.com | <a>Github</a> | <a>Twitter</a></p>
     </footer>
 </body>
 <script>
@@ -286,10 +315,9 @@
          window.requestAnimationFrame(down);
     };
 
-    $('#setting').onclick         = function(){ UIaction.setting.show()        };
+    $('#mainSetting').onclick         = function(){ UIaction.setting.show()        };
 //    $('#setting').onclick         = function(){ i = 0; down()                         };
     $('.settingBox-hide').onclick = function(){ UIaction.setting.hide()        };
-
 
 </script>
 <script>

@@ -104,9 +104,11 @@ var gameboard = function( size ){
         return point;
     };
     _.AroundPosition = function( tag ){
-        var tag = parseInt( tag );
+        var tag =  Number(tag) || -1;
 
-        if( tag >= o.NodeNumber ) return false;
+        if( tag >= o.NodeNumber && tag === -1 ) return false;
+
+        var tag = parseInt(tag);
 
         var point       = _.getPoint( tag),
                 x       = point.x,
@@ -162,7 +164,7 @@ var gameboard = function( size ){
             bottomPosition       : bottomPosition,
             leftBottomPosition   : leftBottomPosition,
             leftPosition         : leftPosition
-        }
+        };
 
         return aroundPostion;
     }
