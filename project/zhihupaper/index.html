@@ -1,111 +1,248 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
     <style>
-        *{ padding: 0px; margin: 0px; }
-        html{ font-family: sans-serif; -webkit-text-size-adjust: 100%; -webkit-user-select: none; }
-        body{ font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
-        a{ text-decoration: none; }
+        *     { padding: 0px; margin: 0px; }
+        html  { font-family: sans-serif; -webkit-text-size-adjust: 100%; -webkit-user-select: none; }
+        body  { font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
+        a     { text-decoration: none; }
 
-        header, .animation-bg{ position: fixed; left: 0px; top: 0px; width: 100%; background-color: #0098CE; -webkit-transition: all 0.4s; }
-        header{ z-index: 977; height: 80px; }
-        .header-shadow{  -webkit-box-shadow:0 1px 6px rgba(0,0,0,.35); }
-        header h1{ line-height: 80px; text-align: center; color: #ffffff; }
+        header, .animation-bg  { position: fixed; left: 0px; top: 0px; width: 100%; background-color: #0098CE; -webkit-transition: all 0.4s; }
+        header                 { z-index: 977; height: 80px; }
+        .header-shadow         {  -webkit-box-shadow:0 1px 6px rgba(0,0,0,.35); }
+        header h1              { line-height: 80px; text-align: center; color: #ffffff; }
 
-        footer{ position: fixed; width: 100%; height: 48px; bottom: -48px; left: 0px; background-color: #ffffff; -webkit-transition: all 0.4s; }
-        .footer-show{ bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
-        footer p{ color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
+        footer         { position: fixed; width: 100%; height: 48px; bottom: -48px; left: 0px; background-color: #ffffff; -webkit-transition: all 0.4s; z-index: 997; }
+        .footer-show   { bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
+        footer p       { color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
 
-        header .setting{ top: 24px; left: 7px; }
-        .setting{ position: absolute; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
-        .cycleBtn, .cycleBtn:before, .cycleBtn:after{ position: absolute; width: 4px; height: 4px; border-radius: 50%; background-color: #ffffff; }
-        .cycleBtn{ top: 6px; left: 7px; }
-        .cycleBtn:before{ content: ''; left: 0px; top: 8px; }
-        .cycleBtn:after{ content: ''; left: 0px; top: 16px; }
+        header .setting  { top: 24px; left: 7px; }
+        .setting         { position: absolute; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
+        .cycleBtn, .cycleBtn:before, .cycleBtn:after
+        { position: absolute; width: 4px; height: 4px; border-radius: 50%; background-color: #ffffff; }
+        .cycleBtn        { top: 6px; left: 7px; }
+        .cycleBtn:before { content: ''; left: 0px; top: 8px; }
+        .cycleBtn:after  { content: ''; left: 0px; top: 16px; }
 
-        .settingBox{ overflow: hidden; position: fixed; width: 270px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.4s; }
-        .settingBox-show{ height: 570px; width: 270px; }
-        .settingBox ul{ list-style: none; }
-        .settingBox ul li{ width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
-        .settingBox ul li a{ color: orangered; }
-        .settingBox ul li a:visited{ color: orangered; }
-        .settingBox .settingBox-hide{ position: absolute; left: 0px; bottom: 0px; height: 35px; width: 100%; background-color: #1573BD; border: none; outline: none; color: #ffffff; cursor: pointer; }
+        .settingBox                   { overflow: hidden; position: fixed; width: 270px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.4s; }
+        .settingBox-show              { height: 570px; width: 270px; }
+        .settingBox ul                { list-style: none; }
+        .settingBox ul li             { width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
+        .settingBox ul li a           { color: orangered; }
+        .settingBox ul li a:visited   { color: orangered; }
+        .settingBox .settingBox-hide  { position: absolute; left: 0px; bottom: 0px; height: 35px; width: 100%; background-color: #1573BD; border: none; outline: none; color: #ffffff; cursor: pointer; }
 
-        .animation-bg{ z-index: -1; height: 277px; }
-        .animation-bg-hide{ height: 80px; }
+        .animation-bg       { z-index: -1; height: 277px; }
+        .animation-bg-hide  { height: 80px; }
 
-        .animation-load{ position: relative; width: 100%; height: 4px; overflow: hidden; background-color: transparent; margin: 0px auto; }
-        .animation-load .moveing-bear{ position: absolute; top: 0px; left: 0px; width: 20%; background-color: orangered; height: 100%; -webkit-animation: bear-move 1.7s infinite; }
-        @-webkit-keyframes bear-move { 0%   { -webkit-transform: translateX( -100% ); } 100% { -webkit-transform: translateX(  500% ); } }
+        .animation-load                { position: relative; width: 100%; height: 4px; overflow: hidden; background-color: transparent; margin: 0px auto; }
+        .animation-load .moveing-bear  { position: absolute; top: 0px; left: 0px; width: 20%; background-color: orangered; height: 100%; -webkit-animation: bear-move 1.7s infinite; }
+        @-webkit-keyframes bear-move   { 0%   { -webkit-transform: translateX( -100% ); } 100% { -webkit-transform: translateX(  500% ); } }
 
-        .icon{ overflow: hidden; position: fixed; width: 120px; height: 120px; border-radius: 4px; right: 10%; -webkit-transform: translateX(50%); top: 217px; background-color: #000000; -webkit-transition: all 0.4s; z-index: 999; }
-        .icon img{ width: 100%; z-index: 0; }
-        .icon a{ position: absolute; left: 0px; top: 0px; z-index: 1; background-color: transparent; outline: none; width: 100%; height: 100%; border: none; cursor: pointer; }
-        .icon-up{ top: 10px; width: 60px; height: 60px; }
+        .icon      { overflow: hidden; position: fixed; width: 120px; height: 120px; border-radius: 4px; right: 10%; -webkit-transform: translateX(50%); top: 217px; background-color: #000000; -webkit-transition: all 0.4s; z-index: 987; }
+        .icon img  { width: 100%; z-index: 0; }
+        .icon a    { position: absolute; left: 0px; top: 0px; z-index: 1; background-color: transparent; outline: none; width: 100%; height: 100%; border: none; cursor: pointer; }
+        .icon-up   { top: 10px; width: 60px; height: 60px; }
 
-        .content-inner{ position: absolute; width: 100%; height: auto; left: 0px; top: 87px; background-color: transparent; margin-bottom: 120px; }
-        .content-inner .time{ margin: 17px auto; width: 200px; color: orangered; text-align: center; }
-        .content-inner .question{ position: relative; padding-top: 40px; width: 60%; min-height: 277px; height: auto; margin: 27px auto; background-color: #ffffff; padding-bottom: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); }
-        .content-inner .question-title{ position: relative; text-align: center; margin: 27px auto; width: 80%; }
-        .content-inner .meta{ height: 34px; position: absolute; top: 3px; left: 3px; }
-        .content-inner .meta img{ border-radius: 50%; }
-        .content-inner .meta span{ line-height: 34px; top: -7px; position: relative; }
-        .content-inner .content{ width: 80%; margin: 7px auto; text-align: center; padding-bottom: 17px; font-size: 1.8em; }
-        .content-inner .view-more{ width: 130px; margin: 0px auto; text-align: center; padding: 7px 0px; background-color: #ffffff; border-radius: 4px; }
-        .content-inner .view-more:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
-        .content-inner .view-more a{ text-decoration: none; color: #a9a9a9; }
-        .content-inner .view-more a:visited{ color: #a9a9a9; }
-        .content-inner .comment-btn{ margin: 27px auto; width: 60%; height: 38px; background-color: transparent; }
-        .content-inner .comment-btn button{ width: 100%; height: 100%; border-radius: 4px; border: none; background-color: #ffffff; cursor: pointer; outline: none; }
-        .content-inner .comment-btn button:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+        .back        { overflow: hidden; position: fixed; width: 56px; height: 56px; border-radius: 50%; cursor: pointer; left: 6%; -webkit-transform: translateX(50%) scale(0); top: 249px; background-color: orangered; -webkit-transition: all 0.4s; z-index: 987; -webkit-box-shadow:0 4px 8px rgba(0,0,0,.37); }
+        .back:before { position: absolute; content: ''; opacity: 0.8; background-color: transparent; width: 16px; height: 16px; left: 22px; top: 20px; border-left: solid 3px #ffffff; border-top: solid #ffffff 3px; border-top-left-radius: 3px; -webkit-transform: rotate(-45deg); }
+        .back-up     { top: 52px; }
+        .back-show   { -webkit-transform: translateX(50%) scale(1); }
 
-        .content-inner .info-card{ margin: 27px auto; width: 60%; background-color: #ffffff; height: 67px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); padding-top: 17px; }
-        .content-inner .info-card p{ width: 80%; margin: 7px auto; }
-        .content-inner .info-card button{ width: 100%; height: 30px; cursor: pointer; background-color: transparent; border: none; font-size: 1.2em; }
+        .news                     { position: absolute; width: 100%; height: auto; overflow: hidden; padding-bottom: 200px; top: 87px; background-color: transparent; -webkit-transition: all 0.4s; }
+        .display-date, .today-date{ margin: 17px auto; width: 200px; color: orangered; text-align: center; }
+        .display-date             { padding-top: 77px; }
+
+        .top-stories                { position: relative; margin: 0px auto; width: 60%; padding-top: 34%; background-color: #ffffff; overflow: hidden; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); cursor: pointer; }
+        .top-stories .slider        { position: absolute; left: 0px; top: 0px; width: 500%; height: 100%; list-style: none; }
+        .top-stories .slider li     { position: relative; float: left; width: 20%; height: 100%; }
+        .top-stories .slider li img { width: 100%; position: absolute; left: 0px; top: 50%; -webkit-transform: translateY(-50%); }
+        .top-stories .slider li h2  { position: absolute; bottom: 57px; right: 27px; left: 27px; color: #ffffff; font-size: 1.8em; z-index: 2; }
+
+        .slider-on                         { -webkit-animation: slider 12s infinite; }
+        .slider-label                      { position: absolute; width: 120px; height: 12px; left: 50%; -webkit-transform: translateX( -50% );  bottom: 17px; }
+        .slider-label ul                   { list-style: none; }
+        .slider-label li, .slider-label .slider-label-color
+        { width: 10%; padding-top: 10%; border-radius: 50%; margin: 0px 5%; }
+        .slider-label li                   { float: left; background-color: #EDEDED; opacity: 0.3; z-index: 0; }
+        .slider-label .slider-label-color  { position: absolute; background-color: #ffffff; z-index: 1; -webkit-animation: slider-label 12s infinite; }
+
+        .new              { position: relative; width: 60%; margin: 27px auto; min-height: 231px; background-color: #ffffff; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); cursor: pointer; }
+        .new:hover        { background-color: #F7F7F7; }
+        .new .new-img     { position: absolute; height: 177px; width: 177px; right: 27px; top: 50%; -webkit-transform: translateY(-50%); overflow: hidden; }
+        .new .new-img img { width: 100%; }
+        .new h3           { position: absolute; right: 231px; font-size: 1.8em; margin: 27px; }
+        .new .new-label   { position: absolute; left: 27px; bottom: 27px; width: auto; height: 27px; padding: 0px 17px; background-color: #ffffff; border-radius: 4px; border: none; outline: none; cursor: pointer; }
+        .new .new-label:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+
+        .content-wrap, .comments{ -webkit-transform: translateX(100%); min-height: 300px; -webkit-transition: all 0.4s; display: none; }
+
+        .navigation-push{ -webkit-transform: translateX(0%)  ; }
+
+        .content-wrap                           { position: absolute; width: 100%; height: auto; left: 0px; top: 87px; background-color: transparent; margin-bottom: 120px; }
+        .content-wrap .headline                 { position: relative; width: 60%; height: auto; overflow: hidden; margin: 27px auto; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); background-color: #ffffff; }
+        .content-wrap .headline .img-wrap       { position: relative; width: 100%; padding-top: 34%; overflow: hidden; }
+        .content-wrap .headline .headline-title { position: absolute; width: 80%; height: auto; left: 27px; bottom: 27px; z-index: 2; color: #ffffff; }
+        .content-wrap .headline .img-source     { position: absolute; width: 80%; height: auto; text-align: right; right: 27px; bottom: 7px; z-index: 2; color: #ffffff; }
+        .content-wrap .headline .img-wrap img   { position: absolute; left: 0px; top: 0px; width: 100%; z-index: 0; color: rgba(255,255,255,.6); text-shadow: 0px 1px 2px rgba(0,0,0,.3); }
+        .img-mask                               { position: absolute; height: 100%; width: 100%; bottom: 0px; left: 0px; background: -webkit-gradient(linear, left top, left bottom, color-stop(25%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.6))); z-index: 1; }
+        .content-wrap .headline .headline-background        { width: 100%; height: auto; padding: 17px 27px; }
+        .content-wrap .headline .headline-background a      { color: #000000; }
+        .content-wrap .headline .headline-background a:hover{ color: #000000; -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+
+        .content-wrap .content-inner        { overflow: hidden; position: relative; padding-top: 0px; width: 60%; min-height: 277px; height: auto; margin: 27px auto; background-color: #ffffff; padding-bottom: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); }
+        .content-wrap .question .bg-img     { position: relative; background-color: orangered; left: 0px; top: 0px; padding-top: 38.4%; width: 100%; overflow: hidden; z-index: 0; opacity: 0.9; }
+        .content-wrap .question .bg-img img { width: 100%; position: absolute; left: 0px; top: 0px; }
+        .content-wrap .question .bg-img h1  { position: absolute; bottom: 27px; color: #ffffff; width: 87%; left: 50%; -webkit-transform: translateX(-50%); }
+        .content-wrap .question-title       { position: relative; text-align: center; margin: 27px auto 27px auto; width: 87%; z-index: 1; }
+        .content-wrap .meta                 { position: relative; text-align: left; margin: 17px auto; width: 87%; z-index: 1; }
+        .content-wrap .content              { width: 87%; margin: 7px auto; text-align: left; padding-bottom: 17px; font-size: 1.6em; z-index: 1; }
+        .content-wrap .view-more            { width: 130px; margin: 27px auto; text-align: center; padding: 7px 0px; background-color: #ffffff; border-radius: 4px; }
+        .content-wrap .view-more:hover      { -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+        .content-wrap .view-more a          { text-decoration: none; color: #a9a9a9; }
+        .content-wrap .view-more a:visited  { color: #a9a9a9; }
+        .content-wrap .comment-btn          { margin: 27px auto; width: 60%; height: 38px; background-color: transparent; }
+        .content-wrap .comment-btn button   { width: 100%; height: 100%; border-radius: 4px; border: none; background-color: #ffffff; cursor: pointer; outline: none; }
+        .content-wrap .comment-btn button:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+
+        .content-inner .info-card           { margin: 27px auto; width: 60%; background-color: #ffffff; height: 67px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); padding-top: 17px; }
+        .content-inner .info-card p         { width: 80%; margin: 7px auto; }
+        .content-inner .info-card button    { width: 100%; height: 30px; cursor: pointer; background-color: transparent; border: none; font-size: 1.2em; }
         .content-inner .info-card button a:visited{ color: #000000; }
-    </style>
 
+        @-webkit-keyframes slider {
+            0%      { -webkit-transform: translateX(0%   ) ;}
+            9.09%   { -webkit-transform: translateX(0%   ) ;}
+            18.18%  { -webkit-transform: translateX(-20% ) ;}
+            27.27%  { -webkit-transform: translateX(-20% ) ;}
+            36.36%  { -webkit-transform: translateX(-40% ) ;}
+            45.45%  { -webkit-transform: translateX(-40% ) ;}
+            54.54%  { -webkit-transform: translateX(-60% ) ;}
+            63.63%  { -webkit-transform: translateX(-60% ) ;}
+            72.72%  { -webkit-transform: translateX(-80% ) ;}
+            81.81%  { -webkit-transform: translateX(-80% ) ;}
+            90.9%   { -webkit-transform: translateX(0%   ) ;}
+            100%    { -webkit-transform: translateX(0%   ) ;}
+        }
+        @-webkit-keyframes slider-label {
+            0%      { -webkit-transform: translateX(0%   ) ;}
+            9.09%   { -webkit-transform: translateX(0%   ) ;}
+            18.18%  { -webkit-transform: translateX(200% ) ;}
+            27.27%  { -webkit-transform: translateX(200% ) ;}
+            36.36%  { -webkit-transform: translateX(400% ) ;}
+            45.45%  { -webkit-transform: translateX(400% ) ;}
+            54.54%  { -webkit-transform: translateX(600% ) ;}
+            63.63%  { -webkit-transform: translateX(600% ) ;}
+            72.72%  { -webkit-transform: translateX(800% ) ;}
+            81.81%  { -webkit-transform: translateX(800% ) ;}
+            90.9%   { -webkit-transform: translateX(0%   ) ;}
+            100%    { -webkit-transform: translateX(0%   ) ;}
+        }
+
+        .comments { position: absolute; width: 100%; height: auto; left: 0px; top: 87px; background-color: transparent; margin-bottom: 120px; }
+        .comments div{ width: 60%; margin: 27px auto; height: 3000px; background-color: red; }
+
+    </style>
 </head>
 <body>
 
 <header>
-    <h1>瞎扯 · 如何正确地吐槽</h1>
+    <h1>知乎日报</h1>
     <div class="setting" id="mainSetting">
         <div class="cycleBtn"></div>
     </div>
 </header>
-<div class="settingBox animation-fast">
+
+<section class="settingBox animation-fast">
     <ul>
         <li>DataSource:</li>
-        <li><a href="http://zhihu.com">ZHIHU.com</a></li>
+        <li><a class="link" data-label="zhihu">ZHIHU.com</a></li>
         <li>Download App:</li>
-        <li><a href="https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8">for iphone</a></li>
-        <li><a href="https://play.google.com/store/apps/details?id=com.zhihu.daily.android">for android</a></li>
+        <li><a class="link" data-label="app_iphone">for iphone</a></li>
+        <li><a class="link" data-label="app_android">for android</a></li>
         <li>Author:</li>
         <li>Mailman_Recat</li>
         <li>Email:</li>
         <li>MailmanRecat@gmail.com</li>
         <li>Use Chrome for the</li>
         <li>best experience:</li>
-        <li><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">Download</a></li>
+        <li><a class="link" data-label="chrome">Download</a></li>
     </ul>
     <button class="settingBox-hide">Hide</button>
-</div>
+</section>
+
 <div class="animation-bg"></div>
-<div class="icon"><img src="icon.png"><a href="https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8"></a></div>
+<div class="icon"><img src="icon.png"><a class="link" data-label="app_iphone"></a></div>
+<div class="back"></div>
 
-<div class="content-inner">
-    <!--<div class="info-card">-->
-    <!--<p class="info">Sorry, there is only chrome support. Download chrome for the best experience.</p>-->
-    <!--<button><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">download</a></button>-->
-    <!--</div>-->
+<section class="news">
 
-</div>
+    <p class="today-date"></p>
+
+    <div class="top-stories">
+        <ul class="slider slider-on">
+            <li class="slider-item"><img><h2></h2><img class="img-mask"></li>
+            <li class="slider-item"><img><h2></h2><img class="img-mask"></li>
+            <li class="slider-item"><img><h2></h2><img class="img-mask"></li>
+            <li class="slider-item"><img><h2></h2><img class="img-mask"></li>
+            <li class="slider-item"><img><h2></h2><img class="img-mask"></li>
+        </ul>
+        <div class="slider-label">
+            <div class="slider-label-color"></div>
+            <ul class="slider-label-bg"><li></li><li></li><li></li><li></li><li></li>
+            </ul>
+        </div>
+    </div>
+
+</section>
+
+<section class="content-wrap"></section>
+
+<section class="comments"><div></div></section>
 
 <footer><div class="animation-load"><div class="moveing-bear"></div></div></footer>
+
 </body>
 <script>
+    window.copyright = {
+        Author  : 'Mailmam_Recat',
+        Date    : '2015',
+        Mail    : 'MailmanRecat@gmail.com',
+        blog    : 'http://zhihupaper.com',
+        Browser : 'chrome only',
+        tucao   : 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html',
+        info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+    };
+
+    var $      = function( obj       )  { return document.querySelector(obj)                                    };
+    var $n     = function( obj, i    )  { return document.getElementsByClassName(obj)[i]                        };
+    var $$     = function( obj       )  { return [].slice.call(document.querySelectorAll(obj));                 };
+    var html   = function( obj, str  )  { obj.innerHTML += str                                                  };
+    var rehtml = function( obj, str  )  { obj.innerHTML  = str                                                  };
+
+    (function(window){
+
+        var link_url = {
+            chrome      : 'https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha',
+            zhihu       : 'http://zhihu.com',
+            app_iphone  : 'https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8',
+            app_android : 'https://play.google.com/store/apps/details?id=com.zhihu.daily.android',
+            blog        : 'http://zhihupaper.com',
+            github      : '',
+            twitter     : ''
+        };
+
+        var link = function(){
+            [].slice.call( document.querySelectorAll('.link')).forEach(function(obj, i){
+                var label = obj.getAttribute('data-label'); obj.href = link_url[ label ];
+            });
+        };
+        link();
+
+    })(window);
+
     (function(window){
 
         var apost = function(data, url, code){
@@ -139,7 +276,7 @@
             xmlHttp.send();
         };
 
-        var getxml=function() {
+        var getxml = function() {
             try{ xmlHttp = new XMLHttpRequest(); }
             catch (e){
                 try{ xmlHttp = new ActiveXObject("Msxml2.XMLHTTP"); }
@@ -159,95 +296,286 @@
     })(window);
 </script>
 <script>
-    var $    = function( obj      )  { return document.querySelector(obj) };
-    var html = function( obj, str )  { obj.innerHTML += str               };
-    var day;
 
-    UIaction = {
-        header     : {
-            ele        : $('header'),
-            shadow     : function(){ this.ele.classList.add('header-shadow')              },
-            unshadow   : function(){ this.ele.classList.remove('header-shadow')           }
-        },
-        footer     : {
-            ele        : $('footer'),
-            show       : function(){ this.ele.classList.add('footer-show')               },
-            hide       : function(){ this.ele.classList.remove('footer-show')            }
-        },
-        animationbg: {
-            ele        : $('.animation-bg'),
-            show       : function(){ this.ele.classList.remove('animation-bg-hide')       },
-            hide       : function(){ this.ele.classList.add('animation-bg-hide')          }
-        },
-        icon       : {
-            ele        : $('.icon'),
-            up         : function(){ this.ele.classList.add('icon-up')                    },
-            down       : function(){ this.ele.classList.remove('icon-up')                 }
-        },
-        setting  : {
-            ele      : $('.settingBox'),
-            isShow   : function(){ return this.ele.classList.contains('settingBox-show')  },
-            show     : function(){ this.ele.classList.add('settingBox-show')              },
-            hide     : function(){ this.ele.classList.remove('settingBox-show')           }
-        },
-        animationLoad: {
-            ele      : $('.animation-load'),
-            show     : function(){ this.ele.style.display = 'block'                        },
-            hide     : function(){ this.ele.style.display = 'none'                         }
+var navigationVC = function( option ){
+    var _                     = this;
+
+    _.InitalV = _.currentView = option.InitalV;
+    _.animationDuration       = option.animationDuration || 400;
+    _.V                       = [ _.InitalV ];
+};
+navigationVC.prototype = {
+    push: function( pushView ){
+        UIaction.back.show();
+
+        var t = document.body.scrollTop || 0, currentView = this.currentView;
+        currentView.scrollMark        = t;
+        currentView.ele.style.display = 'none';
+
+        this.V.push( pushView );
+        this.currentView           = pushView;
+        pushView.ele.style.display = 'block';
+        UIaction.header.titleChange( pushView.title );
+
+        setTimeout(function(){
+            pushView.ele.classList.add('navigation-push');
+            window.scroll(0, -t);
+        }, 200);
+    },
+    pop : function(){
+        var currtentView          = this.currentView, superV, t;
+
+        this.V.pop();
+        this.currentView = superV = this.V[ this.V.length - 1 ];
+        superV.ele.style.display  = 'block';
+        t                         = superV.scrollMark;
+        UIaction.header.titleChange( superV.title );
+
+        currtentView.ele.classList.remove('navigation-push');
+        setTimeout(function(){
+            currtentView.ele.style.display = 'none';
+            window.scroll(0, t);
+        }, 200);
+    },
+    currentViewTitle: function(){ return this.currentView.title; }
+};
+
+var view  = function( inital ){
+    var _ = this;
+
+    _.scrollMark = inital.scrollMark || 0;
+    _.ele        = inital.ele;
+    _.title      = inital.title;
+};
+
+UIaction = {
+    header     : {
+        ele        : $('header'),
+        title   : $('header h1'),
+        shadow     : function(       ){ this.ele.classList.add('header-shadow')          },
+        unshadow   : function(       ){ this.ele.classList.remove('header-shadow')       },
+        titleChange: function( title ){ this.title.innerText = title                     }
+    },
+    footer     : {
+        ele        : $('footer'),
+        show       : function(){ this.ele.classList.add('footer-show')                   },
+        hide       : function(){ this.ele.classList.remove('footer-show')                }
+    },
+    animationbg: {
+        ele        : $('.animation-bg'),
+        show       : function(){ this.ele.classList.remove('animation-bg-hide')          },
+        hide       : function(){ this.ele.classList.add('animation-bg-hide')             }
+    },
+    icon       : {
+        ele        : $('.icon'),
+        up         : function(){ this.ele.classList.add('icon-up')                       },
+        down       : function(){ this.ele.classList.remove('icon-up')                    }
+    },
+    back       : {
+        ele         : $('.back'),
+        up          : function(){ this.ele.classList.add('back-up')                     },
+        down        : function(){ this.ele.classList.remove('back-up')                  },
+        show        : function(){ this.ele.classList.add('back-show')                   },
+        hide        : function(){ this.ele.classList.remove('back-show')                }
+    },
+    setting    : {
+        ele        : $('.settingBox'),
+        isShow     : function(){ return this.ele.classList.contains('settingBox-show')   },
+        show       : function(){ this.ele.classList.add('settingBox-show')               },
+        hide       : function(){ this.ele.classList.remove('settingBox-show')            }
+    },
+    animationLoad: {
+        ele        : $('.animation-load'),
+        show       : function(){ this.ele.style.display = 'block'                        },
+        hide       : function(){ this.ele.style.display = 'none'                         }
+    },
+    commentBox     : {
+        ele        : $('.comment-box'),
+        show       : function(){  },
+        hide       : function(){  }
+    },
+    slider         : {
+        ele          : $('.top-stories'),
+        unit         : '%',
+        distance     : 120,
+        minHeight    : 34,
+        maxHeight    : 40,
+        getHeight    : function(t){ return this.maxHeight - ( t / this.distance * ( this.maxHeight - this.minHeight ) ) },
+        animation    : function( ){
+            var t = document.body.scrollTop, height = this.getHeight( t );
+            this.ele.style.paddingTop = height+this.unit;
         }
-    };
+    },
+    backToTop      : function(){
+        var Tl = document.body.scrollTop - 2 * document.body.scrollTop;
+        var l = 0;
+        var down = function(){
+            l -= 30;
+            window.scroll(0, l);
+            if( l > Tl )
+                window.requestAnimationFrame(down);
+        };
+        down();
+    }
+};
 
-    window.onscroll = function(){
+var zhihupaper = {
+    before           : -1,
+    beforeLock       : true,
+    init          : function(){
+        UIaction.footer.show();
+        ajax.aget('news.php', function( res ){
+            var json;
+            try{ json = JSON.parse( res ); }
+            catch (e){ console.log(e); return false;}
 
-        if(document.body.scrollTop <= 0){
-            UIaction.animationbg.show();
-            UIaction.header.unshadow();
-            UIaction.icon.down();
-        }else{
-            UIaction.animationbg.hide();
-            UIaction.header.shadow();
-            UIaction.icon.up();
+            zhihupaper.day       = json.day;
+            var paper            = json.news,
+                    news         = paper.news,
+                    display_date = paper.display_date,
+                    top_stories  = paper.top_stories;
+
+            zhihupaper.initTopStorise( top_stories, display_date );
+            zhihupaper.initTodayNews( news )        ;
+            UIaction.footer.hide()                  ;
+            zhihupaper.beforeLock = false           ;
+        });
+    },
+    initTopStorise: function( top_stories, time ){
+        var li, str, title, id, image;
+        rehtml($('.today-date'), time);
+
+        for( var i in top_stories ){
+            title        = top_stories[i].title;
+            id           = top_stories[i].id   ;
+            image        = top_stories[i].image;
+
+            str          = '<img src="'+image+'"><h2>'+title+'</h2><img class="img-mask">';
+            li           = $n( 'slider-item', i );
+            li.setAttribute('data-id', id);
+            li.innerHTML = str;
+        }
+    },
+    initTodayNews      : function( news ){
+        var str = '', title, id, thumbnail;
+
+        for( var i in news ){
+            title     = news[i].title    ;
+            id        = news[i].id       ;
+            thumbnail = news[i].thumbnail;
+
+            if( title == '瞎扯 · 如何正确地吐槽' ) id = 0001;
+
+            str  += '<div class="new" data-id="'+id+'">' +
+            '<h3>'+title+'</h3>' +
+            '<div class="new-img"><img src="'+thumbnail+'"></div>' +
+            '<button class="new-label">unkown label</button>' +
+            '</div>';
         }
 
-        if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
-            UIaction.footer.show();
-//            html($('.content-inner'), '<div class="question"></div>')
-            ajax.apost('day=' + day, 'bg.php', function( res ){
-                var json;
-                try{
-                    json = JSON.parse( res );
-                }catch (e){
-                    alert(e);
-                    return false;
-                }
-                var content = json.content;
-                day = json.day;
-                console.log(json.day);
-                html($('.content-inner'), content);
-            });
-        }else{
+        html($('.news'), str);
+        this.bindAction();
+    },
+    initContentWithID: function( id ){
+        UIaction.footer.show();
+        ajax.apost('id='+id, 'idcontent.php', function( res ){
+            var json;
+            try{ json = JSON.parse( res ); }
+            catch (e){ console.log(e); return false;}
+
+            var content    = json.content;
+            rehtml($('.content-wrap'), content);
             UIaction.footer.hide();
+        });
+    },
+    initBeforeNews: function( news, time ){
+        var time = time, str = '<div class="display-date">'+time+'</div>', title, id, thumbnail;
+
+        for( var i in news ){
+            title     = news[i].title    ;
+            id        = news[i].id       ;
+            thumbnail = news[i].thumbnail;
+
+            str  += '<div class="new" data-id="'+id+'">' +
+            '<h3>'+title+'</h3>' +
+            '<div class="new-img"><img src="'+thumbnail+'"></div>' +
+            '<button class="new-label">unkown label</button>' +
+            '</div>';
         }
 
-    };
+        html($('.news'), str);
+        this.bindAction();
+    },
+    getBeforeNews    : function(){
+        if( zhihupaper.beforeLock )
+            ajax.apost('day='+zhihupaper.before, 'beforenews.php', function( res ){
+                var json;
+                try{ json = JSON.parse( res ); }
+                catch (e){ console.log(e); return false;}
 
-    $('#mainSetting').onclick         = function(){ UIaction.setting.show()        };
-    $('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
+                var stories    = json.news.stories,
+                        time       = json.time;
+                zhihupaper.before = json.day;
+                zhihupaper.initBeforeNews( stories, time );
+                UIaction.footer.hide();
+                zhihupaper.beforeLock = true;
+            });
+        if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
+    },
+    bindAction    : function(){
+        var click = function(){
+            var id = this.getAttribute('data-id');
+            if( id == 0001 ) window.location.href = 'http://rbearblog.sinaapp.com/project/zhihupaper';
+            if( id == 0001 ) return false;
+            navVC.push( view_content );
+            zhihupaper.initContentWithID( id );
+        };
+        $$('.slider-item').forEach(function(ele, i){ ele.addEventListener('click', click, false) });
+        $$('.new').forEach(function(ele, i){ ele.addEventListener('click', click, false)         });
+    }
+};
 
-    ajax.aget('bg.php', function( res ){
-        var json;
-        try{
-            json = JSON.parse( res );
-        }catch (e){
-            alert(e);
-            return false;
+window.onscroll = function(){
+
+    if(document.body.scrollTop <= 0){
+        UIaction.animationbg.show();
+        UIaction.header.unshadow();
+        UIaction.icon.down();
+        UIaction.back.down();
+    }else{
+        UIaction.animationbg.hide();
+        UIaction.header.shadow();
+        UIaction.icon.up();
+        UIaction.back.up();
+    }
+
+    if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
+        if( navVC.currentViewTitle() === view_news.title ){
+            UIaction.footer.show();
+            zhihupaper.getBeforeNews();
         }
-        var content = json.content;
-        console.log(json.day);
-        day = json.day;
-        html($('.content-inner'), content);
-    });
+    }else{
+        UIaction.footer.hide();
+    }
+};
 
+var view_news     = new view( { ele: $('.news'),          title: '知乎日报'}),
+        view_content  = new view( { ele: $('.content-wrap'), title: '日报'}),
+        view_comments = new view( { ele: $('.comments'),      title: '评论'});
 
+var navVC         = new navigationVC( { InitalV: view_news} );
+
+$('#mainSetting'    ).onclick     = function(){ UIaction.setting.show()        };
+$('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
+
+$('.back').onclick = function(){
+    navVC.pop();
+    if( navVC.currentViewTitle() === view_news.title ) UIaction.back.hide();
+    if( navVC.currentViewTitle() === view_news.title ) view_content.ele.innerHTML = '';
+};
+
+zhihupaper.init();
+
+window.copyright.info();
 </script>
 </html>

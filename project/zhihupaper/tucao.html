@@ -1,0 +1,291 @@
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        *{ padding: 0px; margin: 0px; }
+        html{ font-family: sans-serif; -webkit-text-size-adjust: 100%; -webkit-user-select: none; }
+        body{ font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
+        a{ text-decoration: none; }
+
+        header, .animation-bg{ position: fixed; left: 0px; top: 0px; width: 100%; background-color: #0098CE; -webkit-transition: all 0.4s; }
+        header{ z-index: 977; height: 80px; }
+        .header-shadow{  -webkit-box-shadow:0 1px 6px rgba(0,0,0,.35); }
+        header h1{ line-height: 80px; text-align: center; color: #ffffff; }
+
+        footer{ position: fixed; width: 100%; height: 48px; bottom: -48px; left: 0px; background-color: #ffffff; -webkit-transition: all 0.4s; z-index: 997; }
+        .footer-show{ bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
+        footer p{ color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
+
+        header .setting{ top: 24px; left: 7px; }
+        .setting{ position: absolute; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
+        .cycleBtn, .cycleBtn:before, .cycleBtn:after{ position: absolute; width: 4px; height: 4px; border-radius: 50%; background-color: #ffffff; }
+        .cycleBtn{ top: 6px; left: 7px; }
+        .cycleBtn:before{ content: ''; left: 0px; top: 8px; }
+        .cycleBtn:after{ content: ''; left: 0px; top: 16px; }
+
+        .settingBox{ overflow: hidden; position: fixed; width: 270px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.4s; }
+        .settingBox-show{ height: 570px; width: 270px; }
+        .settingBox ul{ list-style: none; }
+        .settingBox ul li{ width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
+        .settingBox ul li a{ color: orangered; }
+        .settingBox ul li a:visited{ color: orangered; }
+        .settingBox .settingBox-hide{ position: absolute; left: 0px; bottom: 0px; height: 35px; width: 100%; background-color: #1573BD; border: none; outline: none; color: #ffffff; cursor: pointer; }
+
+        .animation-bg{ z-index: -1; height: 277px; }
+        .animation-bg-hide{ height: 80px; }
+
+        .back-to-top{ position: fixed; width: 56px; height: 56px; border-radius: 50%; display: none; }
+
+        .animation-load{ position: relative; width: 100%; height: 4px; overflow: hidden; background-color: transparent; margin: 0px auto; }
+        .animation-load .moveing-bear{ position: absolute; top: 0px; left: 0px; width: 20%; background-color: orangered; height: 100%; -webkit-animation: bear-move 1.7s infinite; }
+        @-webkit-keyframes bear-move { 0%   { -webkit-transform: translateX( -100% ); } 100% { -webkit-transform: translateX(  500% ); } }
+
+        .icon{ overflow: hidden; position: fixed; width: 120px; height: 120px; border-radius: 4px; right: 10%; -webkit-transform: translateX(50%); top: 217px; background-color: #000000; -webkit-transition: all 0.4s; z-index: 987; }
+        .icon img{ width: 100%; z-index: 0; }
+        .icon a{ position: absolute; left: 0px; top: 0px; z-index: 1; background-color: transparent; outline: none; width: 100%; height: 100%; border: none; cursor: pointer; }
+        .icon-up{ top: 10px; width: 60px; height: 60px; }
+
+        .content-inner{ position: absolute; width: 100%; height: auto; left: 0px; top: 87px; background-color: transparent; margin-bottom: 120px; }
+        .content-inner .time{ margin: 17px auto; width: 200px; color: orangered; text-align: center; }
+        .content-inner .question{ position: relative; padding-top: 40px; width: 60%; min-height: 277px; height: auto; margin: 27px auto; background-color: #ffffff; padding-bottom: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); }
+        .content-inner .question-title{ position: relative; text-align: center; margin: 27px auto; width: 80%; }
+        .content-inner .meta{ height: 34px; position: absolute; top: 3px; left: 3px; }
+        .content-inner .meta img{ border-radius: 50%; }
+        .content-inner .meta span{ line-height: 34px; top: -7px; position: relative; }
+        .content-inner .content{ width: 80%; margin: 7px auto; text-align: center; padding-bottom: 17px; font-size: 1.8em; }
+        .content-inner .view-more{ width: 130px; margin: 0px auto; text-align: center; padding: 7px 0px; background-color: #ffffff; border-radius: 4px; }
+        .content-inner .view-more:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+        .content-inner .view-more a{ text-decoration: none; color: #a9a9a9; }
+        .content-inner .view-more a:visited{ color: #a9a9a9; }
+        .content-inner .comment-btn{ margin: 27px auto; width: 60%; height: 38px; background-color: transparent; }
+        .content-inner .comment-btn button{ width: 100%; height: 100%; border-radius: 4px; border: none; background-color: #ffffff; cursor: pointer; outline: none; }
+        .content-inner .comment-btn button:hover{ -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
+
+        .content-inner .info-card{ margin: 27px auto; width: 60%; background-color: #ffffff; height: 67px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); padding-top: 17px; }
+        .content-inner .info-card p{ width: 80%; margin: 7px auto; }
+        .content-inner .info-card button{ width: 100%; height: 30px; cursor: pointer; background-color: transparent; border: none; font-size: 1.2em; }
+        .content-inner .info-card button a:visited{ color: #000000; }
+
+        .comment-box{ display: none; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #ffffff; z-index: 990; overflow: scroll; }
+        .comment-box-header{ width: 100%; height: 80px; background-color: #0098CE; -webkit-transition: all 0.4s; }
+        .comment-box-header h2{ line-height: 80px; text-align: center; color: #ffffff; }
+        .comment-box .comment-box-innner{ position: absolute; width: 100%; top: 80px; height: auto; }
+        .comment-box .comment-box-innner .long-comment{ width: 100%; height: 500px; background-color: red; }
+        .comment-box .comment-box-innner .comment-view-more{ width: 100%; height: 48px; background-color: #000000; }
+        .comment-box .comment-box-innner .short-comment{ width: 100%; height: 800px; background-color: #ffff00; }
+    </style>
+
+</head>
+<body>
+
+<header>
+    <h1>瞎扯 · 如何正确地吐槽</h1>
+    <div class="setting" id="mainSetting">
+        <div class="cycleBtn"></div>
+    </div>
+</header>
+
+<div class="settingBox animation-fast">
+    <ul>
+        <li>DataSource:</li>
+        <li><a href="http://zhihu.com">ZHIHU.com</a></li>
+        <li>Download App:</li>
+        <li><a href="https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8">for iphone</a></li>
+        <li><a href="https://play.google.com/store/apps/details?id=com.zhihu.daily.android">for android</a></li>
+        <li>Author:</li>
+        <li>Mailman_Recat</li>
+        <li>Email:</li>
+        <li>MailmanRecat@gmail.com</li>
+        <li>Use Chrome for the</li>
+        <li>best experience:</li>
+        <li><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">Download</a></li>
+    </ul>
+    <button class="settingBox-hide">Hide</button>
+</div>
+
+<div class="animation-bg"></div>
+<div class="icon"><img src="icon.png"><a href="https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8"></a></div>
+
+<div class="back-to-top"></div>
+
+<div class="content-inner">
+    <!--<div class="info-card">-->
+    <!--<p class="info">Sorry, there is only chrome support. Download chrome for the best experience.</p>-->
+    <!--<button><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">download</a></button>-->
+    <!--</div>-->
+
+</div>
+
+<div class="comment-box">
+    <div class="comment-box-header"><h2>82条评论</h2></div>
+    <div class="comment-box-innner">
+        <div class="long-comment"></div>
+        <button class="comment-view-more"></button>
+        <div class="short-comment"></div>
+    </div>
+</div>
+
+<footer><div class="animation-load"><div class="moveing-bear"></div></div></footer>
+</body>
+<script>
+    (function(window){
+
+        var apost = function(data, url, code){
+
+            var data = data || null;
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){ if(code != null) code(xmlHttp.responseText); }
+            };
+            xmlHttp.send(data);
+        };
+
+        var aget = function(url, code){
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("GET", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){ if(code != null) code(xmlHttp.responseText); }
+            };
+
+            xmlHttp.send();
+        };
+
+        var getxml=function() {
+            try{ xmlHttp = new XMLHttpRequest(); }
+            catch (e){
+                try{ xmlHttp = new ActiveXObject("Msxml2.XMLHTTP"); }
+                catch (e){ xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+            }
+            return xmlHttp;
+        };
+
+        var ajax = { apost: apost, aget: aget };
+
+        if ( typeof define === 'function' && define.amd ) {
+            define( ajax );
+        } else {
+            window.ajax = ajax;
+        }
+
+    })(window);
+</script>
+<script>
+    var $    = function( obj      )  { return document.querySelector(obj) };
+    var html = function( obj, str )  { obj.innerHTML += str               };
+    var day, syncLock = true; window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+
+    UIaction = {
+        header     : {
+            ele        : $('header'),
+            shadow     : function(){ this.ele.classList.add('header-shadow')              },
+            unshadow   : function(){ this.ele.classList.remove('header-shadow')           }
+        },
+        footer     : {
+            ele        : $('footer'),
+            show       : function(){ this.ele.classList.add('footer-show')               },
+            hide       : function(){ this.ele.classList.remove('footer-show')            }
+        },
+        animationbg: {
+            ele        : $('.animation-bg'),
+            show       : function(){ this.ele.classList.remove('animation-bg-hide')       },
+            hide       : function(){ this.ele.classList.add('animation-bg-hide')          }
+        },
+        icon       : {
+            ele        : $('.icon'),
+            up         : function(){ this.ele.classList.add('icon-up')                    },
+            down       : function(){ this.ele.classList.remove('icon-up')                 }
+        },
+        setting  : {
+            ele      : $('.settingBox'),
+            isShow   : function(){ return this.ele.classList.contains('settingBox-show')  },
+            show     : function(){ this.ele.classList.add('settingBox-show')              },
+            hide     : function(){ this.ele.classList.remove('settingBox-show')           }
+        },
+        animationLoad: {
+            ele      : $('.animation-load'),
+            show     : function(){ this.ele.style.display = 'block'                        },
+            hide     : function(){ this.ele.style.display = 'none'                         }
+        },
+        commentBox   : {
+            ele      : $('.comment-box'),
+            show     : function(){  },
+            hide     : function(){  }
+        },
+        backToTop    : function(){
+            var Tl = document.body.scrollTop - 2 * document.body.scrollTop;
+            var l = 0;
+            var down = function(){
+                l -= 30;
+                window.scroll(0, l);
+                if( l > Tl )
+                    window.requestAnimationFrame(down);
+            };
+            down();
+        }
+    };
+
+    window.onscroll = function(){
+
+        if(document.body.scrollTop <= 0){
+            UIaction.animationbg.show();
+            UIaction.header.unshadow();
+            UIaction.icon.down();
+        }else{
+            UIaction.animationbg.hide();
+            UIaction.header.shadow();
+            UIaction.icon.up();
+        }
+
+        if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
+            UIaction.footer.show();
+            if( syncLock )
+                ajax.apost('day=' + day, 'bg.php', function( res ){
+                    syncLock = true;
+
+                    var json;
+                    try{ json = JSON.parse( res ); }
+                    catch (e){ alert(e); return false;}
+
+                    var content = json.content;
+                    day = json.day;
+                    html($('.content-inner'), content);
+                    UIaction.footer.hide();
+                });
+
+            syncLock = false;
+        }else{
+            UIaction.footer.hide();
+        }
+
+    };
+
+    $('#mainSetting').onclick         = function(){ UIaction.setting.show()        };
+    $('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
+
+    UIaction.footer.show();
+    ajax.aget('tucao.php', function( res ){
+        var json;
+        try{ json = JSON.parse( res ); }
+        catch (e){ alert(e); return false;}
+
+        var content = json.content;
+        day = json.day;
+        html($('.content-inner'), content);
+        UIaction.footer.hide();
+    });
+
+
+</script>
+</html>
