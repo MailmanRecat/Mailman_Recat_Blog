@@ -487,6 +487,7 @@ var zhihupaper = {
             rehtml($('.content-wrap'), content);
             UIaction.footer.hide();
         });
+        navVC.push( view_content );
     },
     initBeforeNews: function( news, time ){
         var time = time, str = '<div class="display-date">'+time+'</div>', title, id, thumbnail;
@@ -495,6 +496,8 @@ var zhihupaper = {
             title     = news[i].title    ;
             id        = news[i].id       ;
             thumbnail = news[i].thumbnail;
+
+            if( title == '瞎扯 · 如何正确地吐槽' ) id = 0001;
 
             str  += '<div class="new" data-id="'+id+'">' +
             '<h3>'+title+'</h3>' +
@@ -507,7 +510,7 @@ var zhihupaper = {
         this.bindAction();
     },
     getBeforeNews    : function(){
-        if( zhihupaper.beforeLock )
+//        if( zhihupaper.beforeLock )
             ajax.apost('day='+zhihupaper.before, 'beforenews.php', function( res ){
                 var json;
                 try{ json = JSON.parse( res ); }
@@ -520,14 +523,14 @@ var zhihupaper = {
                 UIaction.footer.hide();
                 zhihupaper.beforeLock = true;
             });
-        if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
+//        if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
     },
     bindAction    : function(){
         var click = function(){
             var id = this.getAttribute('data-id');
             if( id == 0001 ) window.location.href = 'http://rbearblog.sinaapp.com/project/zhihupaper';
             if( id == 0001 ) return false;
-            navVC.push( view_content );
+//            navVC.push( view_content );
             zhihupaper.initContentWithID( id );
         };
         $$('.slider-item').forEach(function(ele, i){ ele.addEventListener('click', click, false) });

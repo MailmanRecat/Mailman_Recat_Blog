@@ -3,9 +3,7 @@ header("Content-Type:text/html;charset=utf-8");
 date_default_timezone_set('PRC');
 
 function getPost($name){ return isset($_POST[$name])? $_POST[$name] : null; }
-
-$day = getPost('day');
-if( $day && $day > 0): exit(); endif;
+function get    ($name){ return isset($_GET[$name])? $_GET[$name] : null  ; }
 
 class paper{
 	var $url = 'http://news.at.zhihu.com/api/1.2/news/latest';
@@ -43,6 +41,16 @@ class paper{
 		$id                 = $res->stories[ $newsNumber ]->id;
 		return                $this->BS_url_content.$id;
 	}
+	function getBeforeURl( $day ){
+		$tomorrow           = mktime(0, 0, 0, date("m")  , date("d") + $day , date("Y"));
+		$t                  = date('Ymd', $tomorrow);
+		$url                = $this->BS_url_before.$t;
+		return                $url;
+	}
+	function getTime( $day ){
+		$tomorrow           = mktime(0, 0, 0, date("m")  , date("d") + $day , date("Y"));
+		return                date('Y.m.d l', $tomorrow);
+	}
 
 	function getContent( $day = null ){
 		if($day):
@@ -54,9 +62,9 @@ class paper{
 
 		$content = $content_json->body;
 		$content = str_ireplace('<div class="main-wrap content-wrap">', '', $content);
-		$content = str_ireplace('<div class="headline">', '', $content);
-		$content = str_ireplace('<div class="img-place-holder">', '', $content);
-		$content = str_ireplace('<div class="content-inner">', '', $content);
+		$content = str_ireplace('<div class="headline">',               '', $content);
+		$content = str_ireplace('<div class="img-place-holder">',       '', $content);
+		$content = str_ireplace('<div class="content-inner">',          '', $content);
 
 		$c       = explode('</div>', $content, 2);
 		$content = $c[1];
@@ -66,13 +74,24 @@ class paper{
 		$content = '<div><div><div class="time">'.$this->display_date.'</div>'.$content.'<div class="comment-btn"><button>查看评论</button></div>';
 		return $content;
 	}
+	function getTodayNews(){
+		$news                = json_decode( file_get_contents( $this->url ) );
+		return $news;
+	}
+	function getContentWithID( $id ){
+		$url    = $this->BS_url_content.$id;
+		$res    = json_decode( file_get_contents( $url ) );
+
+		$res = $res->body;
+		$res = str_ireplace('<div class="main-wrap content-wrap">', '<div>', $res);
+
+		return $res;
+	}
+	function getBeforeNewsWithDay( $day ){
+		$url       = $this->getBeforeURl( $day );
+		$news      = json_decode( file_get_contents( $url ) );
+		return       $news;
+	}
 }
-
-$p       = new paper;
-
-$content = $p->getContent( $day );
-if($day): $day -= 1; else: $day = -1; endif;
-$arr     = array( 'day' => $day, 'content' => $content );
-echo json_encode( $arr ); 
 
 ?>
