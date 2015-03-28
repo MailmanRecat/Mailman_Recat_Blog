@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+
+        @font-face {
+            font-family: roboto;
+            src:url('Roboto.woff2') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: roboto; }
+
+        button{ cursor: pointer; }
+        button, select, input, iframe{ outline: none; }
+
+        .navigation, .content, .code{ -webkit-transition: all 0.4s; }
+
+        .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 1px solid #B1B1B1; }
+        .navigation-hide{ -webkit-transform: translateX( -100% ); }
+
+        .navigation nav{ position: relative; width: 100%; height: 47px; border-bottom: 1px solid #B1B1B1; }
+        .navigation nav .nav-bar-title{ line-height: 47px; font-size: 1.2em; text-align: center; z-index: 1; }
+        .navigation nav .back-btn { display: none; position: absolute; left: 0px; width: auto; color: #0678C9; font-size: 1em; padding: 0px 0px 0px 23px; border: none; background-color: #ffffff; height: 47px; }
+        .navigation nav .back-btn:before
+        { position: absolute; left: 10px; top: 17px; display: block; content: ''; border-bottom: 2px solid #0678C9; border-left: 2px solid #0678C9; width: 13px; height: 13px; -webkit-transform: rotate(45deg); }
+
+        .navigation .view-wrap{ position: relative; width: 100%; height: calc( 100% - 47px ); overflow-y: scroll; overflow-x: hidden; background-color: #ffffff; }
+        .view-wrap .nav-view.view-push{ -webkit-transform: translateX(-100%); }
+        .view-wrap .nav-view  { position: absolute; top: 0px; -webkit-transition: all 0.47s; }
+
+        .view-wrap .nav-view:nth-child( n + 2 ) { left: 100%; }
+
+        .view-wrap .main-view  { width: 100%; height: 100%; background-color: #ffffff; }
+        .view-wrap .content-box{ position: relative; top: 50%; margin-top: -50%; }
+        .view-wrap .info-box   { position: absolute; color: #B1B1B1; bottom: 17px; left: 0px; width: 100%; }
+        .view-wrap .main-view h2, .view-wrap .main-view p{ text-align: center; }
+        .view-wrap .main-view .start-btn{ margin: 27px 0px; width: 100%; border: none; color: #0678C9; font-size: 2em; background-color: transparent; }
+
+        .view-wrap .archive-view{ width: 100%; height: 100%; background-color: #ffffff; overflow-y: scroll; }
+        .view-wrap .archive-view ul{ position: relative; top: 27px; width: 95%; height: auto; background-color: transparent; margin-left: 5%; list-style: none; cursor: pointer; }
+        .view-wrap .archive-view ul li{ height: 31px; line-height: 31px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #EDEDED; border-radius: 0px; }
+        .view-wrap .archive-view ul li p{ margin-left: 0px; }
+        .view-wrap .archive-view ul li:hover{ color: #ffffff; background-color: #0678C9; }
+
+        .view-wrap .pages-web-view, .view-wrap .pages-css-view, .view-wrap .pages-ios-view, .view-wrap .pages-javascript-view, .view-wrap .pages-game-view
+        { width: 100%; height: 100%; background-color: #ffffff; overflow-y: scroll; }
+
+        li.has-sub-level:before{  }
+
+        .content{ position: absolute; top: 0px; left: 278px; width: calc( 100% - 578px ); height: 100%; background-color: #ffffff; }
+        .content-has-left-edge  { width: calc( 100% - 300px ); left: 0px; }
+        .content-has-right-edge { width: calc( 100% - 278px ); right: 0px; }
+        .content-has-both-edge  { width: 100%; left: 0px; right: 0px; }
+        .content.content-has-left-edge  nav { width: calc( 100% - 300px ); left: 0px; }
+        .content.content-has-right-edge nav { width: calc( 100% - 278px ); right: 0px; }
+        .content.content-has-both-edge  nav { width: 100%; left: 0px; right: 0px; }
+
+        .content nav{ position: fixed; height: 47px; width: calc( 100% - 578px ); background-color: #ffffff; border-bottom: 1px solid #B1B1B1; z-index: 7; }
+
+        .content nav .state-bar, .content nav .spring-btn{ -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+
+        .content nav .state-bar  { position: absolute; top: 10px; width: 70%; height: 27px; border-radius: 4px; background-color: #ffffff; margin-left: 15%; }
+        .content nav .state-bar:before, .content nav .state-bar:after
+        { content: attr(text); position: absolute; color: #ffffff; line-height: 27px; padding: 0% 2%; height: 100%; left: 0px; top: 0px; background-color: transparent; border-radius: 4px; }
+        .content nav .state-bar:before{ width: 96%; }
+        .content nav .state-bar:after { width: 50%; background-color: red; }
+
+        .content nav .spring-btn{ position: absolute; width: 10%; height: 27px; border-radius: 4px; right: 2.5%; top: 10px; background-color: transparent; }
+        .content nav .spring-btn button{ position: relative; width: 50%; border: none; height: 27px; border-radius: 4px; background-color: #ffffff; }
+        .content nav .spring-btn button.selected{ color: #ffffff; background-color: #0678C9; }
+
+        .content iframe{ position: relative; left: 0px; top: 47px; width: 100%; height: calc( 100% - 47px ); border: none; }
+
+        .code{ position: fixed; width: 300px; height: 100%; overflow-x: scroll; background-color: #000000; right: 0px; top: 0px; border-left: 0px solid #B1B1B1; }
+        .code-hide{ -webkit-transform: translateX( 100% ); }
+
+        .code nav{ position: fixed; width: 299px; top: 0px; right: 0px; z-index: 7; height: 47px; background-color: #ffffff; border-left: 1px solid #B1B1B1; border-bottom: 1px solid #B1B1B1; }
+        .code iframe{ position: relative; right: 0px; width: 200%; top: 47px; height: calc( 100% - 47px ); border: none; }
+    </style>
+</head>
+<body>
+
+    <section id="navigation-controller" class="navigation">
+        <nav class="nav-bar">
+            <button class="back-btn">back</button>
+            <p class="nav-bar-title">Title</p>
+        </nav>
+
+        <section class="view-wrap">
+
+            <div class="nav-view main-view">
+                <div class="content-box">
+                    <h2>MailmanRecat SPC</h2>
+                    <p>Gmail:</p>
+                    <p>MailmanRecat@gmail.com</p>
+                    <button class="start-btn">Start</button>
+                </div>
+                <div class="info-box">
+                    <p>All Author: Mailman Recat</p>
+                    <p>All Right Reserved</p>
+                </div>
+            </div>
+
+            <div class="nav-view archive-view">
+                <ul class="archive-btn">
+                    <li><p data-label="web">Web</p></li>
+                    <li><p data-label="javascript">Javascript</p></li>
+                    <li><p data-label="css">CSS</p></li>
+                    <li><p data-label="ios">IOS</p></li>
+                    <li><p data-label="game">Game</p></li>
+                </ul>
+            </div>
+
+            <div class="nav-view pages-web-view">
+
+            </div>
+
+            <div class="nav-view pages-javascript-view">
+
+            </div>
+
+            <div class="nav-view pages-css-view">
+
+            </div>
+
+            <div class="nav-view pages-ios-view">
+
+            </div>
+
+            <div class="nav-view pages-game-view"></div>
+
+        </section>
+    </section>
+
+    <section id="content-view" class="content">
+        <nav>
+            <div class="state-bar" text="search"></div>
+
+            <div class="spring-btn">
+                <button data-action="hide-slide">|</button><button data-action="hide-code">|||</button>
+            </div>
+        </nav>
+
+        <iframe src="search.html"></iframe>
+    </section>
+
+    <section id="code-view" class="code">
+        <nav></nav>
+        <iframe src="codesearch.html"></iframe>
+    </section>
+</body>
+<script>
+
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    var wrap_el = {
+        slide      : $('.navigation'),
+        content    : $('.content'),
+        code       : $('.code')
+            },
+            resizeEdge = {
+                hideSlide : function(){
+                    wrap_el.slide.classList.add('navigation-hide');
+
+                    if( wrap_el.code.classList.contains('code-hide') ) this.resizeContent( 'edge edge' );
+                    else                                               this.resizeContent( 'edge code' );
+                },
+                showSlide : function(){
+                    wrap_el.slide.classList.remove('navigation-hide');
+
+                    if( wrap_el.code.classList.contains('code-hide') ) this.resizeContent( 'slide edge' );
+                    else                                               this.resizeContent( 'slide code' );
+                },
+                hideCode  : function(){
+                    wrap_el.code.classList.add('code-hide');
+
+                    if( wrap_el.slide.classList.contains('navigation-hide') ) this.resizeContent( 'edge edge' );
+                    else                                                      this.resizeContent( 'slide edge' );
+                },
+                showCode  : function(){
+                    wrap_el.code.classList.remove('code-hide');
+
+                    if( wrap_el.slide.classList.contains('navigation-hide') ) this.resizeContent( 'edge code' );
+                    else                                                      this.resizeContent( 'slide code' );
+                },
+                resizeContent: function( S ){
+                    if( S == 'slide edge' ){
+                        wrap_el.content.classList.remove('content-has-left-edge');
+                        wrap_el.content.classList.remove('content-has-both-edge');
+
+                        wrap_el.content.classList.add('content-has-right-edge');
+                        console.log(wrap_el.content.classList);
+                    }else if( S == 'edge code' ){
+                        wrap_el.content.classList.remove('content-has-both-edge');
+                        wrap_el.content.classList.remove('content-has-right-edge');
+
+                        wrap_el.content.classList.add('content-has-left-edge');
+                        console.log(S);
+                    }else if( S == 'slide code' ){
+                        wrap_el.content.classList.remove('content-has-both-edge');
+                        wrap_el.content.classList.remove('content-has-right-edge');
+                        wrap_el.content.classList.remove('content-has-left-edge');
+                        console.log(S);
+                    }else if( S== 'edge edge' ){
+                        wrap_el.content.classList.add('content-has-both-edge');
+                        console.log(S);
+                    }
+                }
+            };
+
+    var view = function( arg ){
+        var _ = this;
+
+        _.el    = arg.el;
+        _.title = arg.title;
+        _.tag   = arg.tag;
+
+        if( typeof arg.viewDidLoad == 'function') _.viewDidLoad = arg.viewDidLoad;
+        if( typeof arg.viewDidMove == 'function') _.viewDidMove = arg.viewDidMove;
+    };
+
+    var bar = function( arg ){
+        var _ = this;
+
+        _.el      = arg.ele;
+        _.title   = arg.title;
+        _.backBtn = arg.backBtn;
+    };
+    bar.prototype = {
+        titleChange: function( title, back ){
+            var _ = this;
+            _.title.innerText   = title;
+            _.backBtn.innerText = back || 'back';
+        }
+    };
+
+    var navigationVC = function( arg ){
+        var _ = this;
+//        _.wrap        = arg.wrap;
+        _.title         = arg.title;
+        _.currentView   = arg.view;
+        _.preView      = _.currentView;
+        _.bar           = arg.bar;
+        _.view          = [ _.currentView ];
+
+        _.push_class  = arg.push_class || 'view-push';
+
+        _.changeTitle();
+        _.currentView.viewDidLoad();
+
+    };
+    navigationVC.prototype = {
+        init: function(){
+
+        },
+        changeTitle: function(){
+            this.bar.titleChange( this.currentView.title, this.preView.title );
+        },
+        pop:  function(){
+            var _ = this;
+
+            var view_len = _.view.length;
+            _.preView = _.view[ view_len - 3 ];
+            if( view_len == 1 ) return;
+            if( view_len == 2 ) _.bar.backBtn.style.display = 'none';
+            if( view_len == 2 ) _.preView = _.view[0];
+
+            _.currentView.el.classList.remove( _.push_class );
+//            _.currentView.viewDidMove();
+
+            _.view.pop();
+            _.currentView = _.view[ view_len - 2 ];
+            _.changeTitle();
+
+        },
+        push: function( view ){
+            var _ = this;
+
+            _.bar.backBtn.style.display = 'block';
+            _.changeTitle( view.title );
+
+            view.viewDidLoad();
+            _.view.push(view);
+            _.preView = _.currentView;
+            _.currentView = view;
+            view.el.classList.add( _.push_class );
+            _.changeTitle();
+            console.log(_.view);
+        }
+    };
+
+    var bar      = new bar ({ el: $('.nav-bar'), title: $('.nav-bar-title'), backBtn: $('.nav-bar .back-btn') }),
+
+    mainView              = new view({ el: $('.main-view'), title: 'Welcome', tag: 0, viewDidLoad: function(){
+        console.log('main view load');
+    }}),
+
+    archiveView           = new view({ el: $('.archive-view'), title: 'Archive', tag: 1, viewDidLoad: function(){
+        console.log('archive view load');
+    }}),
+
+    pagesWebView          = new view({ el: $('.pages-web-view'), title: 'Web Pages', tag: 2, viewDidLoad: function(){
+        console.log('web view load');
+    }}),
+
+    pagesCssView          = new view({ el: $('.pages-css-view'), title: 'CSS Pages', tag: 2, viewDidLoad: function(){
+        console.log('css view load');
+    }}),
+
+    pagesIosView          = new view({ el: $('.pages-ios-view'), title: 'IOS Pages', tag: 2, viewDidLoad: function(){
+        console.log('ios view load');
+    }}),
+
+    pagesJavascriptView   = new view({ el: $('.pages-javascript-view'), title: 'JS Pages', tag: 2, viewDidLoad: function(){
+        console.log('js view load');
+    }}),
+
+    pagesGameView         = new view({ el: $('.pages-game-view'), title: 'Game Pages', tag: 2, viewDidLoad: function(){
+        console.log('game view load');
+    }}),
+
+    NC       = new navigationVC({ view: mainView, bar: bar });
+
+//    NC.push( archiveView );
+    $('.start-btn').onclick = function(){ NC.push( archiveView ) };
+    $('.nav-bar .back-btn').onclick = function(){ NC.pop() };
+
+    $('.archive-btn').addEventListener('click', function(e){
+        if( e.target == this ) return;
+
+        var label = e.target.getAttribute('data-label');
+        switch (label){
+            case 'web'         : NC.push( pagesWebView );        break;
+            case 'css'         : NC.push( pagesCssView );        break;
+            case 'ios'         : NC.push( pagesIosView );        break;
+            case 'javascript'  : NC.push( pagesJavascriptView ); break;
+            case 'game'        : NC.push( pagesGameView );       break;
+            default            : return;
+        }
+    }, false);
+
+
+    [].slice.call( $$('.spring-btn button')).forEach(function( el, i ){
+        var action = el.getAttribute('data-action');
+
+        if( action == 'hide-slide' ){
+            el.onclick = function(){
+                if( el.classList.contains('selected') ){
+                    resizeEdge.showSlide();
+                    el.classList.remove('selected');
+                }else{
+                    resizeEdge.hideSlide();
+                    el.classList.add('selected');
+                }
+            }
+        }else if( action == 'hide-code' ){
+            el.onclick = function(){
+                if( el.classList.contains('selected') ){
+                    resizeEdge.showCode();
+                    el.classList.remove('selected');
+                }else{
+                    resizeEdge.hideCode();
+                    el.classList.add('selected');
+                }
+            }
+        }
+    });
+
+</script>
+</html>

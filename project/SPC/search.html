@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        *{ padding: 0px; margin: 0px; }
+        button, input, select{ outline: none; }
+
+        .search      { position: relative; height: 42px; width: 80%; left: 50%; top: 177px; -webkit-transform: translateX(-50%); -webkit-transition: all 0.4s; }
+        .search input{ position: relative; width: 96%; height: 100%; padding: 0% 2%; border: none; background-color: #EDEDED; border-radius: 4px; color: #000000; font-size: 1.6em; }
+        .search.up   { top: 17px; }
+    </style>
+</head>
+<body>
+<div class="search"><input></div>
+<div class="keyboard"></div>
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    $('.search input').onfocus = function(){
+        $('.search').classList.add('up');
+    };
+    $('.search input').onblur  = function(){
+        $('.search').classList.remove('up');
+    }
+</script>
+</html>
