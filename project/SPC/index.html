@@ -47,6 +47,14 @@
         .view-wrap .pages-web-view, .view-wrap .pages-css-view, .view-wrap .pages-ios-view, .view-wrap .pages-javascript-view, .view-wrap .pages-game-view
         { width: 100%; height: 100%; background-color: #ffffff; overflow-y: scroll; }
 
+        .view-wrap .nav-view ul
+        { position: relative; top: 27px; width: 95%; height: auto; background-color: transparent; margin-left: 5%; list-style: none; cursor: pointer; }
+        .view-wrap .nav-view ul li
+        { height: 31px; line-height: 31px; background-color: transparent; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #EDEDED; border-radius: 0px; }
+        .view-wrap .nav-view ul li p{ margin-left: 0px; }
+        .view-wrap .nav-view ul li:hover
+        { color: #ffffff; background-color: #0678C9; }
+
         li.has-sub-level:before{  }
 
         .content{ position: absolute; top: 0px; left: 278px; width: calc( 100% - 578px ); height: 100%; background-color: #ffffff; }
@@ -65,7 +73,7 @@
         .content nav .state-bar:before, .content nav .state-bar:after
         { content: attr(text); position: absolute; color: #ffffff; line-height: 27px; padding: 0% 2%; height: 100%; left: 0px; top: 0px; background-color: transparent; border-radius: 4px; }
         .content nav .state-bar:before{ width: 96%; }
-        .content nav .state-bar:after { width: 50%; background-color: red; }
+        .content nav .state-bar:after { width: 96%; background-color: #0678C9; }
 
         .content nav .spring-btn{ position: absolute; width: 10%; height: 27px; border-radius: 4px; right: 2.5%; top: 10px; background-color: transparent; }
         .content nav .spring-btn button{ position: relative; width: 50%; border: none; height: 27px; border-radius: 4px; background-color: #ffffff; }
@@ -122,7 +130,9 @@
             </div>
 
             <div class="nav-view pages-css-view">
-
+                <ul class="pages-css-btn">
+                    <li><p data-label="icon-exclamation">icon-exclamation</p></li>
+                </ul>
             </div>
 
             <div class="nav-view pages-ios-view">
@@ -143,12 +153,12 @@
             </div>
         </nav>
 
-        <iframe src="search.html"></iframe>
+        <iframe id="content-i" src="search.html"></iframe>
     </section>
 
     <section id="code-view" class="code">
         <nav></nav>
-        <iframe src="codesearch.html"></iframe>
+        <iframe id="code-i" src="codesearch.html"></iframe>
     </section>
 </body>
 <script>
@@ -178,7 +188,9 @@
     var wrap_el = {
         slide      : $('.navigation'),
         content    : $('.content'),
-        code       : $('.code')
+        code       : $('.code'),
+        Icontent   : $('#content-i'),
+        Icode      : $('#code-i')
             },
             resizeEdge = {
                 hideSlide : function(){
@@ -387,6 +399,17 @@
             }
         }
     });
+
+    $('.pages-css-btn').onclick = function(e){
+        if(e.target == this ) return;
+        var label = e.target.getAttribute('data-label'),
+                h = './pages/css/'      + label +'.html',
+                c = './pages/css/code'  + label +'.html';
+        console.log(label);
+        wrap_el.Icontent.src = h;
+        wrap_el.Icode.src    = c;
+        $('.state-bar').setAttribute('text', label);
+    }
 
 </script>
 </html>
