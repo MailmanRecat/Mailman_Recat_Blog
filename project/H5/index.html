@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        @font-face {
+            font-family: roboto;
+            src:url('Roboto.woff2') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: roboto; }
+
+        button{ cursor: pointer; }
+        input, select, button{ outline: none; }
+        ul{ list-style: none; }
+
+        .segment-controller{ position: relative; width: 100%; height: 32px; background-color: #EDEDED; }
+        .segment-controller button{ height: 100%; outline: none; }
+
+        .input-label{ position: relative; width: 30%; height: 21px; margin-bottom: 21px; border: 1px solid #CFCFCF; }
+        .input-label input{ position: absolute; padding: 0px 5%; width: 90%; height: 100%; border: none; }
+        .input-label:after{ content: attr(text); font-size: 0.8em; position: absolute; color: #000000; text-align: center; line-height: 21px; width: 100%; height: 21px; top: 21px; left: 0%; }
+
+        header{ position: fixed; width: calc( 100% - 277px ); right: 0px; top: 0px; height: 47px; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); z-index: 77; }
+
+        header .phone-wrap-scale-btn{ position: absolute; width: 120px; right: 17px; height: 27px; top: 10px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+        .phone-wrap-scale-btn button{ position: absolute; top: 0px; font-size: 1em; width: 58px; background-color: #ffffff; height: 27px; border: none; border-radius: 2px; outline: none; cursor: pointer; }
+        .phone-wrap-scale-btn button:nth-child(1){ left: 0px; }
+        .phone-wrap-scale-btn button:nth-child(2){ right: 0px; }
+        .phone-wrap-scale-btn button:hover{ background-color: #0678C9; color: #ffffff; }
+
+        .slide-wrap{ position: fixed; left: 0px; top: 0px; width: 277px; height: 100%; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); z-index: 77; overflow: hidden; }
+        .slide-wrap nav{ position: absolute; top: 0px; left: 0px; width: 100%; height: 47px; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); z-index: 87; overflow-y: scroll; }
+        .slide-wrap nav .slide-back-btn { display: none; position: absolute; left: 0px; width: auto; color: #0678C9; font-size: 1.2em; padding: 0px 0px 0px 23px; border: none; background-color: #ffffff; height: 47px; }
+        .slide-wrap nav .slide-back-btn:before
+        { position: absolute; left: 10px; top: 17px; display: block; content: ''; border-bottom: 2px solid #0678C9; border-left: 2px solid #0678C9; width: 13px; height: 13px; -webkit-transform: rotate(45deg); }
+        .slide-wrap nav .slide-nav-title{ text-align: center; margin-right: 27px; line-height: 47px; font-size: 1.6em; z-index: 1; }
+
+        .slide-wrap .view-wrap{ position: absolute; width: 100%; height: calc( 100% - 47px ); left: 0px; top: 47px; background-color: #004050; overflow: hidden;  }
+        .view-wrap .view{ position: absolute; left: 0%; top: 0px; width: 100%; height: 100%; background-color: #ffffff; -webkit-transition: all 0.4s ease-in-out; }
+        .view-wrap .view.view-push{ -webkit-transform: translateX(-100%); }
+        .view-wrap .view:nth-child(1){ z-index: 1; }
+        .view-wrap .view:nth-child(2){ z-index: 2; left: 100%; background-color: #ffffff; }
+        .view-wrap .view:nth-child(3){ z-index: 3; left: 100%; }
+        .view-wrap .view:nth-child(4){ z-index: 4; left: 100%; }
+        .view-wrap .view:nth-child(5){ z-index: 5; left: 100%; }
+        .view-wrap .view:nth-child(6){ z-index: 6; left: 100%; }
+        .view-wrap .view:nth-child(7){ z-index: 7; left: 100%; }
+
+        .main-view ul{ position: relative; top: 27px; width: 90%; height: auto; background-color: transparent; padding: 0% 5%; list-style: none; cursor: pointer; }
+        .main-view ul li{ height: 37px; line-height: 37px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; }
+        .main-view ul li p{ margin-left: 17px; }
+        .main-view ul li:hover{ background-color: #EDEDED; }
+
+        .main-view .add-view{ position: relative; width: 90%; height: 37px; margin: 0px auto; top: 27px; }
+        .main-view .add-view input{ width: 80%; height: 37px; background-color: #EDEDED; border: none; border-radius: 4px; outline: none; font-size: 1.2em; }
+        .main-view .add-view button{ position: absolute; right: 0px; top: 0px; width: 20%; height: 100%; background-color: #0678C9; border-radius: 4px; border: none; color: #ffffff; }
+        .main-view .add-view button:active{ background-color: #ffffff; color: #0678C9; }
+
+        .format-view ul{ position: relative; top: 27px; width: 90%; height: auto; background-color: transparent; padding: 0% 5%; list-style: none; cursor: pointer; }
+        .format-view ul li{ height: 37px; line-height: 37px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; }
+        .format-view ul li p{ margin-left: 17px; }
+        .format-view ul li:hover{ background-color: #EDEDED; }
+
+        .format-view .add-view{ position: relative; width: 90%; height: 37px; margin: 0px auto; top: 27px; }
+        .format-view .add-view button{ font-size: 1.2em; position: absolute; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #0678C9; border-radius: 4px; border: none; color: #ffffff; }
+        .format-view .add-view button:active{ background-color: #ffffff; color: #0678C9; }
+
+        .style-view .segment-controller button{ position: absolute; top: 0px; width: calc( 100% / 3 ); color: #000000; font-size: 1em; background-color: #EDEDED; border: none; border-radius: 0px; }
+        .style-view .segment-controller button:nth-child(1){ left: 0px; }
+        .style-view .segment-controller button:nth-child(2){ left: calc( 100% / 3 ); }
+        .style-view .segment-controller button:nth-child(3){ left: calc( 100% / 3 * 2 ); }
+        .style-view .segment-controller button.selected{ background-color: #0678C9; color: #ffffff; }
+
+        .style-view .style-box{ position: absolute; top: 37px; width: 100%; height: auto; }
+        .style-view .style{ display: none; }
+        .style-view .arrange{ display: block; }
+
+        .style-view ul   { position: relative; top: 0px; width: 100%; height: auto; background-color: transparent; padding: 0% 0%; list-style: none; cursor: pointer; }
+        .style-view ul li{ position: relative; height: 47px; min-height: 47px; line-height: 47px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; overflow: hidden; }
+        .style-view ul li.solid-height{ height: 47px; }
+        .style-view ul li{ height: auto; }
+        .style-view ul li.has-content-box.solid-height.spread{ height: auto; }
+        .style-view ul li.has-content-box.spread:before      { content: ''; position: absolute; border: 5px solid transparent; border-top-color: #6B6B6B; left: 7px; top: 18px; }
+        .style-view ul li.has-content-box:before             { content: ''; position: absolute; border: 5px solid transparent; border-left-color: #6B6B6B; left: 7px; top: 18px; }
+        .style-view ul li:hover{ background-color: #EDEDED; }
+        .style-view ul li p    { margin-left: 27px; }
+        .style-view ul li h4   { margin-left: 5%; }
+
+        .style-view ul li select{ width: 90%; margin-left: 5%; }
+        .style-view ul li .input-label{ width: calc( 42.5% - 2px ); float: left; }
+        .style-view ul li .input-label input{ text-align: right; }
+        .style-view ul li.position .input-label:nth-child(even){ margin-left: 5%; margin-right: 2.5%; }
+        .style-view ul li.position .input-label:nth-child(odd) { margin-left: 2.5%; margin-right: 5%; }
+        .style-view ul li.size .input-label:nth-child(even){ margin-left: 2.5%; margin-right: 5%; }
+        .style-view ul li.size .input-label:nth-child(odd) { margin-left: 5%; margin-right:2.5%;  }
+        .style-view ul li.rotate .input-label{ width: 90%; margin-left: 5%; }
+
+        .style-view .view-pick-color{ position: absolute; top: 10px; right: 7px; border-radius: 4px; width: 70px; background-color: #0678C9; height: 26px; border: 1px solid #CFCFCF; }
+        .style-view .view-pick-border{ position: absolute; top: 10px; right: 7px; border-radius: 4px; width: 70px; background-color: #ffffff; height: 26px; border: 1px solid #CFCFCF; }
+
+        .style-view .pick-color-content-box{ position: relative; width: 100%; height: 200px; background-color: #ffffff; }
+
+        .contain-wrap{ position: absolute; height: auto; width: calc( 100% - 277px ); right: 0px; top: 47px; background-color: orangered; }
+
+        .contain-wrap .phone-wrap{ position: relative; overflow: hidden; margin: 27px auto; width: 375px; height: 667px; background-color: #ffffff; -webkit-transition: all 0.4s; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+
+        .phone-wrap .phone-view-wrap{ position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; }
+        .phone-wrap .phone-view-wrap .phone-view{ position: relative; width: 100%; height: 100%; background-color: #a9a9a9; }
+
+    </style>
+</head>
+<body>
+    <header>
+
+        <div class="phone-wrap-scale-btn">
+            <button data-label="minus">minus</button>
+            <button data-label="plus">plus</button>
+        </div>
+
+    </header>
+
+    <section id="slide" class="slide-wrap">
+        <nav><button class="slide-back-btn">back</button><p class="slide-nav-title">Title</p></nav>
+
+        <section class="view-wrap">
+
+            <div class="main-view view">
+                <ul>
+                    <li class="demobtn" data-type="view"><p>view 1</p></li>
+                    <li data-type="view"><p>view 2</p></li>
+                    <li data-type="view"><p>view 2</p></li>
+                </ul>
+                <div class="add-view">
+                    <input type="text" placeholder="view name"><button>add</button>
+                </div>
+            </div>
+
+            <div class="format-view view">
+                <ul>
+                    <li><p>subview</p></li>
+                    <li class="demoview"><p>view 1</p></li>
+                    <li><p>view 2</p></li>
+                    <li><p>view 3</p></li>
+                    <li><p>view 4</p></li>
+                    <li><p>view 5</p></li>
+                </ul>
+                <div class="add-view">
+                    <button>add subview</button>
+                </div>
+            </div>
+            <div class="style-view view">
+                <div class="segment-controller">
+                    <button class="">Style</button>
+                    <button>Text</button>
+                    <button class="selected">Arrange</button>
+                </div>
+
+                <div class="style style-box">
+                    <ul>
+                        <li class="solid-height has-content-box">
+                            <p>Fill</p><button class="view-pick-color"></button>
+                            <div class="pick-color-content-box">
+                                <p>color with RGB</p>
+                            </div>
+                        </li>
+                        <li class="solid-height has-content-box"><p>Border</p><button class="view-pick-border"></button></li>
+                        <li class="solid-height has-content-box"><p>Shadow</p><button class="view-pick-shadow"></button></li>
+                        <li class="solid-height has-content-box"><p>Opacity</p></li>
+                    </ul>
+                </div>
+
+                <div class="text style-box">
+
+                </div>
+                <div class="arrange style-box">
+                    <ul>
+                        <li class="position">
+                            <h4>Position</h4>
+                            <select>
+                                <option>absolute</option>
+                                <option>fixed</option>
+                            </select>
+                            <select>
+                                <option>unit</option>
+                                <option>px</option>
+                                <option>%</option>
+                            </select>
+                            <div class="input-label" text="Left"><input type="text" placeholder="Left"></div>
+                            <div class="input-label" text="Right"><input type="text" placeholder="Right"></div>
+                            <div class="input-label" text="Top"><input type="text" placeholder="Top"></div>
+                            <div class="input-label" text="Bottom"><input type="text" placeholder="Bottom"></div>
+                        </li>
+                        <li class="size">
+                            <h4>Size</h4>
+                            <select>
+                                <option>unit</option>
+                                <option>px</option>
+                                <option>%</option>
+                            </select>
+                            <div class="input-label" text="Height"><input type="text" placeholder="Height"></div>
+                            <div class="input-label" text="Width"><input type="text" placeholder="Width"></div>
+                        </li>
+                        <li class="rotate">
+                            <h4>Rotate</h4>
+                            <select>
+                                <option>unit</option>
+                                <option>deg</option>
+                            </select>
+                            <div class="input-label" text="Rotate Value"><input type="text" placeholder="Rotate Value"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="contain" class="contain-wrap">
+        <div class="phone-wrap">
+            <div class="phone-view-wrap">
+                <div class="phone-view"></div>
+                <div class="phone-view" style="background-color: indianred;"></div>
+            </div>
+        </div>
+    </section>
+</body>
+<script>
+
+    var $  = function(obj){ return document.querySelector(obj)          },
+        $$ = function(obj){ return document.querySelectorAll(obj)       },
+        $n = function(obj){ return document.getElementsByClassName(obj) };
+
+    var phone_wrap = {
+        el      : $('.phone-wrap'),
+        scaleValue   : 1
+    };
+
+    [].slice.call( $$('.phone-wrap-scale-btn button')).forEach(function( el, i ){
+        var label = el.getAttribute('data-label');
+
+        var operation = { plus: 0, minus: 1},
+        scale = function( opera ){
+            console.log('click');
+            switch (opera){
+                case operation.plus : if( phone_wrap.scaleValue < 1  ) phone_wrap.scaleValue += 0.1; break;
+                case operation.minus: if( phone_wrap.scaleValue > 0.5) phone_wrap.scaleValue -= 0.1; break;
+            }
+            phone_wrap.el.style.webkitTransform = 'scale('+phone_wrap.scaleValue+')';
+        };
+
+        if( label == 'plus'  ) el.onclick = function(){ scale( operation.plus ) };
+        if( label == 'minus' ) el.onclick = function(){ scale( operation.minus )};
+
+    });
+
+    var view = function( arg ){
+        var _ = this;
+
+        _.el    = arg.el;
+        _.title = arg.title;
+        _.tag   = arg.tag;
+
+        if( typeof arg.viewDidLoad == 'function') _.viewDidLoad = arg.viewDidLoad;
+        if( typeof arg.viewDidMove == 'function') _.viewDidMove = arg.viewDidMove;
+    };
+
+    var navigationVC = function( arg ){
+        var _ = this;
+//        _.wrap        = arg.wrap;
+        _.title         = arg.title;
+        _.currentView   = arg.view;
+        _.backBtn       = arg.backBtn;
+        _.view          = [ _.currentView ];
+
+        _.push_class  = arg.push_class || 'view-push';
+
+        _.changeTitle();
+        _.currentView.viewDidLoad();
+    };
+    navigationVC.prototype = {
+        init: function(){
+
+        },
+        changeTitle: function(){
+            this.title.innerText = this.currentView.title;
+        },
+        pop:  function(){
+            var _ = this;
+
+            var view_len = _.view.length;
+            if( view_len == 1 ) return;
+            if( view_len == 2 ) _.backBtn.style.display = 'none';
+
+            _.currentView.el.classList.remove( _.push_class );
+//            _.currentView.viewDidMove();
+
+            _.view.pop();
+            _.currentView = _.view[ view_len - 2 ];
+            _.changeTitle();
+
+            console.log(_.view);
+
+        },
+        push: function( view ){
+            var _ = this;
+
+            _.backBtn.style.display = 'block';
+            _.changeTitle( view.title );
+
+            view.viewDidLoad();
+            _.view.push(view);
+            _.currentView = view;
+            view.el.classList.add( _.push_class );
+            _.changeTitle();
+            console.log(_.view);
+        }
+    }
+
+    var view_one = new view({ el: $('.main-view'), title: 'Main', tag: 0, viewDidLoad: function(){
+        console.log('view load');
+    }});
+
+    var view_two = new view({ el: $('.format-view'), title: 'Format', tag: 1, viewDidLoad: function(){
+        console.log('view load too');
+    }});
+
+    var view_thress = new view({ el: $('.style-view'), title: 'Style', tag: 2, viewDidLoad: function(){
+        console.log('view load again');
+    }});
+
+    var NC = new navigationVC({ title: $('.slide-nav-title'), view: view_one, backBtn: $('.slide-back-btn') });
+    NC.push( view_two );
+    NC.push( view_thress );
+    $('.slide-back-btn').onclick = function(){
+        NC.pop();
+    }
+
+    $('.demobtn').onclick = function(){ NC.push( view_two ) };
+    $('.demoview').onclick = function(){ NC.push( view_thress ) };
+
+</script>
+</html>

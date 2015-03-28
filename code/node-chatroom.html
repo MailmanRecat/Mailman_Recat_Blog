@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+
+        @font-face {
+            font-family: roboto;
+            src:url('../Roboto.woff2') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; font-family: roboto; }
+
+        .code{ position: relative; width: 80%; padding: 7px; border-radius: 2px; background-color: #a9a9a9; margin: 17px auto; -webkit-user-select: none; }
+        .code ul{ position: absolute; left: 7px; top: 0px; width: 80px; list-style: none; }
+        .code li{ height: 27px; line-height: 27px; color: #ffffff; }
+        .code .content{ position: absolute; left: 87px; top: 0px; height: auto; width: calc( 100% - 20px ); }
+        .code p{ color: #ffffff; height: 27px; line-height: 27px; }
+
+        .code-cube{ background-color: #004052; border-radius: 2px; color: #ffffff; padding: 0px 14px; }
+
+        #slide{ position: fixed; left: 0px; top: 0px; width: 299px; height: 100%; border-right: 1px solid #CFCFCF; }
+        #content-wrap{ padding: 100px 0px; position: absolute; left: 300px; width: calc( 100% - 300px ); height: auto; }
+
+        #slide header{ position: fixed; width: 300px; height: 77px; background-color: #004052; opacity: 1; }
+
+        #slide ul{ list-style: none; position: relative; top: 100px; width: 100%; cursor: pointer; }
+        #slide ul li{ height: 42px; margin-left: 7px; border-left: 4px solid transparent; }
+        #slide ul li.selected{ border-left: 4px solid #004052; }
+        #slide ul li p{ margin-left: 27px; line-height: 42px; }
+
+        #content-wrap header{ position: fixed; right: 0px; top: 0px; width: calc( 100% - 300px ); height: 300px; background-color: #000000; opacity: 0.8; }
+        #content-wrap header.header-shadow{  }
+
+        .chat-model{ position: relative; margin: 7px auto; width: 80%; height: 400px; border: 2px solid #a9a9a9; }
+        .chat-box  { position: absolute; left: 0px; bottom: 0px; width: 100%; height: 38px; background-color: #ffff00; }
+        .chat-box input { width: calc( 80% - 2px ); height: calc( 100% - 2px ); outline: none; font-size: 1.4em; border-bottom: none; border-left: none; border-top: 2px solid #a9a9a9; border-right: 2px solid #a9a9a9; }
+        .chat-box button{ position: absolute; right: 0px; bottom: 0px; font-size: 1.4em; cursor: pointer; width: 20%; height: 100%; border: none; background-color: #a9a9a9; outline: none;  }
+
+        .chat-model .chat-wrap{ position: absolute; z-index: 1; width: 100%; height: 100%; top: 0px; left: 0px; background-color: #000000; opacity: 0.8; }
+        .chat-model .chat-wrap h1{ line-height: 177px; text-align: center; color: #ffffff; }
+        .chat-model .chat-wrap input{ position: relative; width: 40%; height: 32px; border: none; margin-left: 20%; outline: none; }
+        .chat-model .chat-wrap button{ position: relative; width: 20%; height: 32px; border: none; background-color: #a9a9a9; cursor: pointer; outline: none; }
+    </style>
+</head>
+<body>
+
+    <section id="slide">
+        <header></header>
+        <ul>
+            <li class="selected"><p data-index="0">立刻开始</p></li>
+            <li><p>模块</p></li>
+            <li><p>创建文件</p></li>
+            <li><p>界面</p></li>
+            <li><p>系统层级的监听</p></li>
+            <li><p>用户层级的监听</p></li>
+            <li><p>系统消息</p></li>
+            <li><p>用户消息</p></li>
+            <li><p>完成</p></li>
+        </ul>
+    </section>
+
+    <section id="content-wrap">
+        <header></header>
+        <h2>通过这篇文章，我将会引导你一步步完成一个简单的web聊天系统。</h2>
+
+        <h2>利用node.js构建基于web的聊天系统，我们无法缺少一些必要模块。我们的系统仅需三个模块: http, express, socket.io</h2>
+        <h2>不知道如何安装以及引入模块？</h2>
+        <div></div>
+        <ul>
+            <li><p>http</p><p>使用这个模块来创建一个简单的HTTP服务器。</p></li>
+            <li><p>express</p><p>express是node.js中管理路由响应请求的模块，用户通过URL访问我们服务器，这个模块将根据URL返回相应的文件。我们将使用这个模块来返回一个HTML文件，也就是我们的聊天页面。</p></li>
+            <li><p>socket.io</p><p>通讯模块，保持客户端和服务端的长时链接，对各种事件加以反应。例如监听用户何时加入聊天室</p></li>
+        </ul>
+
+        <h2>接下来，开始创建我们的第一个文件。</h2>
+        <h2>你还是先把一个简单的聊天窗口写好吧...嗯，不知道你是怎么想的，但还是请你尽情发挥想象力吧，方的圆的三角的都是没问题的。但是最起码，得像下面这个吧，有一个输入窗口，有一个发送按钮，上面再写一个框框当作显示屏。最后将其保存为html文件。</h2>
+        <div class="chat-model">
+            <div class="chat-box"><input placeholder="Input Your Message here"><button>send</button></div>
+        </div>
+
+        <div class="scroll-index" style="height: 100px;"></div>
+
+        <p>这是我的代码:</p>
+        <div class="code">
+            <div class="content">
+                <!--<!DOCTYPE html>-->
+                <!--<html>-->
+                <!--<head lang="en">-->
+                    <!--<meta charset="UTF-8">-->
+                    <!--<title></title>-->
+                    <!--<style>-->
+                        <!--*{ padding: 0px; margin: 0px }-->
+                        <!--#wrap{ position: relative; width: 80%; height: 400px; border: 2px solid #a9a9a9; }-->
+                        <!--#wrap #message-box { width: 100%; height: calc( 400px - 32px ); }-->
+                        <!--#wrap #send-message-->
+                        <!--{ width: calc( 80% - 2px ); height: 30px; border-left: none; border-right: 2px solid #a9a9a9; border-bottom: none; border-top: 2px solid #a9a9a9; }-->
+                        <!--#wrap #send-message-btn-->
+                        <!--{ position: absolute; right: 0px; bottom: 0px; background-color: #a9a9a9; width: 20%; height: 32px; border: none; }-->
+                    <!--</style>-->
+                <!--</head>-->
+                <!--<body>-->
+                <!--<div id="wrap">-->
+                    <!--<div id="message-box"></div>-->
+                    <!--<input id="send-message" placeholder="Input Your Message Here"><button id="send-message-btn">Send</button>-->
+                <!--</div>-->
+                <!--</body>-->
+                <!--</html>-->
+            </div>
+        </div>
+
+        <h2>窗口写完了吗？不过既然你已经看到这里，我们还是当作你已经写好哪个简单的聊天窗口了吧。那我们开始写下一个文件吧。注意！这个文件相当重要！麻烦你先在根目录创建一个文件，名字就叫做server.js吧，不喜欢自己改，改了到下面看不懂自己再改回来也行的。</h2>
+        <div class="code" style="height: 257px">
+            <ul>
+                <li>+1</li>
+                <li>+2</li>
+                <li>+3</li>
+                <li>+4</li>
+                <li>+5</li>
+                <li>+6</li>
+                <li>+7</li>
+                <li>+8</li>
+                <li>+9</li>
+            </ul>
+
+            <div class="content">
+                <p>var http  =  require( 'http' );</p>
+                <p>var express  =  require('express'), app = new express();</p>
+                <p><br></p>
+                <p>var server  =  http.createServer(app);</p>
+                <p>var io  =  require('socket.io').listen(server);</p>
+                <p>app.use( '/', express.static(__dirname + '/web') );</p>
+                <p>server.listen( 1337 );</p>
+                <p><br></p>
+                <p>console.log('start at 1337;');</p>
+            </div>
+        </div>
+        <p>不知道你是手打的还是直接粘贴复制的，不过既然你已经看到这里了，我还是当作你是手打的吧。让开，我来解释解释这几行垃圾代码什么意思。</p>
+        <p>首先从第一句话开始吧，第一句话很简单，意思就是我们引入了那个叫'http'的模块，把这个模块引入进来干嘛？这个模块干什么用的？如果你脑海里面此刻冒出来的是这种问题的话，我建议你点击一个这个按钮<button>点击我</button></p>
+        <p>然后我们将目光聚焦到第2句，第5句，第7句。这三句合起来的意思就是，如果用户访问了我们的服务器，我们就返回web文件夹里面的index.html给他。</p>
+        <p>再看第四句，嗯，这一句的意思就是，我想稍微有点英文基础的同学都应该能看懂吧，就是创建一个服务器啊。然后看到第七句，这一句的意思就是...</p>
+        <p>接下来，嗯，打开你的终端，在当前目录下，键入 <label class="code-cube">node server.js</label> 。如果没有错的话，终端应该会输出一句 <label class="code-cube">start at 1337</label> 。如果有错的话，也请不要灰心，毕竟一开始的时候，照着别人的代码敲，百分百都会出错的。没出错的那些可能是运气好。</p>
+        <p>实在不行的话，还是重启一下电脑吧。</p>
+        <p>没有出错的话，打开你的浏览器，键入 <label class="code-cube">http://localhost:1337</label> 就能顺利访问你刚才建好的页面了。</p>
+
+        <h2>好吧，如果你已经看到这里，那么我就假设你到目前为止，一切都很正常吧。下面，我们就开始监听事件了哦。</h2>
+        <h2>下面我将会向你介绍几个重要得方法！</h2>
+        <h2><label class="code-cube">emit</label> / <label class="code-cube">on</label> / <label class="code-cube">broadcast.emit</label></h2>
+        <p>使用 <label class="code-cube">socket.io</label> 前后端的方法都是一样的，你用 <label class="code-cube">socket.emit()</label>就可以向后端/前端发送消息了，使用socket.on就可以在后端/前端监听后端/前端事件了。 </p>
+        <p>使用broadcast.emit可以向所有的用户发送消息。</p>
+
+        <h2>好了，知道了这几个方法，我们就可以开始继续我们的server了</h2>
+
+        <div class="code" style="height: 1000px">
+            <ul>
+                <li>+1</li>
+                <li>+2</li>
+                <li>+3</li>
+                <li>+4</li>
+                <li>+5</li>
+                <li>+6</li>
+                <li>+7</li>
+                <li>+8</li>
+                <li>+9</li>
+                <li>+10</li>
+                <li>+11</li>
+                <li>+12</li>
+                <li>+13</li>
+                <li>+14</li>
+                <li>+15</li>
+                <li>+16</li>
+                <li>+17</li>
+                <li>+18</li>
+                <li>+19</li>
+                <li>+20</li>
+                <li>+21</li>
+                <li>+22</li>
+                <!--<li>+23</li>-->
+                <!--<li>+24</li>-->
+                <!--<li>+25</li>-->
+                <!--<li>+26</li>-->
+                <!--<li>+27</li>-->
+            </ul>
+
+            <div class="content">
+                <p>var http  =  require( 'http' );</p>
+                <p>var express  =  require('express'), app = new express();</p>
+                <p><br></p>
+                <p>var server  =  http.createServer(app);</p>
+                <p>var io  =  require('socket.io').listen(server);</p>
+                <p>app.use( '/', express.static(__dirname + '/web') );</p>
+                <p>server.listen( 1337 );</p>
+                <p><br></p>
+                <p>console.log('start at 1337;');</p>
+                <p><br></p>
+                <p>io.on('connection', function( socket ){</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; socket.on('login', function( name ){</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if( users.indexOf( name ) > -1 ){</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; socket.emit('nameExisted');</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }else{</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; socket.userIndex = users.length;</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; socket.userName  = name;</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; users.push( name );</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; socket.emit( 'loginSuccess' );</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; io.sockets.emit( 'system', name, users.length, 'login');</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; console.log(users.length);</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+                <p>}</p>
+            </div>
+        </div>
+
+        <p>打开之前写好的html文件，首先引入socket模块 <label class="code-cube">&lt;script src="/socket.io/socket.io.js"&gt;&lt;/script&gt;</label></p>
+        <p>接下来还要再写一个遮罩，用户输入用户名之后，如果与其他用户名不重复，则可以登陆。这样我们就可以统计用户数量了。</p>
+
+
+        <div class="chat-model">
+            <div class="chat-wrap"><h1>Input Your Name Here</h1><input><button>Login</button></div>
+            <div class="chat-box"><input placeholder="Input Your Message here"><button>send</button></div>
+        </div>
+
+        <div class="code" style="height: 2000px">
+            <ul>
+                <li>+1</li>
+                <li>+2</li>
+                <li>+3</li>
+                <li>+4</li>
+                <li>+5</li>
+                <li>+6</li>
+                <li>+7</li>
+                <li>+8</li>
+                <li>+9</li>
+                <li>+10</li>
+                <li>+11</li>
+                <li>+12</li>
+                <li>+13</li>
+                <li>+14</li>
+                <li>+15</li>
+                <li>+16</li>
+                <li>+17</li>
+                <li>+18</li>
+                <li>+19</li>
+                <li>+20</li>
+                <li>+21</li>
+                <li>+22</li>
+                <!--<li>+23</li>-->
+                <!--<li>+24</li>-->
+                <!--<li>+25</li>-->
+                <!--<li>+26</li>-->
+                <!--<li>+27</li>-->
+            </ul>
+
+            <div class="content">
+                <p>var $    = function( obj      )  { return document.querySelector(obj) };</p>
+                <p>var chat = function(){ this.socket = null };</p>
+                <p>chat.prototype = {</p>
+                <p>init: function(){</p>
+
+                <p>this.socket = io.connect();</p>
+
+                <p>this.socket.on('connect', function(){</p>
+                <p>$('#info').innerText = 'get yourself a nice name';</p>
+                <p>$('#start').style.display = 'block';</p>
+                <p>$('#set-name').focus();</p>
+                <p>});</p>
+
+                <p>this.socket.on('nameExisted', function(){</p>
+                <p>$('#info').innerText = 'name existed';</p>
+                <p>});</p>
+
+                <p>this.socket.on('loginSuccess', function(){</p>
+                <p>$('#info').innerText = 'login success';</p>
+                <p>setTimeout(function(){</p>
+                <p>$('#start').style.display = 'none';</p>
+                <p>$('#set-message').focus();</p>
+                <p>}, 200);</p>
+                <p>});</p>
+
+                <p>this.socket.on('system', function( username, usercount, type ){</p>
+                <p>var msg = username + ( type == 'login'? ' joined' : ' left' );</p>
+                <p>var p = document.createElement('p');</p>
+                <p>p.style.color = 'red';</p>
+                <p>p.setAttribute('class', 'system-state');</p>
+                <p>p.innerText = msg;</p>
+                <p>$('#message-box').appendChild(p);</p>
+                <p>$('#app-info label').innerText  = usercount;</p>
+                <p>});</p>
+
+                <p>}</p>
+                <p>}</p>
+
+                <p>window.onload = function(){</p>
+                <p>var achat = new chat();</p>
+                <p>achat.init();</p>
+
+                <p>var send = {</p>
+                <p>name: function(){</p>
+                <p>console.log('sendname');</p>
+                <p>var name = $('#set-name'), info = $('#info');</p>
+
+                <p>if( name.value.length <= 0 ) name.focus();</p>
+                <p>if( name.value.length <= 0 ) return false;</p>
+
+                <p>achat.socket.emit( 'login', name.value);</p>
+                <p>},</p>
+                <p>msg: function(){</p>
+                <p>console.log('sendmsg');</p>
+
+                <p>var msg = $('#set-message');</p>
+
+                <p>if( msg.value.length <= 0 ) msg.focus();</p>
+                <p>if( msg.value.length <= 0 ) return false;</p>
+
+                <p>achat.socket.emit( 'message', msg.value );</p>
+
+                <p>var contain = $('#message-box');</p>
+                <p>var time = new Date().toTimeString().substr(0, 8);</p>
+                <!--<p>var html = '&lt; div class="message me"&gt;&lt;p class="message-time"&gt;'+time+'&it;/p&gt;&lt;p class="message-name"&gt;me:&lt;/p&gt;&lt;&gt;&lt;'+msg.value+'</p></div>';</div><>-->
+                <p>contain.innerHTML += html;</p>
+
+                <p>msg.value = '';</p>
+                <p>achat._scrollBottom();</p>
+                <p>msg.focus();</p>
+                <p>}</p>
+                <p>};</p>
+            </div>
+        </div>
+
+        <p>让开，让我来解释解释这一段代码。首先，用户链接到服务器后，我们将</p>
+    </section>
+</body>
+<script>
+
+    var $ = function(obj){ return document.querySelector(obj); };
+
+    window.onscroll = function(){
+//        console.log(document.body.scrollTop);
+        console.log($('.scroll-index').);
+    };
+
+</script>
+</html>
