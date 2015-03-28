@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        @font-face {
+            font-family: Roboto;
+            src:url('../Roboto.woff2') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: Roboto; }
+
+        body{ background-color: #000000; color: #008000; }
+
+        .code{ position: absolute; width: 100%; overflow: hidden; height: auto; left: 0px; top: 17px; list-style: none; }
+
+        .code li{ position: relative; width: calc( 100% - 77px ); height: 27px; line-height: 27px; background-color: transparent; }
+        .code li:before{ content: attr(BF); margin-left: 0px; position: absolute; width: 57px; left: 0px; top: 0px; height: 27px; line-height: 27px; text-align: right;}
+        .code li{ padding-left: 77px; }
+    </style>
+</head>
+<body>
+<ul class="code">
+    <li BF="1+"><code>.icon-exclamation{ margin: 27px 0px 27px 5%; position: relative; border-radius: 50%; cursor: pointer; }</code></li>
+    <li BF="2+"><code>.icon-exclamation.small { width: 27px; height: 27px; border: 2px solid #0678C9; }</code></li>
+    <li BF="3+"><code>.icon-exclamation.middle{ width: 57px; height: 57px; border: 3px solid #0678C9; }</code></li>
+    <li BF="4+"><code>.icon-exclamation.big   { width: 77px; height: 77px; border: 4px solid #0678C9; }</code></li>
+    <li BF="5+"><code>.icon-exclamation:before, .icon-exclamation:after</code></li>
+    <li BF="6+"><code>{ position: absolute; content: attr(BF); width: 10%; background-color: #0678C9; left: 50%; -webkit-transform: translateX(-50%); }</code></li>
+    <li BF="7+"><code>.icon-exclamation:before{ height: 60%; top: 10%; }</code></li>
+    <li BF="8+"><code>.icon-exclamation:after { height: 10%; bottom: 10%; }</code></li>
+</ul>
+</body>
+<script>
+
+</script>
+</html>

@@ -15,7 +15,7 @@
         button{ cursor: pointer; }
         button, select, input, iframe{ outline: none; }
 
-        .navigation, .content, .code{ -webkit-transition: all 0.4s; }
+        .navigation, .content, .code, nav{ -webkit-transition: all 0.4s ease-in-out; }
 
         .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 1px solid #B1B1B1; }
         .navigation-hide{ -webkit-transform: translateX( -100% ); }
@@ -81,10 +81,16 @@
 
         .content iframe{ position: relative; left: 0px; top: 47px; width: 100%; height: calc( 100% - 47px ); border: none; }
 
-        .code{ position: fixed; width: 300px; height: 100%; overflow-x: scroll; background-color: #000000; right: 0px; top: 0px; border-left: 0px solid #B1B1B1; }
+        .code{ position: fixed; width: 300px; height: 100%; overflow-x: scroll; background-color: #000000; right: 0px; top: 0px; border-left: 0px solid #B1B1B1; z-index: 7; }
+        .code.code-resize{ width: 100%; }
+        .code.code-resize iframe{ width: 100%; }
+        .code.code-resize nav{ width: 100%; }
         .code-hide{ -webkit-transform: translateX( 100% ); }
 
         .code nav{ position: fixed; width: 299px; top: 0px; right: 0px; z-index: 7; height: 47px; background-color: #ffffff; border-left: 1px solid #B1B1B1; border-bottom: 1px solid #B1B1B1; }
+        .code nav .code-resize-btn
+        { position: absolute; width: 47px; background-color: #ffffff; border-radius: 4px; border: none; height: 27px; top: 10px; left: 17px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17);  }
+        .code nav .code-resize-btn.selected{ background-color: #0678C9; color: #ffffff; }
         .code iframe{ position: relative; right: 0px; width: 200%; top: 47px; height: calc( 100% - 47px ); border: none; }
     </style>
 </head>
@@ -157,7 +163,7 @@
     </section>
 
     <section id="code-view" class="code">
-        <nav></nav>
+        <nav><button class="code-resize-btn"> | </button></nav>
         <iframe id="code-i" src="codesearch.html"></iframe>
     </section>
 </body>
@@ -409,6 +415,10 @@
         wrap_el.Icontent.src = h;
         wrap_el.Icode.src    = c;
         $('.state-bar').setAttribute('text', label);
+    };
+    $('.code-resize-btn').onclick = function(){
+        wrap_el.code.classList.toggle('code-resize');
+        this.classList.toggle('selected');
     }
 
 </script>
