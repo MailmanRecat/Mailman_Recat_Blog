@@ -51,7 +51,7 @@
         .main-view ul{ position: relative; top: 27px; width: 90%; height: auto; background-color: transparent; padding: 0% 5%; list-style: none; cursor: pointer; }
         .main-view ul li{ height: 37px; line-height: 37px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; }
         .main-view ul li p{ margin-left: 17px; }
-        .main-view ul li:hover{ background-color: #EDEDED; }
+        .main-view ul li.has-hover-bg:hover{ background-color: #EDEDED; }
 
         .main-view .add-view{ position: relative; width: 90%; height: 37px; margin: 0px auto; top: 27px; }
         .main-view .add-view input{ width: 80%; height: 37px; background-color: #EDEDED; border: none; border-radius: 4px; outline: none; font-size: 1.2em; }
@@ -61,7 +61,7 @@
         .format-view ul{ position: relative; top: 27px; width: 90%; height: auto; background-color: transparent; padding: 0% 5%; list-style: none; cursor: pointer; }
         .format-view ul li{ height: 37px; line-height: 37px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; }
         .format-view ul li p{ margin-left: 17px; }
-        .format-view ul li:hover{ background-color: #EDEDED; }
+        .format-view ul li.has-hover-bg:hover{ background-color: #EDEDED; }
 
         .format-view .add-view{ position: relative; width: 90%; height: 37px; margin: 0px auto; top: 27px; }
         .format-view .add-view button{ font-size: 1.2em; position: absolute; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #0678C9; border-radius: 4px; border: none; color: #ffffff; }
@@ -73,9 +73,10 @@
         .style-view .segment-controller button:nth-child(3){ left: calc( 100% / 3 * 2 ); }
         .style-view .segment-controller button.selected{ background-color: #0678C9; color: #ffffff; }
 
-        .style-view .style-box{ position: absolute; top: 37px; width: 100%; height: auto; }
-        .style-view .style{ display: none; }
-        .style-view .arrange{ display: block; }
+        .style-view .style-box{ display: none; position: absolute; top: 37px; width: 100%; height: auto; }
+        .style-view .style{  }
+        .style-view .arrange{  }
+        .style-box.selected{ display: block; }
 
         .style-view ul   { position: relative; top: 0px; width: 100%; height: auto; background-color: transparent; padding: 0% 0%; list-style: none; cursor: pointer; }
         .style-view ul li{ position: relative; height: 47px; min-height: 47px; line-height: 47px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-radius: 0px; overflow: hidden; }
@@ -84,7 +85,7 @@
         .style-view ul li.has-content-box.solid-height.spread{ height: auto; }
         .style-view ul li.has-content-box.spread:before      { content: ''; position: absolute; border: 5px solid transparent; border-top-color: #6B6B6B; left: 7px; top: 18px; }
         .style-view ul li.has-content-box:before             { content: ''; position: absolute; border: 5px solid transparent; border-left-color: #6B6B6B; left: 7px; top: 18px; }
-        .style-view ul li:hover{ background-color: #EDEDED; }
+        .style-view ul li.has-hover-bg:hover{ background-color: #EDEDED; }
         .style-view ul li p    { margin-left: 27px; }
         .style-view ul li h4   { margin-left: 5%; }
 
@@ -122,15 +123,15 @@
     </header>
 
     <section id="slide" class="slide-wrap">
-        <nav><button class="slide-back-btn">back</button><p class="slide-nav-title">Title</p></nav>
+        <nav class="slide-bar"><button class="slide-back-btn">back</button><p class="slide-nav-title">Title</p></nav>
 
         <section class="view-wrap">
 
             <div class="main-view view">
                 <ul>
                     <li class="demobtn" data-type="view"><p>view 1</p></li>
-                    <li data-type="view"><p>view 2</p></li>
-                    <li data-type="view"><p>view 2</p></li>
+                    <li class="has-hover-bg" data-type="view"><p>view 2</p></li>
+                    <li class="has-hover-bg" data-type="view"><p>view 2</p></li>
                 </ul>
                 <div class="add-view">
                     <input type="text" placeholder="view name"><button>add</button>
@@ -140,11 +141,11 @@
             <div class="format-view view">
                 <ul>
                     <li><p>subview</p></li>
-                    <li class="demoview"><p>view 1</p></li>
-                    <li><p>view 2</p></li>
-                    <li><p>view 3</p></li>
-                    <li><p>view 4</p></li>
-                    <li><p>view 5</p></li>
+                    <li class="has-hover-bg demoview"><p>view 1</p></li>
+                    <li class="has-hover-bg"><p>view 2</p></li>
+                    <li class="has-hover-bg"><p>view 3</p></li>
+                    <li class="has-hover-bg"><p>view 4</p></li>
+                    <li class="has-hover-bg"><p>view 5</p></li>
                 </ul>
                 <div class="add-view">
                     <button>add subview</button>
@@ -152,14 +153,14 @@
             </div>
             <div class="style-view view">
                 <div class="segment-controller">
-                    <button class="">Style</button>
-                    <button>Text</button>
-                    <button class="selected">Arrange</button>
+                    <button data-label="style" class="">Style</button>
+                    <button data-label="text" >Text</button>
+                    <button data-label="arrange" class="selected">Arrange</button>
                 </div>
 
                 <div class="style style-box">
                     <ul>
-                        <li class="solid-height has-content-box">
+                        <li class="has-hover-bg solid-height has-content-box">
                             <p>Fill</p><button class="view-pick-color"></button>
                             <div class="pick-color-content-box">
                                 <p>color with RGB</p>
@@ -174,7 +175,7 @@
                 <div class="text style-box">
 
                 </div>
-                <div class="arrange style-box">
+                <div class="arrange style-box selected">
                     <ul>
                         <li class="position">
                             <h4>Position</h4>
@@ -265,32 +266,53 @@
         if( typeof arg.viewDidMove == 'function') _.viewDidMove = arg.viewDidMove;
     };
 
+    var bar = function( arg ){
+        var _ = this;
+
+        _.el      = arg.ele;
+        _.title   = arg.title;
+        _.backBtn = arg.backBtn;
+    };
+    bar.prototype = {
+        titleChange: function( title, back ){
+            var _ = this;
+            _.title.innerText   = title;
+            _.backBtn.innerText = back || 'back';
+        }
+    };
+
     var navigationVC = function( arg ){
         var _ = this;
 //        _.wrap        = arg.wrap;
         _.title         = arg.title;
         _.currentView   = arg.view;
-        _.backBtn       = arg.backBtn;
+        _.preView      = _.currentView;
+        _.bar           = arg.bar;
         _.view          = [ _.currentView ];
 
         _.push_class  = arg.push_class || 'view-push';
 
         _.changeTitle();
         _.currentView.viewDidLoad();
+
+        _.bar.backBtn.onclick = function(){ _.pop() };
+
     };
     navigationVC.prototype = {
         init: function(){
 
         },
         changeTitle: function(){
-            this.title.innerText = this.currentView.title;
+            this.bar.titleChange( this.currentView.title, this.preView.title );
         },
         pop:  function(){
             var _ = this;
 
             var view_len = _.view.length;
+            _.preView = _.view[ view_len - 3 ];
             if( view_len == 1 ) return;
-            if( view_len == 2 ) _.backBtn.style.display = 'none';
+            if( view_len == 2 ) _.bar.backBtn.style.display = 'none';
+            if( view_len == 2 ) _.preView = _.view[0];
 
             _.currentView.el.classList.remove( _.push_class );
 //            _.currentView.viewDidMove();
@@ -299,45 +321,64 @@
             _.currentView = _.view[ view_len - 2 ];
             _.changeTitle();
 
-            console.log(_.view);
-
         },
         push: function( view ){
             var _ = this;
 
-            _.backBtn.style.display = 'block';
+            _.bar.backBtn.style.display = 'block';
             _.changeTitle( view.title );
 
             view.viewDidLoad();
             _.view.push(view);
+            _.preView = _.currentView;
             _.currentView = view;
             view.el.classList.add( _.push_class );
             _.changeTitle();
             console.log(_.view);
         }
-    }
+    };
 
-    var view_one = new view({ el: $('.main-view'), title: 'Main', tag: 0, viewDidLoad: function(){
+    var bar      = new bar ({ el: $('.slide-bar'), title: $('.slide-nav-title'), backBtn: $('.slide-back-btn') }),
+
+    mainView = new view({ el: $('.main-view'), title: 'Main', tag: 0, viewDidLoad: function(){
         console.log('view load');
-    }});
+    }}),
 
-    var view_two = new view({ el: $('.format-view'), title: 'Format', tag: 1, viewDidLoad: function(){
+    formatView = new view({ el: $('.format-view'), title: 'Format', tag: 1, viewDidLoad: function(){
         console.log('view load too');
-    }});
+    }}),
 
-    var view_thress = new view({ el: $('.style-view'), title: 'Style', tag: 2, viewDidLoad: function(){
+    styleView = new view({ el: $('.style-view'), title: 'Style', tag: 2, viewDidLoad: function(){
         console.log('view load again');
-    }});
+    }}),
 
-    var NC = new navigationVC({ title: $('.slide-nav-title'), view: view_one, backBtn: $('.slide-back-btn') });
-    NC.push( view_two );
-    NC.push( view_thress );
-    $('.slide-back-btn').onclick = function(){
-        NC.pop();
-    }
+    NC = new navigationVC({ view: mainView, bar: bar });
 
-    $('.demobtn').onclick = function(){ NC.push( view_two ) };
-    $('.demoview').onclick = function(){ NC.push( view_thress ) };
+    NC.push( formatView );
+    NC.push( styleView  );
+
+    $('.demobtn').onclick = function(){ NC.push( formatView ) };
+    $('.demoview').onclick = function(){ NC.push( styleView ) };
+
+    var SstyleView = $('.style'), StextView = $('.text'), SarrangeView = $('.arrange'), Sviews = [ SstyleView, StextView, SarrangeView ],
+    DisplayView = function( label ){
+        for( var i = 0, l = Sviews.length; i < l; i++ ){ Sviews[i].classList.remove('selected'); };
+        switch (label){
+            case 'style'  : SstyleView.classList.add('selected');   break;
+            case 'text'   : StextView.classList.add('selected');    break;
+            case 'arrange': SarrangeView.classList.add('selected'); break;
+        }
+    };
+
+    var scbtns = [];
+    [].slice.call( $$('.segment-controller button')).forEach(function(el ,i){
+        var label = el.getAttribute('data-label'); scbtns.push( el );
+        el.onclick = function(){
+            for( var i = 0, l = scbtns.length; i < l; i++ ){ scbtns[i].classList.remove('selected') };
+            this.classList.add('selected');
+            DisplayView(label);
+        };
+    });
 
 </script>
 </html>

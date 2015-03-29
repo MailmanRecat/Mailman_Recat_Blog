@@ -15,6 +15,12 @@
         button{ cursor: pointer; }
         button, select, input, iframe{ outline: none; }
 
+        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); background-color: #ffffff; }
+        .icon-search.small { width: 27px; height: 27px; border: solid 1px #0678C9; }
+        .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
+        .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
+        .icon-search:before{ content: attr(BF); width: 12%; height: 40%; background-color: #0678C9; position: absolute; bottom: -40%; left: 50%; -webkit-transform: translateX(-50%); }
+
         .navigation, .content, .code, nav{ -webkit-transition: all 0.4s ease-in-out; }
 
         .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 1px solid #B1B1B1; }
@@ -25,6 +31,7 @@
         .navigation nav .back-btn { display: none; position: absolute; left: 0px; width: auto; color: #0678C9; font-size: 1em; padding: 0px 0px 0px 23px; border: none; background-color: #ffffff; height: 47px; }
         .navigation nav .back-btn:before
         { position: absolute; left: 10px; top: 17px; display: block; content: ''; border-bottom: 2px solid #0678C9; border-left: 2px solid #0678C9; width: 13px; height: 13px; -webkit-transform: rotate(45deg); }
+        .navigation nav .bar-item-search{ position: absolute; top: 10px; right: 17px; }
 
         .navigation .view-wrap{ position: relative; width: 100%; height: calc( 100% - 47px ); overflow-y: scroll; overflow-x: hidden; background-color: #ffffff; }
         .view-wrap .nav-view.view-push{ -webkit-transform: translateX(-100%); }
@@ -100,6 +107,7 @@
         <nav class="nav-bar">
             <button class="back-btn">back</button>
             <p class="nav-bar-title">Title</p>
+            <button class="bar-item-search icon-search small"></button>
         </nav>
 
         <section class="view-wrap">
@@ -137,7 +145,8 @@
 
             <div class="nav-view pages-css-view">
                 <ul class="pages-css-btn">
-                    <li><p data-label="icon-exclamation">icon-exclamation</p></li>
+                    <li><p data-label="icon-exclamation">exclamation icon by css</p></li>
+                    <li><p data-label="icon-search">search icon by css</p></li>
                 </ul>
             </div>
 
@@ -419,7 +428,13 @@
     $('.code-resize-btn').onclick = function(){
         wrap_el.code.classList.toggle('code-resize');
         this.classList.toggle('selected');
-    }
+    };
+    $('.bar-item-search').onclick = function(){
+        var h = 'search.html', c = 'codesearch.html';
+        wrap_el.Icontent.src = h;
+        wrap_el.Icode.src    = c;
+        $('.state-bar').setAttribute('text', 'search');
+    };
 
 </script>
 </html>

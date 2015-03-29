@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        @font-face {
+            font-family: apple;
+            src:url('myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: apple; }
+        button{ outline: none; cursor: pointer; }
+
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #0678C9; }
+        header h1{ line-height: 80px; color: #0678C9; }
+
+        .download{ width: 100px; height: 37px; border: none; background-color: #0678C9; border-radius: 4px; margin-left: 5%; color: #ffffff; font-size: 1.4em; }
+
+        pre { margin: 27px 0px; }
+        code{ position: relative; background-color: #0678C9; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 2px 7px 2px 7px; color: #ffffff; font-size: 1em; }
+
+        .icon-search{ margin: 27px 0px 27px 5%; position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); }
+        .icon-search.small { width: 27px; height: 27px; border: solid 1px #0678C9; }
+        .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
+        .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
+        .icon-search:before{ content: attr(BF); width: 12%; height: 40%; background-color: #0678C9; position: absolute; bottom: -40%; left: 50%; -webkit-transform: translateX(-50%); }
+
+    </style>
+</head>
+<body>
+
+<header><h1>search icon by css</h1></header>
+
+<pre><code>&lt;div class = "icon-search small" BF=""&gt;&lt;/div&gt;</code></pre>
+<pre><code>27 px and 27 px</code></pre>
+<div class="icon-search small" BF=""></div>
+
+<pre><code>&lt;div class = "icon-search small" BF=""&gt;&lt;/div&gt;</code></pre>
+<pre><code>57 px and 57 px</code></pre>
+<div class="icon-search middle" BF=""></div>
+
+<pre><code>&lt;div class = "icon-search small" BF=""&gt;&lt;/div&gt;</code></pre>
+<pre><code>77 px and 77 px</code></pre>
+<div class="icon-search big" BF=""></div>
+
+<button class="download">download</button>
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+</script>
+</html>
