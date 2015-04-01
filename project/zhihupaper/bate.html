@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>zhihupaper</title>
+    <style>
+        *{ padding: 0px; margin: 0px; outline: none; }
+
+        .news{ position: absolute; top: 0px; left: 0px; height: auto; width: 477px; background-color: #ffffff; }
+
+        .top-stories                { position: relative; width: 100%; height: 277px; background-color: #ffffff; overflow: hidden; cursor: pointer; }
+        .top-stories .slider        { position: absolute; left: 0px; top: 0px; width: 500%; height: 100%; list-style: none; }
+        .top-stories .slider li     { position: relative; float: left; width: 20%; height: 100%; }
+        .top-stories .slider li img { width: 100%; position: absolute; left: 0px; top: 50%; -webkit-transform: translateY(-50%); }
+        .top-stories .slider li h2  { position: absolute; bottom: 57px; right: 27px; left: 27px; color: #ffffff; font-size: 1.8em; z-index: 2; }
+
+        .slider-on                         { -webkit-animation: slider 12s infinite; }
+        .slider-label                      { position: absolute; width: 120px; height: 12px; left: 50%; -webkit-transform: translateX( -50% );  bottom: 17px; }
+        .slider-label ul                   { list-style: none; }
+        .slider-label li, .slider-label .slider-label-color
+        { width: 10%; padding-top: 10%; border-radius: 50%; margin: 0px 5%; }
+        .slider-label li                   { float: left; background-color: #EDEDED; opacity: 0.3; z-index: 0; }
+        .slider-label .slider-label-color  { position: absolute; background-color: #ffffff; z-index: 1; -webkit-animation: slider-label 12s infinite; }
+
+        .stories{ position: relative; width: 100%; height: auto; }
+
+        .content { position: fixed; width: calc( 100% - 477px ); height: 100%; left: 277px; }
+
+        /*.comments{ width: 300px; position: fixed; right: 0px; top: 0px; height: 100%; background-color: #000000; }*/
+
+        @-webkit-keyframes slider {
+            0%      { -webkit-transform: translateX(0%   ) ;}
+            9.09%   { -webkit-transform: translateX(0%   ) ;}
+            18.18%  { -webkit-transform: translateX(-20% ) ;}
+            27.27%  { -webkit-transform: translateX(-20% ) ;}
+            36.36%  { -webkit-transform: translateX(-40% ) ;}
+            45.45%  { -webkit-transform: translateX(-40% ) ;}
+            54.54%  { -webkit-transform: translateX(-60% ) ;}
+            63.63%  { -webkit-transform: translateX(-60% ) ;}
+            72.72%  { -webkit-transform: translateX(-80% ) ;}
+            81.81%  { -webkit-transform: translateX(-80% ) ;}
+            90.9%   { -webkit-transform: translateX(0%   ) ;}
+            100%    { -webkit-transform: translateX(0%   ) ;}
+        }
+        @-webkit-keyframes slider-label {
+            0%      { -webkit-transform: translateX(0%   ) ;}
+            9.09%   { -webkit-transform: translateX(0%   ) ;}
+            18.18%  { -webkit-transform: translateX(200% ) ;}
+            27.27%  { -webkit-transform: translateX(200% ) ;}
+            36.36%  { -webkit-transform: translateX(400% ) ;}
+            45.45%  { -webkit-transform: translateX(400% ) ;}
+            54.54%  { -webkit-transform: translateX(600% ) ;}
+            63.63%  { -webkit-transform: translateX(600% ) ;}
+            72.72%  { -webkit-transform: translateX(800% ) ;}
+            81.81%  { -webkit-transform: translateX(800% ) ;}
+            90.9%   { -webkit-transform: translateX(0%   ) ;}
+            100%    { -webkit-transform: translateX(0%   ) ;}
+        }
+    </style>
+</head>
+<body>
+
+    <section class="news">
+
+        <div class="top-stories">
+            <ul class="slider slider-on">
+                <li class="slider-item"><img src="icon.png"><h2></h2><img class="img-mask"></li>
+                <li class="slider-item"><img src="icon.png"><h2></h2><img class="img-mask"></li>
+                <li class="slider-item"><img src="icon.png"><h2></h2><img class="img-mask"></li>
+                <li class="slider-item"><img src="icon.png"><h2></h2><img class="img-mask"></li>
+                <li class="slider-item"><img src="icon.png"><h2></h2><img class="img-mask"></li>
+            </ul>
+            <div class="slider-label">
+                <div class="slider-label-color"></div>
+                <ul class="slider-label-bg"><li></li><li></li><li></li><li></li><li></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="stories">
+            <ul>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+                <li>dasdsadsa</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <section class="content"></section>
+
+    <section class="comments"></section>
+
+</body>
+<script>
+    window.copyright = {
+        Author  : 'Mailmam_Recat',
+        Date    : '2015',
+        Mail    : 'MailmanRecat@gmail.com',
+        Blog    : 'http://zhihupaper.com',
+        Browser : 'chrome only',
+        info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+    };
+
+    var $      = function( obj       )  { return document.querySelector(obj)                                    };
+    var $n     = function( obj, i    )  { return document.getElementsByClassName(obj)[i]                        };
+    var $$     = function( obj       )  { return [].slice.call(document.querySelectorAll(obj));                 };
+    var html   = function( obj, str  )  { obj.innerHTML += str                                                  };
+    var rehtml = function( obj, str  )  { obj.innerHTML  = str                                                  };
+
+    (function(window){
+
+        var link_url = {
+            chrome      : 'https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha',
+            zhihu       : 'http://zhihu.com',
+            app_iphone  : 'https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8',
+            app_android : 'https://play.google.com/store/apps/details?id=com.zhihu.daily.android',
+            tucao       : 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html',
+            blog        : 'http://zhihupaper.com',
+            github      : '',
+            twitter     : ''
+        };
+
+        var link = function(){
+            [].slice.call( document.querySelectorAll('.link')).forEach(function(obj, i){
+                var label = obj.getAttribute('data-label'); obj.href = link_url[ label ];
+            });
+        };
+        link();
+
+    })(window);
+
+    (function(window){
+
+        var apost = function(data, url, code){
+
+            var data = data || null;
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){ if(code != null) code(xmlHttp.responseText); }
+            };
+            xmlHttp.send(data);
+        };
+
+        var aget = function(url, code){
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("GET", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){ if(code != null) code(xmlHttp.responseText); }
+            };
+
+            xmlHttp.send();
+        };
+
+        var getxml = function() {
+            try{ xmlHttp = new XMLHttpRequest(); }
+            catch (e){
+                try{ xmlHttp = new ActiveXObject("Msxml2.XMLHTTP"); }
+                catch (e){ xmlHttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+            }
+            return xmlHttp;
+        };
+
+        var ajax = { apost: apost, aget: aget };
+
+        if ( typeof define === 'function' && define.amd ) {
+            define( ajax );
+        } else {
+            window.ajax = ajax;
+        }
+
+    })(window);
+
+    var zhihupaper = {
+        before           : -1,
+        beforeLock       : true,
+        init          : function(){
+            UIaction.footer.show();
+            ajax.aget('news.php', function( res ){
+                var json;
+                try{ json = JSON.parse( res ); }
+                catch (e){ console.log(e); return false;}
+
+                zhihupaper.day       = json.day;
+                var paper            = json.news,
+                        news         = paper.news,
+                        display_date = paper.display_date,
+                        top_stories  = paper.top_stories;
+
+                zhihupaper.initTopStorise( top_stories, display_date );
+                zhihupaper.initTodayNews( news )        ;
+                UIaction.footer.hide()                  ;
+                zhihupaper.beforeLock = false           ;
+            });
+        },
+        initTopStorise: function( top_stories, time ){
+            var li, str, title, id, image;
+            rehtml($('.today-date'), time);
+
+            for( var i in top_stories ){
+                title        = top_stories[i].title;
+                id           = top_stories[i].id   ;
+                image        = top_stories[i].image;
+
+                str          = '<img src="'+image+'"><h2>'+title+'</h2><img class="img-mask">';
+                li           = $n( 'slider-item', i );
+                li.setAttribute('data-id', id);
+                li.innerHTML = str;
+            }
+        },
+        initTodayNews      : function( news ){
+            var str = '', title, id, thumbnail;
+
+            for( var i in news ){
+                title     = news[i].title    ;
+                id        = news[i].id       ;
+                thumbnail = news[i].thumbnail;
+
+                if( title == '瞎扯 · 如何正确地吐槽' ) id = 0001;
+
+                str  += '<div class="new" data-id="'+id+'">' +
+                '<h3>'+title+'</h3>' +
+                '<div class="new-img"><img src="'+thumbnail+'"></div>' +
+                '<button class="new-label">unkown label</button>' +
+                '</div>';
+            }
+
+            html($('.news'), str);
+            this.bindAction();
+        },
+        initContentWithID: function( id ){
+            UIaction.footer.show();
+            ajax.apost('id='+id, 'idcontent.php', function( res ){
+                var json;
+                try{ json = JSON.parse( res ); }
+                catch (e){ console.log(e); return false;}
+
+                var content    = json.content;
+                rehtml($('.content-wrap'), content);
+                UIaction.footer.hide();
+            });
+        },
+        initBeforeNews: function( news, time ){
+            var time = time, str = '<div class="display-date">'+time+'</div>', title, id, thumbnail;
+
+            for( var i in news ){
+                title     = news[i].title    ;
+                id        = news[i].id       ;
+                thumbnail = news[i].thumbnail;
+
+                if( title == '瞎扯 · 如何正确地吐槽' ) id = 0001;
+
+                str  += '<div class="new" data-id="'+id+'">' +
+                '<h3>'+title+'</h3>' +
+                '<div class="new-img"><img src="'+thumbnail+'"></div>' +
+                '<button class="new-label">unkown label</button>' +
+                '</div>';
+            }
+
+            html($('.news'), str);
+            this.bindAction();
+        },
+        getBeforeNews    : function(){
+            //        if( zhihupaper.beforeLock )
+            ajax.apost('day='+zhihupaper.before, 'beforenews.php', function( res ){
+                var json;
+                try{ json = JSON.parse( res ); }
+                catch (e){ console.log(e); return false;}
+
+                var stories    = json.news.stories,
+                        time       = json.time;
+                zhihupaper.before = json.day;
+                zhihupaper.initBeforeNews( stories, time );
+                UIaction.footer.hide();
+                zhihupaper.beforeLock = true;
+            });
+            //if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
+        },
+        bindAction    : function(){
+            var click = function(){
+                var id = this.getAttribute('data-id');
+                if( id == 0001 ) window.location.href = 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html';
+                if( id == 0001 ) return false;
+                zhihupaper.initContentWithID( id );
+                navVC.push( view_content );
+            };
+            $$('.slider-item').forEach(function(ele, i){ ele.addEventListener('click', click, false) });
+            $$('.new').forEach(function(ele, i){ ele.addEventListener('click', click, false)         });
+        }
+    };
+
+//    window.onscroll = function(){
+//
+//        if(document.body.scrollTop <= 0){
+//            UIaction.animationbg.show();
+//            UIaction.header.unshadow();
+//            UIaction.icon.down();
+//            UIaction.back.down();
+//        }else{
+//            UIaction.animationbg.hide();
+//            UIaction.header.shadow();
+//            UIaction.icon.up();
+//            UIaction.back.up();
+//        }
+//
+//        if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
+//            if( navVC.currentViewTitle() === view_news.title ){
+//                UIaction.footer.show();
+//                zhihupaper.getBeforeNews();
+//            }
+//        }else{
+//            UIaction.footer.hide();
+//        }
+//    };
+
+    $('#mainSetting'    ).onclick     = function(){ UIaction.setting.show()        };
+    $('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
+
+
+//    zhihupaper.init();
+
+
+</script>
+</html>

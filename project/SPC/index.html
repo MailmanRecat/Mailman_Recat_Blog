@@ -128,15 +128,18 @@
             <div class="nav-view archive-view">
                 <ul class="archive-btn">
                     <li><p data-label="web">Web</p></li>
-                    <li><p data-label="javascript">Javascript</p></li>
+                    <!--<li><p data-label="javascript">Javascript</p></li>-->
                     <li><p data-label="css">CSS</p></li>
-                    <li><p data-label="ios">IOS</p></li>
-                    <li><p data-label="game">Game</p></li>
+                    <!--<li><p data-label="ios">IOS</p></li>-->
+                    <!--<li><p data-label="game">Game</p></li>-->
                 </ul>
             </div>
 
             <div class="nav-view pages-web-view">
-
+                <ul class="pages-web-btn">
+                    <li><p data-label="UISegmentedControl">UISegmentedControl</p></li>
+                    <li><p data-label="UINavigationControl">UINavigationControl</p></li>
+                </ul>
             </div>
 
             <div class="nav-view pages-javascript-view">
@@ -285,7 +288,6 @@
 
     var navigationVC = function( arg ){
         var _ = this;
-//        _.wrap        = arg.wrap;
         _.title         = arg.title;
         _.currentView   = arg.view;
         _.preView      = _.currentView;
@@ -296,6 +298,7 @@
 
         _.changeTitle();
         _.currentView.viewDidLoad();
+        _.bar.backBtn.onclick = function(){ _.pop() };
 
     };
     navigationVC.prototype = {
@@ -370,9 +373,8 @@
 
     NC       = new navigationVC({ view: mainView, bar: bar });
 
-//    NC.push( archiveView );
     $('.start-btn').onclick = function(){ NC.push( archiveView ) };
-    $('.nav-bar .back-btn').onclick = function(){ NC.pop() };
+//    $('.nav-bar .back-btn').onclick = function(){ NC.pop()       };
 
     $('.archive-btn').addEventListener('click', function(e){
         if( e.target == this ) return;
@@ -417,20 +419,30 @@
 
     $('.pages-css-btn').onclick = function(e){
         if(e.target == this ) return;
+
         var label = e.target.getAttribute('data-label'),
                 h = './pages/css/'      + label +'.html',
                 c = './pages/css/code'  + label +'.html';
-        console.log(label);
         wrap_el.Icontent.src = h;
         wrap_el.Icode.src    = c;
         $('.state-bar').setAttribute('text', label);
     };
+    $('.pages-web-btn').onclick = function(e){
+        if(e.target == this ) return;
+
+        var label = e.target.getAttribute('data-label'),
+                h = './pages/web/'      + label +'.html',
+                c = './pages/css/code'  + label +'.html';
+        wrap_el.Icontent.src = h;
+        $('.state-bar').setAttribute('text', label);
+    };
+
     $('.code-resize-btn').onclick = function(){
         wrap_el.code.classList.toggle('code-resize');
         this.classList.toggle('selected');
     };
     $('.bar-item-search').onclick = function(){
-        var h = 'search.html', c = 'codesearch.html';
+        var h = 'search.html', c = 'view-source:search.html';
         wrap_el.Icontent.src = h;
         wrap_el.Icode.src    = c;
         $('.state-bar').setAttribute('text', 'search');

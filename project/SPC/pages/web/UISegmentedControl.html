@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>UISegmentedControl</title>
+    <style>
+
+        @font-face {
+            font-family: Menlo roboto;
+            src: url('../Menlo.ttc') format('ttc');
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url('../Roboto.woff2') format('woff');
+        }
+
+        @font-face {
+            font-family: apple-style;
+            src: url('../myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .segment{ position: relative; margin-left: 5%; height: 27px; border: solid 1px #B32230; border-radius: 4px; overflow: hidden; }
+        .segment button{ width: 100px; height: 27px; border: none; color: #000000; background-color: #ffffff; border-right: solid 1px #B32230; }
+        .segment button:last-child{ border-right: none; }
+        .segment button.selected{ background-color: #B32230; color: #ffffff; }
+
+        .segment-one{ width: 300px; }
+        .segment-two{ width: 400px; }
+
+        button.download{ font-size: 1.2em; width: auto; padding: 7px 17px; border-radius: 4px; color: #B32230; border: none; margin-left: 5%; background-color: #ffffff; }
+        button.download:hover{ -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+        button.download:active{ -webkit-box-shadow:0 0px 0px rgba(0, 0, 0, .17); }
+    </style>
+</head>
+<body>
+
+    <header><h1>UISegmentedControl by javascript</h1></header>
+    <pre><code>var $$ = function( el ){ return document.querySelectorAll( el ) };</code></pre>
+    <pre><code>var de = { require:{ didSelectAtIndex: function( Index ){} }, option: {} }</code></pre>
+    <pre><code>var S = new UISegmentedControl({ segments: $$('.segment button'), delegate: ds });</code></pre>
+    <pre><code>S.init();</code></pre>
+
+    <div class="segment segment-one">
+        <button class="selected" data-index="0">1</button><button data-index="1">2</button><button data-index="2">3</button>
+    </div>
+    <pre><code class="demo-one"></code></pre>
+
+    <div class="segment segment-two">
+        <button class="selected" data-index="0">bad</button><button data-index="1">not bad</button><button data-index="2">good</button><button data-index="3">excellent</button>
+    </div>
+    <pre><code class="demo-two"></code></pre>
+
+    <button class="download">Download Code</button>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    var UISegmentedControl = function( arg ){
+        var _ = this;
+
+        _.segments             = arg.segments;
+        _.selectedClass        = arg.selectedClass        || 'selected';
+        _.selectedSegmentIndex = arg.selectedSegmentIndex || 0;
+        _.delegate             = arg.delegate;
+
+        if( typeof _.delegate.require.didSelectAtIndex !== 'function' ) return {  };
+
+    };
+    UISegmentedControl.prototype = {
+        init: function(){
+            var _ = this;
+            [].slice.call( _.segments ).forEach(function( el, i ){
+                var index  = el.getAttribute('data-index');
+
+                el.onclick = function(){
+                    _.segments[ _.selectedSegmentIndex ].classList.remove('selected');
+                    this.classList.add('selected');
+                    _.selectedSegmentIndex = index;
+                    _.delegate.require.didSelectAtIndex( index );
+                };
+            });
+        }
+    };
+
+    var de = {
+        require: {
+            didSelectAtIndex: function( Index ){
+                $('.demo-one').innerText =  'data-index = "' + Index + '" button was selected';
+            }
+        },
+        option: {
+            isEnableForSegmentAtIndex: function(){}
+        }
+    };
+
+    var S = new UISegmentedControl({ segments: $$('.segment-one button'), delegate: de }); S.init();
+
+    var feels = ['bad', 'not bad', 'good', 'excellent'];
+
+    var det= {
+        require: {
+            didSelectAtIndex: function( Index ){
+                $('.demo-two').innerText = 'I feel ' + feels[ Index ] + '!';
+            }
+        }
+    }
+
+    var ST= new UISegmentedControl({ segments: $$('.segment-two button'), delegate: det }); ST.init();
+</script>
+</html>

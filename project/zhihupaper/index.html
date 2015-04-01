@@ -498,23 +498,23 @@ var zhihupaper = {
     before           : -1,
     beforeLock       : true,
     init          : function(){
-//        UIaction.footer.show();
-//        ajax.aget('news.php', function( res ){
-//            var json;
-//            try{ json = JSON.parse( res ); }
-//            catch (e){ console.log(e); return false;}
-//
-//            zhihupaper.day       = json.day;
-//            var paper            = json.news,
-//                    news         = paper.news,
-//                    display_date = paper.display_date,
-//                    top_stories  = paper.top_stories;
-//
+        UIaction.footer.show();
+        ajax.aget('news.php', function( res ){
+            var json;
+            try{ json = JSON.parse( res ); }
+            catch (e){ console.log(e); return false;}
+
+            zhihupaper.day       = json.day;
+            var paper            = json.news,
+                    news         = paper.news,
+                    display_date = paper.display_date,
+                    top_stories  = paper.top_stories;
+
 //            zhihupaper.initTopStorise( top_stories, display_date );
-//            zhihupaper.initTodayNews( news )        ;
-//            UIaction.footer.hide()                  ;
-//            zhihupaper.beforeLock = false           ;
-//        });
+            zhihupaper.initTodayNews( news )        ;
+            UIaction.footer.hide()                  ;
+            zhihupaper.beforeLock = false           ;
+        });
     },
     initTopStorise: function( top_stories, time ){
         var li, str, title, id, image;
@@ -553,18 +553,15 @@ var zhihupaper = {
     },
     initContentWithID: function( id ){
         UIaction.footer.show();
-//        ajax.apost('id='+id, 'idcontent.php', function( res ){
-//            var json;
-//            try{ json = JSON.parse( res ); }
-//            catch (e){ console.log(e); return false;}
-//
-//            var content    = json.content;
-//            rehtml($('.content-wrap'), content);
-//            navVC.push( view_content );
-//            UIaction.footer.hide();
-//        });
-//        navVC.push( view_content );
-        UIaction.footer.show();
+        ajax.apost('id='+id, 'idcontent.php', function( res ){
+            var json;
+            try{ json = JSON.parse( res ); }
+            catch (e){ console.log(e); return false;}
+
+            var content    = json.content;
+            rehtml($('.content-wrap'), content);
+            UIaction.footer.hide();
+        });
     },
     initBeforeNews: function( news, time ){
         var time = time, str = '<div class="display-date">'+time+'</div>', title, id, thumbnail;
@@ -587,82 +584,64 @@ var zhihupaper = {
         this.bindAction();
     },
     getBeforeNews    : function(){
-//        if( zhihupaper.beforeLock )
-            ajax.apost('day='+zhihupaper.before, 'beforenews.php', function( res ){
-                var json;
-                try{ json = JSON.parse( res ); }
-                catch (e){ console.log(e); return false;}
+        //        if( zhihupaper.beforeLock )
+        ajax.apost('day='+zhihupaper.before, 'beforenews.php', function( res ){
+            var json;
+            try{ json = JSON.parse( res ); }
+            catch (e){ console.log(e); return false;}
 
-                var stories    = json.news.stories,
-                        time       = json.time;
-                zhihupaper.before = json.day;
-                zhihupaper.initBeforeNews( stories, time );
-                UIaction.footer.hide();
-                zhihupaper.beforeLock = true;
-            });
-//        if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
+            var stories    = json.news.stories,
+                    time       = json.time;
+            zhihupaper.before = json.day;
+            zhihupaper.initBeforeNews( stories, time );
+            UIaction.footer.hide();
+            zhihupaper.beforeLock = true;
+        });
+        //if( zhihupaper.beforeLock ) zhihupaper.beforeLock = false;
     },
     bindAction    : function(){
         var click = function(){
             var id = this.getAttribute('data-id');
-            if( id == 0001 ) window.location.href = 'http://rbearblog.sinaapp.com/project/zhihupaper';
+            if( id == 0001 ) window.location.href = 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html';
             if( id == 0001 ) return false;
-            view_content_demo.id = id;
-            navVC.push( view_content_demo );
             zhihupaper.initContentWithID( id );
+            navVC.push( view_content );
         };
         $$('.slider-item').forEach(function(ele, i){ ele.addEventListener('click', click, false) });
         $$('.new').forEach(function(ele, i){ ele.addEventListener('click', click, false)         });
     }
 };
 
-window.onscroll = function(){
-
-    if(document.body.scrollTop <= 0){
-        UIaction.animationbg.show();
-        UIaction.header.unshadow();
-        UIaction.icon.down();
-        UIaction.back.down();
-    }else{
-        UIaction.animationbg.hide();
-        UIaction.header.shadow();
-        UIaction.icon.up();
-        UIaction.back.up();
-    }
-
-    if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
+//window.onscroll = function(){
+//
+//    if(document.body.scrollTop <= 0){
+//        UIaction.animationbg.show();
+//        UIaction.header.unshadow();
+//        UIaction.icon.down();
+//        UIaction.back.down();
+//    }else{
+//        UIaction.animationbg.hide();
+//        UIaction.header.shadow();
+//        UIaction.icon.up();
+//        UIaction.back.up();
+//    }
+//
+//    if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
 //        if( navVC.currentViewTitle() === view_news.title ){
 //            UIaction.footer.show();
 //            zhihupaper.getBeforeNews();
 //        }
-    }else{
-        UIaction.footer.hide();
-    }
-};
+//    }else{
+//        UIaction.footer.hide();
+//    }
+//};
 
-//var view_news     = new view( { ele: $('.news'),          title: '知乎日报', tag: 0 }),
-//        view_content  = new view( { ele: $('.content-wrap'), title: '日报',  tag: 1 }),
-//        view_comments = new view( { ele: $('.comments'),      title: '评论', tag: 2 });
-
-var view_news_demo = new newsView( { ele: $('.news'), title: '知乎日报', tag: 0 }),
-        view_content_demo = new contentView( { ele: $('.content-wrap'), title: '日报', tag: 1 }),
-        view_comments     = new commentView( { ele: $('.comments'),     title: '评论', tag: 2 } );
-
-var navVC         = new navigationVC( { InitalV: view_news_demo } );
 
 $('#mainSetting'    ).onclick     = function(){ UIaction.setting.show()        };
 $('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
 
-$('.back').onclick = function(){
-    navVC.pop();
-    if( navVC.currentViewTag() === view_news.tag ) UIaction.back.hide();
-    if( navVC.currentViewTag() === view_news.tag ) view_content.ele.innerHTML = '';
-};
 
 //zhihupaper.init();
-view_news_demo.ViewDidLoad();
-view_content_demo.ViewDidLoad();
 
-window.copyright.info();
 </script>
 </html>

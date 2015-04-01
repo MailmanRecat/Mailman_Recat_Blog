@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        *{ padding: 0px; margin: 0px; }
+        button, input, select{ outline: none; }
+        button{ cursor: pointer; }
+
+        body{ background-color: #ffffff; opacity: 1; z-index: 0; }
+
+        .search, .keyboard{  -webkit-transition: all 0.4s; z-index: 1; }
+
+        .search      { position: relative; height: 42px; width: 80%; left: 50%; top: 177px; -webkit-transform: translateX(-50%); }
+        .search input{ position: relative; width: 96%; height: 100%; padding: 0% 2%; border: none; background-color: #EDEDED; border-radius: 4px; color: #000000; font-size: 1.6em; }
+        .search.up   { top: 17px; }
+
+        .res-box{ display: none; position: absolute; width: 100%; top: 76px; bottom: 0px; overflow: scroll; background-color: #ffffff; }
+        .res-box ul{ position: absolute; height: auto; list-style: none; width: 100%; left: 0px; top:0px; cursor: pointer; }
+        .res-box ul li{ height: 47px; line-height: 47px; width: 100%; padding: 0px 10%; }
+        .res-box ul li:hover{ background-color: #EDEDED; }
+
+        .keyboard, .keyboard button{ -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+        .keyboard{ position: fixed; bottom: -100%; padding: 5px 0px 5px 0px; left: 0px; width: 100%; height: 400px; background-color: #ffffff; }
+        .keyboard.keyboard-show{ bottom: 0px; }
+        .keyboard .row{ position: relative; width: 100%; height: 80px; }
+        .keyboard .row button{ position: relative; margin: 5px 5px; border: none; background-color: #ffffff; font-size: 1.8em; border-radius: 4px; width: calc( 8% - 10px ); height: 70px; }
+        .keyboard .row button:active{ background-color: #0678C9; color: #ffffff; }
+
+        .keyboard .row:nth-child(1) button{ width: calc( 9% - 10px ); left: 0.5%; }
+
+        .keyboard .row:nth-child(2) button{ left: 0.5%; width: calc( 9% - 10px ); }
+
+        .keyboard .row:nth-child(3) button{ left: 5%; width: calc( 9% - 10px ); }
+
+        .keyboard .row:nth-child(4) button{ left: 0.5%; width: calc( 8.9% - 10px ); }
+        .keyboard .row:nth-child(4) button:nth-child(1){ width: calc( 10% - 10px ); }
+
+        .keyboard .row:nth-child(5) button{ left: 2.5%; width: calc( 12.5% - 10px ); }
+        .keyboard .row button.space { width: calc( 70% - 10px ); }
+    </style>
+</head>
+<body>
+
+<div class="search"><input type="text" placeholder="search"></div>
+
+<div class="res-box">
+    <ul></ul>
+</div>
+
+<div class="keyboard">
+    <div class="row">
+        <button data-value="@">@</button><button data-value="0">0</button><button data-value="1">1</button><button data-value="2">2</button><button data-value="3">3</button><button data-value="4">4</button><button data-value="5">5</button><button data-value="6">6</button><button data-value="7">7</button><button data-value="8">8</button><button data-value="9">9</button>
+    </div>
+    <div class="row">
+        <button data-value="q">q</button><button data-value="w">w</button><button data-value="e">e</button><button data-value="r">r</button><button data-value="t">t</button><button data-value="y">y</button><button data-value="u">u</button><button data-value="i">i</button><button data-value="o">o</button><button data-value="p">p</button><button data-value="delete">delete</button>
+    </div>
+    <div class="row">
+        <button data-value="a">a</button><button data-value="s">s</button><button data-value="d">d</button><button data-value="f">f</button><button data-value="g">g</button><button data-value="h">h</button><button data-value="j">j</button><button data-value="k">k</button><button data-value="l">l</button><button data-value="return">return</button>
+    </div>
+    <div class="row">
+        <button data-value="lock">lock</button><button data-value=",">,</button><button data-value="z">z</button><button data-value="x">x</button><button data-value="c">c</button><button data-value="v">v</button><button data-value="b">b</button><button data-value="n">n</button><button data-value="m">m</button><button data-value=".">.</button><button data-value="?">?</button>
+    </div>
+    <div class="row">
+        <button data-value="number" class="number">123</button><button data-value="space" class="space">space</button><button data-value="hide" class="hide">hide</button>
+    </div>
+</div>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    UIaction = {
+        search   : {
+            el      : $('.search'),
+            up      : function(){ this.el.classList.add('up')    },
+            down    : function(){ this.el.classList.remove('up') }
+        },
+        keyboard: {
+            el    : $('.keyboard'),
+            show  : function(){ this.el.classList.add('keyboard-show')    },
+            hide  : function(){ this.el.classList.remove('keyboard-show') }
+        }
+    };
+
+    $('.search input').onfocus = function(){
+        UIaction.search.up();
+//        UIaction.keyboard.show();
+        $('.res-box').style.display = 'block';
+    };
+    $('.search input').onblur  = function(){
+//        $('.search').classList.remove('up');
+    };
+
+    var i = '?';
+    console.log(i.toUpperCase());
+
+    var special_key = ['delete', 'return', 'number', 'space', 'hide', 'lock'];
+    [].slice.call( $$('.keyboard button')).forEach(function(el, i){
+        var value = el.getAttribute('data-value');
+        el.onclick = function(){
+            if( special_key.indexOf(value) ){
+                console.log(value);
+            }
+        }
+    });
+
+    var search = {
+//        keywords: ['UISegmentedControl by javascript', 'UINavigationControl by javascript', '', 'TEST', 'SETTING'],
+        keywords: [],
+        addKeywords: function( word ){
+            search.keywords.push( word );
+        },
+        getwords: function( word ){
+            if(word.length === 0) return false;
+
+            var word = word.toUpperCase();
+            var T = true, keys = [];
+
+            for( var key in search.keywords){
+                var keyword = search.keywords[key].toUpperCase();
+                for(var i in word){
+                    var letter = word[i];
+                    if( keyword.indexOf( letter ) === -1 ){
+                        T = false;
+                    }
+                }
+
+                if( T === true ){
+                    keys.push( search.keywords[key] );
+                }
+
+                T = true;
+            }
+
+            return keys;
+        }
+    };
+
+    var resBox = {
+        el    : $('.res-box'),
+        insert: function( keys ){
+            console.log(keys);
+            var str = '';
+            for(var key in keys){
+                str += '<li data-app='+keys[key]+'>'+keys[key]+'</li>';
+            }
+            if( keys.length === 0 ){
+                str = '<li>NO RESULT</li>';
+            }
+            $('.res-box ul').innerHTML = str;
+        },
+        didSelect: function(){
+            [].slice.call(document.querySelectorAll( '.iiii li' )).forEach(function(li, i){
+                var isSelect = li.getAttribute('data-select');
+                if( isSelect === 'YES' ){
+                    var appName = li.getAttribute('data-app');
+                    app.appStart( appName, function(){
+                        console.log(appName+' start');
+                    } );
+                }
+            });
+        }
+    };
+
+    var keys = [
+        'UISegmentedControl by javascript',
+        'UINavigationControl by javascript',
+        'exclamation icon by css',
+        'search icon by css'
+    ];
+
+    search.keywords = keys;
+
+    //    for( var i = 0, l = keys.length; i < l; i++ ){ search.addKeywords( keys[i] ) };
+
+    $('.search input').oninput = function(){
+        var w = $('input').value;
+        var keys = search.getwords(w);
+
+        resBox.insert( keys );
+    }
+
+    $('.res-box ul').onclick = function( e ){
+        if( e.target == this ) return;
+
+        var page = e.target.getAttribute('data-app');
+    }
+
+</script>
+</html>

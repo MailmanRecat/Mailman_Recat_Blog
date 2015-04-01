@@ -67,6 +67,35 @@
         .format-view .add-view button{ font-size: 1.2em; position: absolute; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #0678C9; border-radius: 4px; border: none; color: #ffffff; }
         .format-view .add-view button:active{ background-color: #ffffff; color: #0678C9; }
 
+        .style-box-item{ position: relative; width: 100%; height: auto; }
+        .style-box-item h4{ margin-left: 5%; line-height: 80px; }
+
+        .style-box-item.title{ height: 80px; border-bottom: 1px #B1B1B1 solid; cursor: pointer; overflow: hidden; }
+        .style-box-item.title.title-show{ height: auto; }
+        .style-box-item.title:before{ content: attr(BF); position: absolute; border: solid transparent 6px; border-top-color: #B1B1B1; right: 5%; top: 37px; }
+        .style-box-item.title h1{ line-height: 80px; margin-left: 5%; font-size: 2em; }
+        .style-box-item.title ul{ list-style: none; }
+        .style-box-item.title ul li   { width: 100%; height: 77px; }
+        .style-box-item.title ul li p { position: absolute; line-height: 77px; margin-left: 5%; top: 0px; }
+        .style-box-item.title ul li h2, .style-box-item.title ul li h3, .style-box-item.title ul li h4, .style-box-item.title ul li h5, .style-box-item.title ul li h6,
+        .style-box-item.title ul li h7
+        { position: absolute; right: 5%; top: 0px; line-height: 77px; }
+
+        .style-box-item.font{ position: relative; width: 100%; height: auto; }
+        .style-box-item.font select{ width: 90%; margin: 7px 0px 7px 5%; }
+        .style-box-item.font .select-normal  { width: 50%; }
+        .style-box-item.font .select-unit    { width: 32%; }
+        .style-box-item.font .input-font-size{ margin: 7px 0px 7px 5%; width: 90%; }
+        .style-box-item.font .font-style     { position: relative; width: 90%; height: 27px; border-radius: 4px; overflow: hidden; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); margin: 27px 0px 7px 5%; }
+        .style-box-item.font .font-style button{ position: relative; width: 50%; height: 27px; border: none; background-color: #ffffff; }
+        .style-box-item.font .font-style button:active{ background-color: #0678C9; }
+        .style-box-item.font .font-color     { padding-left: 7px; text-align: left; position: relative; color: #ffffff; border-radius: 4px; background-color: #0678C9; margin: 7px 0px 7px 5%; width: 63px; border:  1px solid #CFCFCF; height: 26px; }
+        .style-box-item.font .font-color:before{ content: attr(text); position: absolute; right: 7px; border: 4px solid transparent; border-top-color: #ffffff; top: 11px; }
+
+        .style-box-item.alignment .font-alignment{ position: relative; width: 90%; left: 5%; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); border-radius: 4px; overflow: hidden; }
+        .style-box-item.alignment .font-alignment button{ width: calc( 100% / 3 ); height: 27px; border: none; background-color: #ffffff; }
+        .style-box-item.alignment .font-alignment button:active{ background-color: #0678C9; }
+
         .style-view .segment-controller button{ position: absolute; top: 0px; width: calc( 100% / 3 ); color: #000000; font-size: 1em; background-color: #EDEDED; border: none; border-radius: 0px; }
         .style-view .segment-controller button:nth-child(1){ left: 0px; }
         .style-view .segment-controller button:nth-child(2){ left: calc( 100% / 3 ); }
@@ -154,8 +183,8 @@
             <div class="style-view view">
                 <div class="segment-controller">
                     <button data-label="style" class="">Style</button>
-                    <button data-label="text" >Text</button>
-                    <button data-label="arrange" class="selected">Arrange</button>
+                    <button data-label="text" class="selected" >Text</button>
+                    <button data-label="arrange" class="">Arrange</button>
                 </div>
 
                 <div class="style style-box">
@@ -172,10 +201,45 @@
                     </ul>
                 </div>
 
-                <div class="text style-box">
-
+                <div class="text selected style-box">
+                    <div class="title style-box-item">
+                        <h1>title</h1>
+                        <ul>
+                            <li><p>h2</p> <h2>title</h2></li>
+                            <li><p>h3</p> <h3>title</h3></li>
+                            <li><p>h4</p> <h4>title</h4></li>
+                            <li><p>h5</p> <h5>title</h5></li>
+                            <li><p>h6</p> <h6>title</h6></li>
+                            <li><p>h7</p> <h7>title</h7></li>
+                        </ul>
+                    </div>
+                    <div class="font style-box-item">
+                        <h4>Font</h4>
+                        <select>
+                            <option>Helvetica</option>
+                        </select>
+                        <select class="select-normal">
+                            <option>Normal</option>
+                        </select>
+                        <select class="select-unit">
+                            <option>unit</option>
+                            <option>px</option>
+                            <option>em</option>
+                        </select>
+                        <div class="input-label input-font-size" text="Size"><input type="text" placeholder="Size"></div>
+                        <div class="font-style">
+                            <button>/</button><button>_</button>
+                        </div>
+                        <button class="font-color">color</button>
+                    </div>
+                    <div class="alignment style-box-item">
+                        <h4>Alignment</h4>
+                        <div class="font-alignment">
+                            <button>|__</button><button>_|_</button><button>__|</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="arrange style-box selected">
+                <div class="arrange style-box">
                     <ul>
                         <li class="position">
                             <h4>Position</h4>

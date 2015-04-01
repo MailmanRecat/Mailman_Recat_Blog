@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        @font-face {
+            font-family: Menlo roboto;
+            src: url('../Menlo.ttc') format('ttc');
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url('../Roboto.woff2') format('woff');
+        }
+
+        @font-face {
+            font-family: apple-style;
+            src: url('../myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .icon-exclamation{ position: absolute; border-radius: 50%; cursor: pointer; right: 7px; top: 15.5px; background-color: #ffffff; }
+        .icon-exclamation.small { width: 27px; height: 27px; border: 2px solid #0678C9; }
+        .icon-exclamation.middle{ width: 57px; height: 57px; border: 3px solid #0678C9; }
+        .icon-exclamation.big   { width: 77px; height: 77px; border: 4px solid #0678C9; }
+        .icon-exclamation:before, .icon-exclamation:after
+        { position: absolute; content: attr(BF); width: 10%; background-color: #0678C9; left: 50%; -webkit-transform: translateX(-50%); }
+        .icon-exclamation:before{ height: 60%; top: 10%; }
+        .icon-exclamation:after { height: 10%; bottom: 10%; }
+
+        .phone .home-btn{ -webkit-transform: translateX(-50%); }
+
+        .phone{ position: relative; width: 288px; height: 587px; border: solid 1px #000000; margin: 27px 5%; border-radius: 37px; }
+        .phone .home-btn{ position: absolute; bottom: 11.5px; background-color: #ffffff; left: 50%; width: 47px; height: 47px; border-radius: 50%; border: solid 1px #000000; }
+
+        .UINavigation{ position: absolute; width: 100%; height: 100%; overflow: hidden; font-family: apple-style; }
+        .UINavigation nav{ position: relative; width: 100%; height: 88px; border-bottom: 1px solid #C7C7C7; }
+        .UINavigation nav .nav-title{ line-height: 88px; font-size: 1.2em; text-align: center; z-index: 1; }
+        .UINavigation nav .nav-back-btn { display: none; position: absolute; left: 0px; width: auto; color: #0678C9; font-size: 2em; padding: 0px 0px 0px 23px; border: none; background-color: #ffffff; height: 88px; }
+        .UINavigation nav .nav-back-btn:before
+        { position: absolute; left: 10px; top: 31px; display: block; content: ''; border-bottom: 2px solid #0678C9; border-left: 2px solid #0678C9; width: 26px; height: 26px; -webkit-transform: rotate(45deg); }
+
+        .UINavigation .view.view-push{ -webkit-transform: translateX( -100% ); }
+
+        .UINavigation .view{ position: absolute; height: calc( 100% - 89px ); left: 0px; top: 89px; width: 100%; background-color: #ffffff; -webkit-transition: all 0.4s; }
+        .UINavigation .view:first-child       { left: 0%; }
+        .UINavigation .view:nth-child( n + 3 ){ left: 100%; }
+
+        .UINavigation .view button{ position: absolute; left: 50%; top: 50%; width: auto; border-radius: 2px; padding: 77px 100px; border: none; background-color: #ffffff; -webkit-transform: translateX(-50%) translateY(-50%); -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .UINavigation .mask{ display: none; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #000000; opacity: 0.2; z-index: 7; }
+
+        .UIAlertView{ left: 50%; top: 50%; -webkit-transition: all 0.6s; -webkit-transform: translateX(-50%) translateY(-50%) scale( 0.0 ); opacity: 0; }
+        /*.UIAlertView.alert-show{ -webkit-transform: translateX(-50%) translateY(-50%) scale( 1 ); opacity: 1; }*/
+        .UIAlertView.alert-show{ -webkit-animation: alert-show 1s forwards; }
+        .UIAlertView.alert-show.alert-hide{ -webkit-animation: alert-hide 0.4s forwards; }
+
+        .UIAlertView{ position: absolute; width: 80%; height: auto; border-radius: 4px; overflow: hidden; background-color: #ffffff; z-index: 9; font-family: apple-style; }
+        .UIAlertView button
+        { position: relative; width: 100%; height: 37px; color: #0678C9; left: 0px; top: calc( 100% - 37px ); background-color: #ffffff; border-top: 0.5px #0678C9 solid; border-left: none; border-right: none; border-bottom: none; }
+        .UIAlertView h2, .UIAlertView p{ position: relative; height: auto; width: 80%; text-align: center; }
+        .UIAlertView h2{ font-size: 0.8em; padding: 7px 10% 0px 10%;  }
+        .UIAlertView p { font-size: 0.8em; padding: 0px 10% 14px 10%; }
+
+        @-webkit-keyframes alert-hide {
+            0%   { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1 );  opacity: 1; }
+            37%  { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1.07 ); opacity: 1; }
+            100% { -webkit-transform: translateX(-50%) translateY(-50%) scale( 0 );    opacity: 0; }
+        }
+
+        @-webkit-keyframes alert-show {
+            0%   { -webkit-transform: translateX(-50%) translateY(-50%) scale( 0.6 );  opacity: 0; }
+            37%  { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1.07 ); opacity: 1; }
+            100% { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1 );    opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+<!--<header><h1>UINavigationControl by javascript</h1></header>-->
+
+<!--<div class="phone">-->
+    <div class="UINavigation">
+
+        <nav><button class="nav-back-btn">back</button><p class="nav-title">title</p><button class="nav-item-btn icon-exclamation middle"></button></nav>
+
+        <div class="view main-view"><button>push second view</button></div>
+        <div class="view second-view" style="background-color: #0678C9"><button>push third view</button></div>
+        <div class="view third-view" style="background-color: #B32230"><button>pop</button></div>
+
+        <div class="mask"></div>
+
+        <div class="UIAlertView">
+            <h2 class="alert-title">Cellular Date is Turned Off</h2>
+            <p class="alert-content">Turn on cellular data or Use WLAN to access data</p>
+            <button class="alert-cancel-btn">OK</button>
+        </div>
+
+    </div>
+
+    <!--<button class="home-btn"></button>-->
+<!--</div>-->
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    var view = function( arg ){
+        var _ = this;
+
+        _.el    = arg.el;
+        _.title = arg.title;
+        _.tag   = arg.tag;
+
+        if( typeof arg.viewDidLoad == 'function') _.viewDidLoad = arg.viewDidLoad;
+        if( typeof arg.viewDidMove == 'function') _.viewDidMove = arg.viewDidMove;
+    };
+
+    var bar = function( arg ){
+        var _ = this;
+
+        _.el      = arg.ele;
+        _.title   = arg.title;
+        _.backBtn = arg.backBtn;
+    };
+    bar.prototype = {
+        titleChange: function( title, back ){
+            var _ = this;
+            _.title.innerText   = title;
+            _.backBtn.innerText = back || 'back';
+        }
+    };
+
+    var navigationVC = function( arg ){
+        var _ = this;
+        _.title         = arg.title;
+        _.currentView   = arg.view;
+        _.preView      = _.currentView;
+        _.bar           = arg.bar;
+        _.view          = [ _.currentView ];
+
+        _.push_class  = arg.push_class || 'view-push';
+
+        _.changeTitle();
+        _.currentView.viewDidLoad();
+        _.bar.backBtn.onclick = function(){ _.pop() };
+
+    };
+    navigationVC.prototype = {
+        init: function(){
+
+        },
+        changeTitle: function(){
+            this.bar.titleChange( this.currentView.title, this.preView.title );
+        },
+        pop:  function(){
+            var _ = this;
+
+            var view_len = _.view.length;
+            _.preView = _.view[ view_len - 3 ];
+            if( view_len == 1 ) return;
+            if( view_len == 2 ) _.bar.backBtn.style.display = 'none';
+            if( view_len == 2 ) _.preView = _.view[0];
+
+            _.currentView.el.classList.remove( _.push_class );
+//            _.currentView.viewDidMove();
+
+            _.view.pop();
+            _.currentView = _.view[ view_len - 2 ];
+            _.changeTitle();
+
+        },
+        push: function( view ){
+            var _ = this;
+
+            _.bar.backBtn.style.display = 'block';
+            _.changeTitle( view.title );
+
+            view.viewDidLoad();
+            _.view.push(view);
+            _.preView = _.currentView;
+            _.currentView = view;
+            view.el.classList.add( _.push_class );
+            _.changeTitle();
+            console.log(_.view);
+        }
+    };
+
+    var bar      = new bar ({ el: $('.UINavigation nav'), title: $('.nav-title'), backBtn: $('.nav-back-btn') }),
+
+            mainView              = new view({ el: $('.main-view'), title: 'main', tag: 0, viewDidLoad: function(){
+                console.log('main view load');
+            }}),
+
+            secondView           = new view({ el: $('.second-view'), title: 'second', tag: 1, viewDidLoad: function(){
+                console.log('second view load');
+            }}),
+
+            thirdView          = new view({ el: $('.third-view'), title: 'third', tag: 2, viewDidLoad: function(){
+                console.log('third view load');
+            }}),
+
+            NC       = new navigationVC({ view: mainView, bar: bar });
+
+    $('.main-view button').onclick   = function(){ NC.push( secondView )};
+    $('.second-view button').onclick = function(){ NC.push( thirdView ) };
+    $('.third-view button').onclick  = function(){ NC.pop()             };
+
+    var UIAlertView = function( arg ){
+        var _ = this;
+
+        _.el     = arg.el;
+    };
+
+    var UIAlertView = $('.UIAlertView'), mask = $('.mask');
+
+    $('.nav-item-btn').onclick = function(){
+        mask.style.display = 'block';
+        UIAlertView.classList.add('alert-show');
+    };
+    $('.alert-cancel-btn').onclick = function(){
+        UIAlertView.classList.add('alert-hide');
+        setTimeout(function(){
+            mask.style.display = 'none';
+            UIAlertView.classList.remove('alert-show');
+            UIAlertView.classList.remove('alert-hide');
+        }, 400);
+    };
+
+    document.addEventListener('touchmove', function(e) {
+        if( e.target.type == 'range' ) return;
+        e.preventDefault();
+    });
+</script>
+</html>
