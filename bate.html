@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>bate</title>
+    <meta charset="utf-8">
+
+    <style>
+        @font-face {
+            font-family: Menlo roboto;
+            src: url('Menlo.ttc') format('ttc');
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url('Roboto.woff2') format('woff');
+        }
+
+        @font-face {
+            font-family: apple-style;
+            src: url('myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        /*{ background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,rgba(0,0,0,0)), color-stop(80%,rgba(0,0,0,0.2))); }*/
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button{ outline: none; cursor: pointer; }
+
+        .card{ -webkit-transition: all 0s; }
+
+        .view{ position: absolute; width: 100%; height: 100%; background-color: #ffffff; overflow: hidden; }
+        .view:nth-child(odd){ position: fixed !important; width: 100%; height: 100%; left: 0px; top: 0px; }
+
+        .view img{ position: absolute; left: 0px; top: 0px; width: 100%; height: auto; }
+
+        .view.first{ position: fixed !important; height: 100%; left: 0px; top: 0px; z-index: 97; overflow: hidden; }
+        .view.first:before
+        { content: ''; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; }
+        .view.first img{ width: 100%; height: auto; }
+
+        .first .info-btn{ position: absolute; width: 37px; height: 3px; right: 7px; top: 7px; border: none; background-color: #000000; }
+
+        .flip{ position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; -webkit-perspective: 1000; }
+        .flip .card{ position: absolute; width: 100%; height: 100%; -webkit-transform-style: preserve-3d;  -webkit-transform: scale(0.01) translateX( 0 ); background-color: transparent; opacity: 0; }
+        .flip .card div{ display: block; position: inherit; width: 100%; height: 100%; -webkit-backface-visibility: hidden; }
+        .flip .card .front{ background: red; }
+        .flip .card .back { background: red; -webkit-transform: rotateY(180deg); }
+        .card.flipped{ -webkit-transform: rotateY(180deg) translateX( 0 ) scale(1); opacity: 1; }
+
+        .view.second{ top: 100%; background-color: #ffffff; z-index: 197; }
+
+        .view.third { background-color: #000000; z-index: 87; }
+
+        .view.fourth{ position: absolute; left: 0px; top: 300%; background-color: #ffff00; z-index: 197; }
+
+        .view.fifth { z-index: 77; }
+
+    </style>
+
+</head>
+<body>
+
+    <!--<section class="navigation-mailman">-->
+
+    <!--</section>-->
+
+    <section class="view first">
+        <img src="win10.jpg">
+
+        <button class="info-btn"></button>
+
+        <div class="flip">
+            <div class="card">
+                <div class="front">1</div>
+                <div class="back">2</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="view second">
+        <img src="win10.jpg">
+    </section>
+
+    <section class="view third">
+        <img src="win10.jpg">
+    </section>
+
+    <section class="view fourth">
+        <img src="win10.jpg">
+    </section>
+
+    <section class="view fifth">
+        <img src="win10.jpg">
+    </section>
+
+    <footer>
+
+    </footer>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+
+    var h = window.screen.availHeight;
+
+    console.log(h);
+
+    window.onscroll = function(){
+
+//        $('.card').classList.add('flipped');
+
+        var st = document.body.scrollTop;
+
+        if( st < h ){
+            $('.first').style.top = 0 + '%';
+        }else if( st >= h ){
+            $('.first').style.top = -100 + '%';
+        }else if( st < 3 * h && st > h ){
+
+        }else if( st > 3 * h ){
+
+        }else if( st ){
+
+        }
+    };
+
+    document.addEventListener('touchmove', function(e) {
+        if( e.target.type == 'range' ) return;
+        e.preventDefault();
+    });
+</script>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        @font-face {
+            font-family: Menlo roboto;
+            src: url('../Menlo.ttc') format('ttc');
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url('../Roboto.woff2') format('woff');
+        }
+
+        @font-face {
+            font-family: apple-style;
+            src: url('../myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
+        input { outline: none; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+        h4       { position: relative; text-align: right; margin: 7px 5%; color: #B32230; font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .phone .home-btn{ -webkit-transform: translateX(-50%); }
+
+        .phone{ position: relative; width: 288px; height: 587px; border: solid 1px #000000; margin: 27px 5%; border-radius: 37px; }
+        .phone .screen{ position: absolute; margin: 75px 8px; width: 270px; height: 437px; overflow: hidden; border: 1px solid #000000;  }
+        .phone .screen nav{ position: relative; width: 100%; height: 17px; background-color: transparent; z-index: 77; }
+
+        .phone .screen nav .cellular-on{ position: absolute; left: 3px; margin: 5px 1px 5px 1px; height: 7px; width: 7px; border-radius: 50%; background-color: #000000; }
+        .phone .screen nav .cellular-on:before, .phone .screen nav .cellular-on:after
+        { position: absolute; content: attr(BF); top: 0px; width: 7px; height: 7px; border-radius: 50%; background-color: #000000; margin: 0px 3px; }
+        .phone .screen nav .cellular-on:before{ left: 5px; }
+        .phone .screen nav .cellular-on:after { left: 13px; }
+
+        .phone .screen nav .cellular-off{ position: absolute; left: 25px; margin: 5px 3px; height: 5px; width: 5px; border-radius: 50%; border: 1px solid #000000; background-color: transparent; }
+        .phone .screen nav .cellular-off:before
+        { position: absolute; content: attr(BF); top: -1px; width: 5px; height: 5px; border-radius: 50%; background-color: transparent; border: 1px solid #000000; margin: 0px 3px; }
+        .phone .screen nav .cellular-off:before{ left: 4px; }
+
+        .phone .screen nav .nav-time{ position: absolute; width: 100%; text-align: center; background-color: transparent; top: 2px; }
+        .phone .screen nav .net{ position: absolute; left: 47px; top: 2px; height: 17px; width: auto; line-height: 17px; }
+
+        .phone .screen nav .battery{ position: absolute; right: 7px; top: 4px; width: 20px; height: 9px; border-radius: 2px; background-color: #000000; }
+        .phone .screen nav .battery:before{ position: absolute; content: attr(BF); width: 2px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; height: 5px; right: -2px; background-color: #000000; top: 2px; }
+
+        .phone .screen .view{ position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; background-color: #ffffff; overflow: hidden; }
+        .desk-top img   { position: absolute; width: auto; height: 100%; left: 0px; top: 0px; }
+        .app-icon       { position: absolute; left: 13px; top: 23px; width: 57px; height: 57px; border-radius: 13px; background-color: #000000; cursor: pointer; }
+        .app-icon:before{ position: absolute; content: attr(BF); top: 101%; left: 0px; font-size: 0.8em; width: 100%; text-align: center; color: #000000; }
+
+        .phone .home-btn{ position: absolute; bottom: 11.5px; background-color: #ffffff; left: 50%; width: 47px; height: 47px; border-radius: 50%; border: solid 1px #000000; }
+
+        .app{ -webkit-transform: scale(0); -webkit-transition: all 0.4s; opacity: 0; }
+        .app.start{ -webkit-transform: scale(1); opacity: 1; }
+
+        .mask{ display: none; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #000000; opacity: 0.2; z-index: 87; }
+
+        .UIAlertView{ left: 50%; top: 50%; -webkit-transition: all 0.6s; -webkit-transform: translateX(-50%) translateY(-50%) scale( 0.0 ); opacity: 0; }
+        .UIAlertView.alert-show{ -webkit-animation: alert-show 1s forwards; }
+        .UIAlertView.alert-show.alert-hide{ -webkit-animation: alert-hide 0.4s forwards; }
+
+        .UIAlertView{ position: absolute; width: 80%; height: auto; border-radius: 4px; overflow: hidden; background-color: #ffffff; z-index: 97; font-family: Roboto; }
+        .UIAlertView button
+        { position: relative; width: 100%; height: 37px; color: #0678C9; left: 0px; top: calc( 100% - 37px ); background-color: #ffffff; border-top: 1px #0678C9 solid; border-left: none; border-right: none; border-bottom: none; }
+        .UIAlertView h2, .UIAlertView p{ position: relative; height: auto; width: 80%; text-align: center; }
+        .UIAlertView h2{ font-size: 0.8em; padding: 7px 10% 0px 10%;  }
+        .UIAlertView p { font-size: 0.8em; padding: 0px 10% 14px 10%; }
+
+        @-webkit-keyframes alert-hide {
+            0%   { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1 );  opacity: 1; }
+            /*37%  { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1.07 ); opacity: 1; }*/
+            100% { -webkit-transform: translateX(-50%) translateY(-50%) scale( 0.77 );    opacity: 0; }
+        }
+
+        @-webkit-keyframes alert-show {
+            0%   { -webkit-transform: translateX(-50%) translateY(-50%) scale( 0.6 );  opacity: 0; }
+            37%  { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1.07 ); opacity: 1; }
+            100% { -webkit-transform: translateX(-50%) translateY(-50%) scale( 1 );    opacity: 1; }
+        }
+
+        input:first-child{ margin-top: 27px; }
+        input{ width: 80%; border: none; background-color: #EDEDED; height: 37px; border-radius: 2px; font-size: 1.2em; padding: 0px 5%; margin: 0px 5% 17px 5%; }
+        .alert-btn{ border: none; background-color: #ffffff; width: 90%; margin: 0px 5%; height: 37px; border-radius: 2px; font-size: 1.8em; color: #0678C9; }
+
+    </style>
+</head>
+<body>
+    <header><h1>UIAlertView by javascript</h1></header>
+    <h4>Author: Mailman Recat</h4>
+
+    <pre><code>Example:</code></pre>
+    <pre><code>var $ = function( el ){ return document.querySeletor(el) };</code></pre>
+    <pre><code>var delegate = {</code></pre>
+    <pre><code>    title: '', content: '',</code></pre>
+    <pre><code>    setTitle       : function( title   ){ var self = delegate; self.title   = title   },</code></pre>
+    <pre><code>    setContent     : function( content ){ var self = delegate; self.content = content },</code></pre>
+    <pre><code>    require:   {</code></pre>
+    <pre><code>        getTitle   : function(){ var self = delegate; return self.title   },</code></pre>
+    <pre><code>        getContent : function(){ var self = delegate; return self.content }</code></pre>
+    <pre><code>    },</code></pre>
+    <pre><code>    option: {}</code></pre>
+    <pre><code>};</code></pre>
+
+    <pre><code>var A = new UIAlertView({ el: $('.UIAlertView'), titleEl: $('.title'), contentEl: $('.content'), mask: mask, delegate: delegate });</code></pre>
+    <pre><code>A.show().mask.show();</code></pre>
+    <pre><code>A.hide().mask.hide();</code></pre>
+
+    <div class="phone">
+
+        <div class="screen">
+            <nav>
+                <p class="nav-time">12:30</p>
+                <div class="cellular-on"></div>
+                <div class="cellular-off"></div>
+                <p class="net">4G</p>
+                <div class="battery"></div>
+            </nav>
+
+            <div class="view desk-top">
+                <img src="win.jpg">
+                <div class="app-icon" BF="Demo"></div>
+            </div>
+
+            <div class="view app start">
+                <input name="title" type="text" placeholder="Alert title">
+                <input name="content" type="text" placeholder="Alert content">
+                <button class="alert-btn">Alert</button>
+
+                <div class="mask"></div>
+
+                <div class="UIAlertView">
+                    <h2 class="alert-title">Cellular Date is Turned Off</h2>
+                    <p class="alert-content">Turn on cellular data or Use WLAN to access data</p>
+                    <button class="alert-cancel-btn">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="home-btn"></button>
+    </div>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    var mask = {
+                el      : $('.mask'),
+                show    : function(){ mask.el.style.display = 'block'; },
+                hide    : function(){ mask.el.style.display = 'none' ; }
+            },
+
+            UIAlertView = function( arg ){
+        var self = this;
+
+        if( typeof arg.delegate.require.getTitle   !== 'function' ) return {  };
+        if( typeof arg.delegate.require.getContent !== 'function' ) return {  };
+
+        self.el        = arg.el;
+        self.titleEl   = arg.titleEl;
+        self.contentEl = arg.contentEl;
+        self.mask      = arg.mask;
+        self.cshow     = arg.cshow || 'alert-show';
+        self.chide     = arg.chide || 'alert-hide';
+        self.title     = '';
+        self.content   = '';
+        self.delegate  = arg.delegate;
+    };
+    UIAlertView.prototype = {
+        show:   function(){
+            var self = this;
+
+            self.title   = self.delegate.require.getTitle();
+            self.content = self.delegate.require.getContent();
+
+            console.log( self.title );
+
+            if( self.title   == '' ){ self.title   = 'Cellular Date is Turned Off';                      }
+            if( self.content == '' ){ self.content = 'Turn on cellular data or Use WLAN to access data'; }
+
+            self.titleEl.innerText   = self.title;
+            self.contentEl.innerText = self.content;
+            self.el.classList.add(self.cshow);    return self;
+        },
+        hide:   function(){
+            var self = this;
+            self.el.classList.add( self.chide );
+
+            setTimeout(function(){
+                self.el.classList.remove( self.chide );
+                self.el.classList.remove( self.cshow );
+            }, 400);
+
+            return self;
+        }
+    };
+
+    var delegate = {
+        title     : '',
+        content   : '',
+        setTitle  : function( title   ){ var self = delegate; self.title   = title   },
+        setContent: function( content ){ var self = delegate; self.content = content },
+        require: {
+            getTitle: function(){
+                var self = delegate;
+                return self.title;
+            },
+            getContent: function(){
+                var self = delegate;
+                return self.content;
+            }
+        },
+        option:  {
+
+        }
+    };
+
+    var A = new UIAlertView({ el: $('.UIAlertView'), titleEl: $('.alert-title'), contentEl: $('.alert-content'), mask: mask, delegate: delegate });
+
+    $('.alert-btn').onclick = function(){
+
+        var title = $('input[name = title]').value,
+                content = $('input[name = content]').value;
+
+        delegate.setTitle( title ); delegate.setContent( content );
+
+        A.show().mask.show();
+    };
+    $('.alert-cancel-btn').onclick = function(){
+        $('input[name = title]').focus();
+
+        A.hide().mask.hide();
+    };
+
+    var app = $('.app'), itl, barTime = $('.nav-time'), t = new Date(), h = t.getHours(), m = t.getMinutes(), s = t.getSeconds(), time = h +':'+ m;
+
+    barTime.innerText = time;
+    setInterval(function(){
+        barTime.innerText = time;
+    }, 60000);
+
+    $('.home-btn').onclick = function(){
+        app.classList.remove('start');
+    };
+    $('.app-icon').onclick = function(){
+        app.classList.add('start');
+        $('input[name = title]').focus();
+    };
+
+</script>
+</html>

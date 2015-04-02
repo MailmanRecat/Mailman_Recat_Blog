@@ -612,29 +612,29 @@ var zhihupaper = {
     }
 };
 
-//window.onscroll = function(){
-//
-//    if(document.body.scrollTop <= 0){
-//        UIaction.animationbg.show();
-//        UIaction.header.unshadow();
-//        UIaction.icon.down();
-//        UIaction.back.down();
-//    }else{
-//        UIaction.animationbg.hide();
-//        UIaction.header.shadow();
-//        UIaction.icon.up();
-//        UIaction.back.up();
-//    }
-//
-//    if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
-//        if( navVC.currentViewTitle() === view_news.title ){
-//            UIaction.footer.show();
-//            zhihupaper.getBeforeNews();
-//        }
-//    }else{
-//        UIaction.footer.hide();
-//    }
-//};
+window.onscroll = function(){
+
+    if(document.body.scrollTop <= 0){
+        UIaction.animationbg.show();
+        UIaction.header.unshadow();
+        UIaction.icon.down();
+        UIaction.back.down();
+    }else{
+        UIaction.animationbg.hide();
+        UIaction.header.shadow();
+        UIaction.icon.up();
+        UIaction.back.up();
+    }
+
+    if( document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight ){
+        if( navVC.currentViewTitle() === view_news.title ){
+            UIaction.footer.show();
+            zhihupaper.getBeforeNews();
+        }
+    }else{
+        UIaction.footer.hide();
+    }
+};
 
 
 $('#mainSetting'    ).onclick     = function(){ UIaction.setting.show()        };
