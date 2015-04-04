@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        @font-face {
+            font-family: roboto;
+            src:url('Roboto.woff2') format('woff');
+        }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: roboto; }
+        a{ text-decoration: none; }
+
+        .wrap{ position: absolute; margin: 0% 5%; top: 20%; width: 90%; height: 80%; background-color: #ffd700; overflow: hidden; }
+        .wrap .container{ position: absolute; top: 0%; width: 100%; height: 100%; -webkit-transition: all 0.77s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+        .wrap .container.up{ -webkit-transform: translateY( -100% ); }
+        .container .view{ position: relative; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+<section class="wrap">
+    <section class="container">
+        <div class="view" style="background-color: #ffd700"></div>
+        <div class="view" style="background-color: #003399"></div>
+    </section>
+</section>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)},
+            $ca  = function(el, name){ el.classList.add(name)            },
+            $cr  = function(el, name){ el.classList.remove(name)         },
+            $cc  = function(el, name){ return el.classList.contains(name)},
+            $ct  = function(el, name){ el.classList.toggle(name)         };
+
+    var t = - 100;
+    $('.wrap').addEventListener('mousewheel', function( e ){
+        console.log(e.wheelDelta);
+        if( e.wheelDelta > 0 ){
+            $('.container').style.webkitTransform = 'translateY( ' + 100 + '%)';
+        }else{
+            $('.container').style.webkitTransform = 'translateY( -' + 100 + '%)';
+        }
+//        $('.container').classList.add('up');
+//        $('.container').style.webkitTransform = 'translateY( ' + t + '%)';
+        console.log('ok');
+    }, false);
+</script>
+</html>

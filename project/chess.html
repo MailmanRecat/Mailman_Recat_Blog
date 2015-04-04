@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        *{ -webkit-font-smoothing: antialiased; }
+
+        .game-board{ position: relative; margin: 100px auto; width: 1100px; cursor: pointer; -webkit-transform: scale(0.5); }
+        .game-board .cube{ position: relative; width: 120px; height: 120px; margin: 1px; float: left; background-color: #a9a9a9; text-align: center; line-height: 38px; color: white; -webkit-transition: all 0.1s; }
+        /*.game-board .cube:before{ position: absolute; content: attr(BF); color: #000000; font-size: 2em; text-indent: -0.8em; line-height: 120px; left: 50%; top: 50%; width: 2px; height: 100%; background-color: #000000; -webkit-transform: translateX(-50%) translateY(-50%); }*/
+        /*.game-board .cube:after { position: absolute; content: attr(BFA); left: 50%; top: 50%; width: 100%; height: 2px; background-color: #000000; -webkit-transform: translateX(-50%) translateY(-50%); }*/
+        .game-board .cube:before  { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; font-size: 1.6em; content: attr(BF); color: #ffd700; text-align: center; line-height: 120px; }
+
+        .eatme{ -webkit-animation: eatmeeatme 1s infinite; }
+
+        @-webkit-keyframes eatmeeatme {
+            to{ opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-board"></div>
+</body>
+<script>
+    var $  = function( obj ){ return document.querySelector( obj );},
+            $n = function( obj ){ return [].slice.call(document.querySelectorAll( obj ));},
+            arrdl = function( a, i ){ return a.slice( 0, i ).concat( a.slice( i + 1, a.length ) ) };
+
+//    for(var i = 0; i<90; i++){
+//        $('.game-board').innerHTML += '<div class="cube" BF="fuck" data-tag="'+i+'"></div>';
+//    }
+    var gameboard = function( size ){
+        var _ = this;
+
+        var size = size || { MAX_X: 0, MAX_Y: 0 };
+
+        var o = { NodeNumber: size.MAX_X * size.MAX_Y };
+
+        _.getPoint = function( tag ){
+            var tag = parseInt( tag );
+
+            if( tag >= o.NodeNumber ) return false;
+
+            var x = parseInt( tag % size.MAX_X ),
+                    y = parseInt( tag / size.MAX_X );
+
+            var point = {
+                x: x,
+                y: y
+            };
+            return point;
+        };
+        _.AroundPosition = function( tag ){
+            var tag =  Number(tag) || -1;
+
+            if( tag >= o.NodeNumber && tag === -1 ) return false;
+
+            var tag = parseInt(tag);
+
+            var point       = _.getPoint( tag),
+                    x       = point.x,
+                    y       = point.y,
+                    lenghtX = size.MAX_X,
+                    lenghtY = size.MAX_Y,
+                    maxX    = lenghtX - 1,
+                    maxY    = lenghtY - 1;
+
+            var leftTopPosition         = tag - lenghtX -1,
+                    topPosition         = tag - lenghtX,
+                    rightTopPosition    = tag - lenghtX + 1,
+                    rightPosition       = tag + 1,
+                    rightBottomPosition = tag + lenghtX + 1,
+                    bottomPosition      = tag + lenghtX,
+                    leftBottomPosition  = tag + lenghtX - 1,
+                    leftPosition        = tag - 1;
+
+            switch (x){
+                case 0:
+                    leftPosition        = null;
+                    leftTopPosition     = null;
+                    leftBottomPosition  = null;
+                    break;
+                case maxX:
+                    rightPosition       = null;
+                    rightTopPosition    = null;
+                    rightBottomPosition = null;
+                    break;
+                default: break;
+            }
+
+            switch (y){
+                case 0:
+                    topPosition         = null;
+                    rightTopPosition    = null;
+                    leftTopPosition     = null;
+                    break;
+                case maxY:
+                    bottomPosition      = null;
+                    rightBottomPosition = null;
+                    leftBottomPosition  = null;
+                    break;
+                default: break;
+            }
+
+            var aroundPostion = {
+                leftTopPostion       : leftTopPosition,
+                topPosition          : topPosition,
+                rightTopPosition     : rightTopPosition,
+                rightPosition        : rightPosition,
+                rightBottomPosition  : rightBottomPosition,
+                bottomPosition       : bottomPosition,
+                leftBottomPosition   : leftBottomPosition,
+                leftPosition         : leftPosition
+            };
+
+            return aroundPostion;
+        }
+    };
+
+    var gameBoard = new gameboard({ MAX_X: 9, MAX_Y: 10 });
+
+    var chess = function( arg ){
+        var self = this;
+
+        self.gameBoard   = gameBoard;
+        self.stuff       = [ 'Boss', 'bread', 'bread', 'vegetable', 'vegetable', 'cream', 'cream', 'meat', 'meat', 'pineapple', 'pineapple', 'sesame', 'sesame', 'sesame', 'sesame', 'sesame' ];
+        self.hamburg     = self.stuff;
+        self.chickenRoll = self.stuff;
+
+        self.activitePlayer = self.hamburg;
+
+    };
+    chess.prototype = {
+        GameStart  : function(){
+            var self = this, number = 90, stuff, camp, str = '';
+
+            for( var i = 0; i < number; i++ ){
+                if     ( i == 0 || i == 8 || i == 89 || i == 81 ){ stuff = 'vegetable' }
+                else if( i == 1 || i == 7 || i == 88 || i == 82 ){ stuff = 'cream'     }
+                else if( i == 2 || i == 6 || i == 87 || i == 83 ){ stuff = 'meat'      }
+                else if( i == 3 || i == 5 || i == 86 || i == 84 ){ stuff = 'bread'     }
+                else if( i == 19|| i == 25|| i == 64 || i == 70 ){ stuff = 'pineapple' }
+                else if( i == 4 || i == 85                      ){ stuff = 'Boss'      }
+                else if( i == 27|| i == 29|| i == 31 || i == 33 || i == 35 || i == 54 || i == 56 || i == 58 || i == 60 ){ stuff = 'sesame' }
+                else   { stuff = i }
+
+                if     ( i < 45 ){ camp = 'hamburg' }else if( i > 53 ){ camp = 'chickenRoll' }
+
+                str += '<div class="cube" BF="'+stuff+'" data-camp="'+camp+'" data-tag="'+i+'"></div>';
+            }
+
+            $('.game-board').innerHTML = str;
+        },
+        Eat    : function( stuff ){
+            var self = this, i = 0, len;
+
+            if( self.activitePlayer == self.hamburg ){
+                for( len = self.chickenRoll.length; i < len; i++ ){
+                    if( self.chickenRoll[i] == stuff ){ self.chickenRoll = arrdl( self.chickenRoll, i ) }
+                }
+            }else if( self.activitePlayer == self.chickenRoll ){
+                for( len = self.hamburg.length;     i < len; i++  ){
+                    if( self.hamburg[i]     == stuff ){ self.hamburg     = arrdl( self.hamburg,      i ) }
+                }
+            }
+        },
+        Move    : function( from, to ){
+
+        },
+        GetPath : function( stuff, tag ){
+            var self = this, path = [], len = { xl: 9, yl: 10 }, point = self.gameBoard.getPoint( tag), x = point.x, y = point.y;
+
+            if( stuff == 'vagetable' ){
+                path[0]     = x;
+                path[1]     = x +     len.xl;
+                path[2]     = x + 2 * len.xl;
+                path[3]     = x + 3 * len.xl;
+                path[4]     = x + 4 * len.xl;
+                path[5]     = x + 5 * len.xl;
+                path[6]     = x + 6 * len.xl;
+                path[7]     = x + 7 * len.xl;
+                path[8]     = x + 8 * len.xl;
+                path[9]     = x + 9 * len.xl;
+                path[10]    = y;
+                path[11]    = y +     len.yl;
+            }
+            if( stuff == 'cream'     ){
+                path[0]     = ( x > 1            && y > 0            )? tag -     len.xl - 2 : null;
+                path[1]     = ( x < (len.xl - 2) && y > 0            )? tag -     len.xl + 2 : null;
+                path[2]     = ( x > 0            && y > 1            )? tag - 2 * len.xl - 1 : null;
+                path[3]     = ( x < (len.xl - 1) && y > 1            )? tag - 2 * len.xl + 1 : null;
+                path[4]     = ( x > 1            && y < (len.yl - 1) )? tag +     len.xl - 2 : null;
+                path[5]     = ( x < (len.xl - 2) && y < (len.yl - 1) )? tag +     len.xl + 2 : null;
+                path[6]     = ( x > 0            && y < (len.yl - 2) )? tag + 2 * len.xl - 1 : null;
+                path[7]     = ( x < (len.xl - 1) && y < (len.yl - 2) )? tag + 2 * len.xl + 1 : null;
+            }
+            if( stuff == 'meat'      ){
+                path[0]     = ( x > 1            && y < (len.yl - 2) )? tag + 2 * len.xl - 2 : null;
+                path[1]     = ( x < (len.xl - 2) && y < (len.yl - 2) )? tag + 2 * len.xl + 2 : null;
+                path[2]     = ( x < (len.xl - 2) && y > 1            )? tag - 2 * len.xl + 2 : null;
+                path[3]     = ( x > 1            && y > 1            )? tag - 2 * len.xl - 2 : null;
+            }
+            if( stuff == 'bread'     ){
+                path[0]     = ( x > 0            && y < (len.yl -1 ) )? tag + len.xl - 1     : null;
+                path[1]     = ( x < (len.xl - 1) && y < (len.yl -1 ) )? tag + len.xl + 1     : null;
+                path[2]     = ( x < (len.xl - 1) && y > 0            )? tag - len.xl + 1     : null;
+                path[3]     = ( x > 0            && y > 0            )? tag - len.xl - 1     : null;
+            }
+            if( stuff == 'pineapple' ){
+
+                path[0]     = x;
+                path[1]     = x +     len.xl;
+                path[2]     = x + 2 * len.xl;
+                path[3]     = x + 3 * len.xl;
+                path[4]     = x + 4 * len.xl;
+                path[5]     = x + 5 * len.xl;
+                path[6]     = x + 6 * len.xl;
+                path[7]     = x + 7 * len.xl;
+                path[8]     = x + 8 * len.xl;
+                path[9]     = x + 9 * len.xl;
+            }
+            if( stuff == 'Boss'      ){
+                path[0]     =                 tag + 1;
+                path[1]     =                 tag - 1;
+                path[2]     = ( y < len.yl )? tag + len.xl : null;
+                path[3]     = ( y > 0      )? tag - len.xl : null;
+            }
+            if( stuff == 'sesame'    ){
+                path[0]     = tag + len.xl;
+            }
+
+            return path;
+        }
+    };
+
+
+    var c = new chess();
+//    c.eat( 'Boss' );
+    console.log(c.chickenRoll);
+    c.GameStart();
+    var p =  c.GetPath( 'bread', 7 );
+    console.log( p );
+
+    $('.game-board').onclick = function(e){
+        if(e.target == this ) return;
+
+        var stuff = e.target.getAttribute('bf');
+        if( isNaN( stuff ) ) e.target.style.backgroundColor = 'orange';
+
+        e.target.classList.toggle('eatme');
+
+        console.log( stuff );
+
+    };
+
+    fi = 9;
+
+    var i = ( fi > 9 )? 9 : 1;
+
+    console.log(i);
+
+//    var s = ['fuck', 'kao', 'ui'];
+//
+//    for( var i = 0, l = 3; i < l; i++ ){
+//        if(s[i] == 'kao'  ){
+//            s =  arrdl( s, i );
+//        }
+//    }
+
+//    console.log(s);
+</script>
+</html>

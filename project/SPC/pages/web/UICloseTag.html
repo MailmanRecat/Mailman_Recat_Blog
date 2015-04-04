@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>UICloseTag</title>
+    <meta charset="utf-8">
+    <style>
+        @font-face {
+            font-family: Menlo roboto;
+            src: url('../Menlo.ttc') format('ttc');
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url('../Roboto.woff2') format('woff');
+        }
+
+        @font-face {
+            font-family: apple-style;
+            src: url('../myriad-set-pro_ultralight.woff') format('woff');
+        }
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
+        input { outline: none; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+        h4       { position: relative; text-align: right; margin: 7px 5%; color: #B32230; font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .phone .home-btn{ -webkit-transform: translateX(-50%); }
+
+        .phone{ position: relative; width: 288px; height: 587px; border: solid 1px #000000; margin: 27px 5%; border-radius: 37px; }
+        .phone .screen{ position: absolute; margin: 75px 8px; width: 270px; height: 437px; overflow: hidden; border: 1px solid #000000;  }
+        .phone .screen nav{ position: relative; width: 100%; height: 17px; background-color: transparent; z-index: 77; }
+
+        .phone .screen nav .cellular-on{ position: absolute; left: 3px; margin: 5px 1px 5px 1px; height: 7px; width: 7px; border-radius: 50%; background-color: #000000; }
+        .phone .screen nav .cellular-on:before, .phone .screen nav .cellular-on:after
+        { position: absolute; content: attr(BF); top: 0px; width: 7px; height: 7px; border-radius: 50%; background-color: #000000; margin: 0px 3px; }
+        .phone .screen nav .cellular-on:before{ left: 5px; }
+        .phone .screen nav .cellular-on:after { left: 13px; }
+
+        .phone .screen nav .cellular-off{ position: absolute; left: 25px; margin: 5px 3px; height: 5px; width: 5px; border-radius: 50%; border: 1px solid #000000; background-color: transparent; }
+        .phone .screen nav .cellular-off:before
+        { position: absolute; content: attr(BF); top: -1px; width: 5px; height: 5px; border-radius: 50%; background-color: transparent; border: 1px solid #000000; margin: 0px 3px; }
+        .phone .screen nav .cellular-off:before{ left: 4px; }
+
+        .phone .screen nav .nav-time{ position: absolute; width: 100%; text-align: center; background-color: transparent; top: 2px; }
+        .phone .screen nav .net{ position: absolute; left: 47px; top: 2px; height: 17px; width: auto; line-height: 17px; }
+
+        .phone .screen nav .battery{ position: absolute; right: 7px; top: 4px; width: 20px; height: 9px; border-radius: 2px; background-color: #000000; }
+        .phone .screen nav .battery:before{ position: absolute; content: attr(BF); width: 2px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; height: 5px; right: -2px; background-color: #000000; top: 2px; }
+
+        .phone .screen .view{ position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; background-color: #ffffff; overflow: hidden; }
+        .desk-top img   { position: absolute; width: auto; height: 100%; left: 0px; top: 0px; }
+        .app-icon       { position: absolute; left: 13px; top: 23px; width: 57px; height: 57px; border-radius: 13px; background-color: #000000; cursor: pointer; }
+        .app-icon:before{ position: absolute; content: attr(BF); top: 101%; left: 0px; font-size: 0.8em; width: 100%; text-align: center; color: #000000; }
+
+        .phone .home-btn{ position: absolute; bottom: 11.5px; background-color: #ffffff; left: 50%; width: 47px; height: 47px; border-radius: 50%; border: solid 1px #000000; }
+
+        .app{ -webkit-transform: scale(0); -webkit-transition: all 0.4s; opacity: 0; }
+        .app.start{ -webkit-transform: scale(1); opacity: 1; }
+
+        .app .bar, .push-view .bar    { position: relative; width: 100%; height: 47px; background-color: #0C64AF; }
+        .app .bar button{ position: absolute; width: 80px; height: 27px; top: 10px; border: none; background-color: transparent; font-size: 1.2em; color:  #55DCBF; right: 17px; font-family: Roboto; }
+
+        .hamburg{ position: absolute; width: 47px; height: 47px; right: 0px; top: 10px; background-color: transparent; cursor: pointer; }
+
+        .close-tag{ position: absolute; right: 17px; top: 23px; width: 17px; height: 2px; background-color: #000000; -webkit-transform: rotate( 45deg ); cursor: pointer; }
+        .close-tag:before { position: absolute; content: attr(BF); left: 0px; top: 0px; width: 100%; height: 100%; background-color: inherit; -webkit-transform: rotate(90deg); z-index: 5; }
+        .close-tag:after
+        { position: absolute; content: attr(BF); left: 50%; top: 50%; background-color: #ffd700; width: 17px; height: 17px; border-radius: 50%; -webkit-transform: translateX(-50%) translateY(-50%) scale( 0 ); z-index: 3; }
+        .close-tag.on:after{ -webkit-animation: bun 0.77s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+
+        @-webkit-keyframes bun {
+            to{ -webkit-transform: translateX(-50%) translateY(-50%) scale(2.7); opacity: 0; }
+        }
+
+        .input-wrap{ position: relative; width: 100%; height: 147px; -webkit-box-shadow:0 0px 0px rgba( 0, 0, 0, 0.47); }
+        .input-wrap input{ position: relative; width: calc( 90% - 47px ); padding: 0% 5%; border: none; font-size: 1.2em; height: 57px; top: 10px; }
+        .input-wrap .hamburg{ display: none; }
+
+        .push-view{ z-index: 7; position: absolute; width: 100%; height: 100%; left: 0px; top: 100%; background-color: #ffffff; -webkit-transition: all 0.47s cubic-bezier( 0, 0.07, 0.1, 1 ); }
+        .push-view.push{ -webkit-transform: translateY( -100% ); }
+        .push-view-hamburg{ position: absolute; width: 47px; height: 47px; right: 0px; top: 0px; background-color: transparent; cursor: pointer; }
+        .push-view-hamburg .close-tag{ background-color: #ffffff; }
+        .push-view p{ position: relative; color: #ffffff; left: 17px; line-height: 47px; font-size: 1.2em; font-family: Roboto; }
+
+        .keyboard{ position: absolute; left: 0px; bottom: 0px; width: 100%; height: 200px; background-color: #ffffff; -webkit-box-shadow:0 1px 6px rgba( 0, 0, 0, 0.37); }
+        .keyboard button{ position: relative; float: left; width: calc( 100% / 3 ); font-size: 1.2em; color: #55DCBF; background-color: #ffffff; height: 50px; border: none; overflow: hidden; }
+        .keyboard button:before{ position: absolute; content: attr(BF); left: 50%; top: 50%; width: 100px; height: 100px; border-radius: 50%; background-color:  #55DCBF; -webkit-transform: translateX(-50%) translateY(-50%) scale(0); }
+        .keyboard button.on:before{ -webkit-animation: bun-btn 0.47s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+
+        @-webkit-keyframes bun-btn {
+            to{ -webkit-transform: translateX(-50%) translateY(-50%) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header><h1>UICloseTag by javascript</h1></header>
+    <h4>Author: Mailman Recat</h4>
+
+    <pre><code>FeedBack is very important to user who just do a action.</code></pre>
+    <pre><code>so in this page, I will introduce you the feedback close-tag.</code></pre>
+    <pre><code>Example:</code></pre>
+    <pre><code>var $ = function( el ){ return document.querySeletor(el) };</code></pre>
+    <pre><code>var delegate = { require:   { DidClicked: function(){} }, option:    {} },</code></pre>
+    <pre><code>C            = new UICloseTag({ wrap: $('.wrap'), el: $('.close-tag'), delegate: delegate });</code></pre>
+    <pre><code>C.init();</code></pre>
+    <pre><code>For the close-tag, one single tag is fine.</code></pre>
+    <pre><code>You can write in this way: &lt;div class="close-tag"&gt;&lt;/div&gt;</code></pre>
+    <pre><code>But For the best experience, you should add a wrap make sure that click area is bigger.</code></pre>
+    <pre><code>Like this                : &lt;div class="wrap"&gt;&lt;div class="close-tag"&gt;&lt;/div&gt;&lt;/div&gt;</code></pre>
+
+    <section class="phone">
+
+        <section class="screen">
+
+            <section class="view desk-top">
+                <img src="win.jpg">
+                <div class="app-icon" BF="Demo"></div>
+            </section>
+
+            <section class="view app start">
+                <div class="bar">
+                    <button class="history-btn">History</button>
+                </div>
+
+                <div class="input-wrap">
+                    <input type="text" placeholder="R G B Here">
+                    <div class="hamburg"><div class="close-tag"></div></div>
+                </div>
+
+                <div class="keyboard">
+                    <button data-index="1">1</button>
+                    <button data-index="2">2</button>
+                    <button data-index="3">3</button>
+                    <button data-index="4">4</button>
+                    <button data-index="5">5</button>
+                    <button data-index="6">6</button>
+                    <button data-index="7">7</button>
+                    <button data-index="8">8</button>
+                    <button data-index="9">9</button>
+                    <button data-index="delete">Delete</button>
+                    <button data-index="0">0</button>
+                    <button data-index="HEX">HEX</button>
+                </div>
+
+                <div class="push-view">
+                    <div class="bar">
+                        <p>History</p>
+                        <div class="push-view-hamburg"><div class="close-tag"></div></div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <button class="home-btn"></button>
+    </section>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)};
+
+    var UICloseTag = function( arg ){
+        var self = this;
+
+        self.DidClicked = arg.delegate.require.DidClicked;
+        self.wrap       = arg.wrap             ;
+        self.el         = arg.el               ;
+        self.cname      = arg.cname || 'on'    ;
+        self.clearTime  = arg.clearTime || 770 ;
+    };
+    UICloseTag.prototype = {
+        init :   function(){
+            var self = this;
+
+            self.wrap.onclick = function(){
+                self.el.classList.add( self.cname );
+                self.clear();
+                typeof self.DidClicked === 'function' && self.DidClicked();
+            };
+
+            return self;
+        },
+        clear: function(){
+            var self = this;
+            setTimeout(function(){ self.el.classList.remove( self.cname ); }, self.clearTime);
+        }
+    };
+
+    var i = $('.input-wrap input'), c = $('.input-wrap .hamburg'), v = [], str;
+
+    var pDe = {
+        require: {
+            DidClicked: function(){ setTimeout(function(){ $('.push-view').classList.remove('push'); }, 200); }
+        },
+        option: {}
+    };
+    var De = {
+        require: { DidClicked: function(){ i.value = ''; v.length = 0; } },
+        option : {}
+    };
+
+    var PC    = new UICloseTag({ wrap: $('.push-view-hamburg'), el: $('.push-view-hamburg .close-tag'), delegate: pDe }),
+            C = new UICloseTag({ wrap: c, el: $('.hamburg .close-tag'), delegate: De });
+    PC.init(); C.init();
+
+    $('.history-btn').onclick = function(){ $('.push-view').classList.add('push'); };
+
+    i.onfocus = function(){ c.style.display = 'block'; };
+    i.onblur  = function(){ setTimeout(function(){ c.style.display = 'none' ; }, 770); };
+
+    $('.keyboard').onclick = function( e ) {
+        if (e.target == this) return;
+        c.style.display = 'block';
+
+        var b = e.target, index = b.getAttribute('data-index');
+        b.classList.add('on');
+        setTimeout(function () {
+            b.classList.remove('on')
+        }, 470);
+
+        if     ( index === 'delete' ){ v.pop();          }
+        else if( index === 'HEX'    ){ getHEX(); return; }
+        else                         { v.push(index);    }
+
+        if( v.length == 0 ) c.style.display = 'none';
+        str = v.join('');i.value = str;
+    };
+
+    var getHEX = function(){
+        console.log('hex');
+    }
+
+</script>
+</html>

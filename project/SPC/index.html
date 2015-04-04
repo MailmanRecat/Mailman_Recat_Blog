@@ -21,7 +21,7 @@
         .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
         .icon-search:before{ content: attr(BF); width: 12%; height: 67%; background-color: #ffffff; position: absolute; bottom: -67%; left: 50%; -webkit-transform: translateX(-50%); }
 
-        .navigation, .content, .code, nav{ -webkit-transition: all 0.4s ease-in-out; }
+        .navigation, .content, .code, nav{ -webkit-transition: all 0.4s; }
 
         .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 0px solid #EDEDED; }
         .navigation-hide{ -webkit-transform: translateX( -100% ); }
@@ -35,7 +35,7 @@
 
         .navigation .view-wrap{ position: relative; width: 100%; height: calc( 100% - 47px ); overflow-y: scroll; overflow-x: hidden; background-color: #ffffff; }
         .view-wrap .nav-view.view-push{ -webkit-transform: translateX(-100%); }
-        .view-wrap .nav-view  { position: absolute; top: 0px; background-color: #EDEDED !important; -webkit-transition: all 0.47s; }
+        .view-wrap .nav-view  { position: absolute; top: 0px; background-color: #EDEDED !important; -webkit-transition: all 0.57s cubic-bezier( 0, 0.01, 0.01, 1 ); }
 
         .view-wrap .nav-view:nth-child( n + 2 ) { left: 100%; }
 
