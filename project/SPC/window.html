@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <style>
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; }
+        button, input{ outline: none; }
+
+        body{ background-color: #37415C; }
+
+        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( 45deg ); background-color: transparent; }
+        .icon-search.small { width: 7px; height: 7px; border: solid 2px #C5C5C5; }
+        .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
+        .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
+        .icon-search:before{ content: attr(BF); width: 24%; height: 87%; background-color: #C5C5C5; position: absolute; bottom: -87%; left: 50%; -webkit-transform: translateX(-50%); }
+
+        .window-wrap{ position: absolute; padding-top: 33%; width: 57%; border: solid 0px #000000; left: 27%; bottom: 47px; }
+        .view{ position: absolute; width: 100%; height: 100%; border: 0px solid #000000; left: 0px; top: 0px; background-color: #ffffff; z-index: 97; cursor: pointer;-webkit-transform-origin: 0 100%; }
+        /*.view:hover       { -webkit-transform: scale(1) rotate(-7deg); -webkit-transition: all 0.4s; }*/
+        .view:nth-child(2){ background-color: #ffd700; -webkit-transform: rotate(-5deg); -webkit-transform-origin: 0 100%; z-index: 87; }
+        /*.view:nth-child(2):hover{ background-color: #000000; -webkit-transform: rotate(-14deg) scale(1); -webkit-transform-origin: 0% 100%; z-index: 87; }*/
+        .view:nth-child(3){ background-color: orangered; -webkit-transform: rotate(-10deg); -webkit-transform-origin: 0 100%; z-index: 77; }
+        .view:nth-child(4){ background-color: #008000; -webkit-transform: rotate(-15deg); -webkit-transform-origin: 0 100%; z-index: 67; }
+        .view:nth-child(5){ background-color: #b62525; -webkit-transform: rotate(-20deg); -webkit-transform-origin: 0 100%; z-index: 57; }
+        .view:nth-child(6){ background-color: #ffd700; -webkit-transform: rotate(-25deg); -webkit-transform-origin: 0 100%; z-index: 47; }
+        .view:nth-child(7){ background-color: #ffd700; -webkit-transform: rotate(-30deg); -webkit-transform-origin: 0 100%; z-index: 37; }
+        .view:nth-child(8){ background-color: #ffd700; -webkit-transform: rotate(-35deg); -webkit-transform-origin: 0 100%; z-index: 27; }
+        /*.view:nth-child(2){ background-color: #ffd700; -webkit-transform: rotate(-10deg); -webkit-transform-origin: 0 100%; }*/
+
+        .view:nth-child(1) nav{ background-color: orangered; }
+        .view:nth-child(2) nav{ background-color: #F3B52A; }
+        .view:nth-child(3) nav{ background-color: #6FAC42; }
+        .view:nth-child(4) nav{ background-color: #2DACB6; }
+        .view:nth-child(5) nav{ background-color: #1F7CDC; }
+        .view:nth-child(6) nav{ background-color: #1766BC; }
+        .view:nth-child(7) nav{ background-color: #875BBC; }
+        .view:nth-child(8) nav{ background-color: #4D4D4D; }
+
+        .view .slide{ position: absolute; bottom: 0px; left: 0px; height: 100%; width: 157px; background-color: #282828; z-index: 7; }
+        .view .slide ul{ position: relative; list-style: none; width: 100%; top: 121px; }
+        .view .slide ul li{ text-align: left; padding-left: 57px; width: 100px; color: #ffffff; height: 31px; line-height: 31px; }
+
+        .view .state-bar{ position: relative; height: 27px; width: 100%; background-color: #000000; z-index: 17; }
+
+        .view .state-bar .close-tag{ position: absolute; right: 0px; top: 0px; width: 41px; height: 21px; background-color: orangered; }
+        .view .state-bar .close-tag:before, .view .state-bar .close-tag:after
+        { position: absolute; content: attr(BF); width: 13px; left: 14px; top: 9px; height: 3px; background-color: #ffffff; }
+        .view .state-bar .close-tag:before{ -webkit-transform: rotate(45deg);  }
+        .view .state-bar .close-tag:after { -webkit-transform: rotate(-45deg); }
+
+        .view .state-bar .cookie   { position: absolute; width: 9px; height: 9px; border: 1px solid #ffffff; right: 47px; top: 6px; opacity: 0.6; }
+
+        .view .state-bar .min-tag  { position: absolute; width: 9px; height: 9px; border-bottom: 1px solid #ffffff; right: 67px; top: 6px; opacity: 0.6; }
+        .view .state-bar .min-tag:hover, .view .state-bar .cookie:hover{ opacity: 1; }
+
+        .view nav   { position: relative; width: 100%; height: 80px; background-color: #D55441; z-index: 17; }
+
+        .view nav .select{ position: absolute; border: 5px solid transparent; width: 0px; height: 0px; border-top-color: #ffffff; top: 17px; left: 87px; }
+
+        .view nav .arrow-left, .view nav .arrow-right{ position: absolute; width: 13px; height: 3px; top: 17px; background-color: #ffffff; opacity: 0.7; }
+        .view nav .arrow-left.selected, .view nav .arrow-right.selected{ opacity: 1; }
+        .view nav .arrow-left:before, .view nav .arrow-left:after, .view nav .arrow-right:before, .view nav .arrow-right:after
+        { position: absolute; content: attr(BF); height: 7px; width: 4px; background-color: #ffffff; }
+        .view nav .arrow-right{ left: 47px; }
+        .view nav .arrow-right:before{ right: 0px; bottom: 1px; -webkit-transform: skew( 45deg, 0deg ); }
+        .view nav .arrow-right:after { right: 0px; top: 1px;    -webkit-transform: skew( -45deg, 0deg ); }
+        .view nav .arrow-left { left: 17px; }
+        .view nav .arrow-left:before{  left: 0px;  bottom: 1px;  -webkit-transform: skew( -45deg, 0deg ); }
+        .view nav .arrow-left:after  { left: 0px;  top: 1px;     -webkit-transform: skew( 45deg, 0deg ); }
+
+        .view nav .address-input-box, .view nav .search-input-box{ position: absolute; height: 17px; top: 11px; border: 0px solid #ffffff; background-color: #ffffff; }
+        .view nav .address-input-box{ width: 60%; right: calc( 20% + 27px ); }
+        .view nav .search-input-box { width: 20%; right: 17px; }
+        .view nav .search-input-box .icon-search{ position: absolute; right: 3px; top: 2px; }
+        .view nav input{ position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; border: none; }
+
+        .view .content{ position: absolute; left: 157px; bottom: 0px; height: calc( 100% - 106px ); width: calc( 100% - 156px ); background-color: #ffffff; }
+
+        .view .content hr       { position: relative; left: 2.5%; top: 27px; border: none; background-color: #C5C5C5; height: 2px; width: 95%; }
+        .view .content hr:before{ position: absolute; content: attr(BF);  padding-right: 7px; background-color: #ffffff; top: 50%; -webkit-transform: translateY(-50%); color: #508ACE; }
+        .view .content hr:after { position: absolute; content: attr(BFA); top: 50%; left: -9px; border: 5px solid transparent; border-left-color: #C5C5C5; -webkit-transform: translateY(-50%); }
+
+        .view .content hr.drives{ top: 57px; }
+        .view .content hr.drives:after{ -webkit-transform: translateY(-30%) rotate(45deg); border-left-color: #508ACE; }
+
+        .view .content .devices{ position: relative; top: 77px; width: 47.5%; height: 67px; background-color: #ffffff; float: left; }
+        .view .content .devices:nth-child(odd){ margin-left: 2.5%; }
+        .view .content .devices:hover{ background-color: #D1E8FF; opacity: 1; }
+
+        .view .content .devices hr{ position: absolute; left: 20%; top: 21px; width: 77%; height: 17px; background-color: #C5C5C5; border: none; }
+        .view .content .devices hr:after { position: absolute; content: attr(BF);  left: 0px; top: -100%; border: none; -webkit-transform: translateY(0%); }
+        .view .content .devices hr:before{ position: absolute; content: attr(BFB); left: 0px; top: 0px; width: 67%; height: 100%; background-color: #2AA2DB; -webkit-transform: translateY(0%); }
+
+        .view:nth-child(1) .close-tag{ background-color: orangered; }
+        .view:nth-child(2) .close-tag{ background-color: #F3B52A; }
+        .view:nth-child(3) .close-tag{ background-color: #6FAC42; }
+        .view:nth-child(4) .close-tag{ background-color: #2DACB6; }
+        .view:nth-child(5) .close-tag{ background-color: #1F7CDC; }
+        .view:nth-child(6) .close-tag{ background-color: #1766BC; }
+        .view:nth-child(7) .close-tag{ background-color: #875BBC; }
+        .view:nth-child(8) .close-tag{ background-color: #4D4D4D; }
+    </style>
+</head>
+<body>
+
+    <div class="window-wrap">
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="view">
+            <div class="state-bar">
+                <div class="close-tag"></div>
+                <div class="cookie"></div>
+                <div class="min-tag"></div>
+            </div>
+            <nav>
+                <div class="arrow-left selected"></div>
+                <div class="arrow-right"></div>
+                <div class="select"></div>
+
+                <div class="address-input-box">
+                    <input class="address-input" type="text">
+                </div>
+                <div class="search-input-box">
+                    <input class="search-input" type="text">
+                    <div class="icon-search small"></div>
+                </div>
+            </nav>
+            <div class="slide">
+                <ul>
+                    <li>Home</li>
+                    <li>Favorite</li>
+                    <li>OneDrive</li>
+                    <li>This PC</li>
+                    <li>Network</li>
+                    <li>Homegroup</li>
+                </ul>
+            </div>
+            <div class="content">
+                <hr BF="Folders (6)" class="folders">
+                <hr BF="Devices and drives (2)" class="drives">
+
+                <div class="devices">
+                    <hr BF="Local Disk (C:)">
+                </div>
+                <div class="devices">
+                    <hr BF="DVD/CD-RW Drive (D:)">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+<script>
+
+</script>
+</html>

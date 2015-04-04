@@ -15,27 +15,27 @@
         button{ cursor: pointer; }
         button, select, input, iframe{ outline: none; }
 
-        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); background-color: #ffffff; }
-        .icon-search.small { width: 27px; height: 27px; border: solid 1px #0678C9; }
+        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); background-color: transparent; }
+        .icon-search.small { width: 20px; height: 20px; border: solid 2px #ffffff; }
         .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
         .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
-        .icon-search:before{ content: attr(BF); width: 12%; height: 40%; background-color: #0678C9; position: absolute; bottom: -40%; left: 50%; -webkit-transform: translateX(-50%); }
+        .icon-search:before{ content: attr(BF); width: 12%; height: 67%; background-color: #ffffff; position: absolute; bottom: -67%; left: 50%; -webkit-transform: translateX(-50%); }
 
         .navigation, .content, .code, nav{ -webkit-transition: all 0.4s ease-in-out; }
 
-        .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 1px solid #B1B1B1; }
+        .navigation     { position: fixed; width: 277px; height: 100%; left: 0px; top: 0px; border-right: 0px solid #EDEDED; }
         .navigation-hide{ -webkit-transform: translateX( -100% ); }
 
-        .navigation nav{ position: relative; width: 100%; height: 47px; border-bottom: 1px solid #B1B1B1; }
+        .navigation nav{ position: relative; background-color: #074A7F; color: #ffffff; border-right: 0px solid #EDEDED; width: 100%; height: 47px; border-bottom: 0px solid #B1B1B1; }
         .navigation nav .nav-bar-title{ line-height: 47px; font-size: 1.2em; text-align: center; z-index: 1; }
-        .navigation nav .back-btn { display: none; position: absolute; left: 0px; width: auto; color: #0678C9; font-size: 1em; padding: 0px 0px 0px 23px; border: none; background-color: #ffffff; height: 47px; }
+        .navigation nav .back-btn { display: none; position: absolute; left: 0px; width: auto; color: #ffffff; font-size: 1em; padding: 0px 0px 0px 23px; border: none; background-color: #074A7F; height: 47px; }
         .navigation nav .back-btn:before
-        { position: absolute; left: 10px; top: 17px; display: block; content: ''; border-bottom: 2px solid #0678C9; border-left: 2px solid #0678C9; width: 13px; height: 13px; -webkit-transform: rotate(45deg); }
+        { position: absolute; left: 10px; top: 17px; display: block; content: ''; border-bottom: 2px solid #ffffff; border-left: 2px solid #ffffff; width: 13px; height: 13px; -webkit-transform: rotate(45deg); }
         .navigation nav .bar-item-search{ position: absolute; top: 10px; right: 17px; }
 
         .navigation .view-wrap{ position: relative; width: 100%; height: calc( 100% - 47px ); overflow-y: scroll; overflow-x: hidden; background-color: #ffffff; }
         .view-wrap .nav-view.view-push{ -webkit-transform: translateX(-100%); }
-        .view-wrap .nav-view  { position: absolute; top: 0px; -webkit-transition: all 0.47s; }
+        .view-wrap .nav-view  { position: absolute; top: 0px; background-color: #EDEDED !important; -webkit-transition: all 0.47s; }
 
         .view-wrap .nav-view:nth-child( n + 2 ) { left: 100%; }
 
@@ -43,13 +43,13 @@
         .view-wrap .content-box{ position: relative; top: 50%; margin-top: -50%; }
         .view-wrap .info-box   { position: absolute; color: #B1B1B1; bottom: 17px; left: 0px; width: 100%; }
         .view-wrap .main-view h2, .view-wrap .main-view p{ text-align: center; }
-        .view-wrap .main-view .start-btn{ margin: 27px 0px; width: 100%; border: none; color: #0678C9; font-size: 2em; background-color: transparent; }
+        .view-wrap .main-view .start-btn{ margin: 27px 0px; width: 100%; border: none; color: #074A7F; font-size: 2em; background-color: transparent; }
 
         .view-wrap .archive-view{ width: 100%; height: 100%; background-color: #ffffff; overflow-y: scroll; }
         .view-wrap .archive-view ul{ position: relative; top: 27px; width: 95%; height: auto; background-color: transparent; margin-left: 5%; list-style: none; cursor: pointer; }
-        .view-wrap .archive-view ul li{ height: 31px; line-height: 31px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #EDEDED; border-radius: 0px; }
+        .view-wrap .archive-view ul li{ height: 31px; line-height: 31px; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #074A7F; border-radius: 0px; }
         .view-wrap .archive-view ul li p{ margin-left: 0px; }
-        .view-wrap .archive-view ul li:hover{ color: #ffffff; background-color: #0678C9; }
+        .view-wrap .archive-view ul li:hover{ color: #ffffff; background-color: #074A7F; }
 
         .view-wrap .pages-web-view, .view-wrap .pages-css-view, .view-wrap .pages-ios-view, .view-wrap .pages-javascript-view, .view-wrap .pages-game-view
         { width: 100%; height: 100%; background-color: #ffffff; overflow-y: scroll; }
@@ -57,14 +57,14 @@
         .view-wrap .nav-view ul
         { position: relative; top: 27px; width: 95%; height: auto; background-color: transparent; margin-left: 5%; list-style: none; cursor: pointer; }
         .view-wrap .nav-view ul li
-        { height: 31px; line-height: 31px; background-color: transparent; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #EDEDED; border-radius: 0px; }
+        { height: 31px; line-height: 31px; background-color: transparent; font-size: 1.2em; margin: 0px 0px; text-align: left; border-bottom: 1px solid #074A7F; border-radius: 0px; }
         .view-wrap .nav-view ul li p{ margin-left: 0px; }
         .view-wrap .nav-view ul li:hover
-        { color: #ffffff; background-color: #0678C9; }
+        { color: #ffffff; background-color: #074A7F; }
 
         li.has-sub-level:before{  }
 
-        .content{ position: absolute; top: 0px; left: 278px; width: calc( 100% - 578px ); height: 100%; background-color: #ffffff; }
+        .content{ position: absolute; top: 0px; left: 277px; width: calc( 100% - 577px ); height: 100%; background-color: #ffffff; }
         .content-has-left-edge  { width: calc( 100% - 300px ); left: 0px; }
         .content-has-right-edge { width: calc( 100% - 278px ); right: 0px; }
         .content-has-both-edge  { width: 100%; left: 0px; right: 0px; }
@@ -72,7 +72,7 @@
         .content.content-has-right-edge nav { width: calc( 100% - 278px ); right: 0px; }
         .content.content-has-both-edge  nav { width: 100%; left: 0px; right: 0px; }
 
-        .content nav{ position: fixed; height: 47px; width: calc( 100% - 578px ); background-color: #ffffff; border-bottom: 1px solid #B1B1B1; z-index: 7; }
+        .content nav{ position: fixed; height: 47px; width: calc( 100% - 577px ); background-color: #0059A2; border-bottom: 0px solid #B1B1B1; z-index: 7; }
 
         .content nav .state-bar, .content nav .spring-btn{ -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
 
@@ -80,7 +80,7 @@
         .content nav .state-bar:before, .content nav .state-bar:after
         { content: attr(text); position: absolute; color: #ffffff; line-height: 27px; padding: 0% 2%; height: 100%; left: 0px; top: 0px; background-color: transparent; border-radius: 4px; }
         .content nav .state-bar:before{ width: 96%; }
-        .content nav .state-bar:after { width: 96%; background-color: #0678C9; }
+        .content nav .state-bar:after { width: 96%; background-color: #ffffff; color: #0059A2; }
 
         .content nav .spring-btn{ position: absolute; width: 10%; height: 27px; border-radius: 4px; right: 2.5%; top: 10px; background-color: transparent; }
         .content nav .spring-btn button{ position: relative; width: 50%; border: none; height: 27px; border-radius: 4px; background-color: #ffffff; }
@@ -88,19 +88,30 @@
 
         .content iframe{ position: relative; left: 0px; top: 47px; width: 100%; height: calc( 100% - 47px ); border: none; }
 
-        .code{ position: fixed; width: 299px; height: 100%; overflow-y: scroll; background-color: #ffffff; right: 0px; top: 0px; border-left: 1px solid #B1B1B1; z-index: 7; }
+        .code{ position: fixed; width: 300px; height: 100%; overflow-y: scroll; background-color: #ffffff; right: 0px; top: 0px; z-index: 7; }
         .code.code-resize       { width: 100%; }
         .code.code-resize iframe{ width: 100%; }
         .code.code-resize nav   { width: 100%; }
         .code-hide              { -webkit-transform: translateX( 100% ); }
 
-        .code nav{ position: fixed; width: 299px; top: 0px; right: 0px; z-index: 7; height: 47px; background-color: #ffffff; border-left: 1px solid #B1B1B1; border-bottom: 1px solid #B1B1B1; }
+        .code nav{ position: fixed; width: 300px; top: 0px; right: 0px; z-index: 7; height: 47px; background-color: #0C64AF; border-left: 0px solid #0C64AF; border-bottom: 0px solid #B1B1B1; }
         .code nav .code-resize-btn
         { position: absolute; width: 47px; background-color: #ffffff; border-radius: 4px; border: none; height: 27px; top: 10px; left: 17px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17);  }
         .code nav .code-resize-btn.selected{ background-color: #0678C9; color: #ffffff; }
         .code iframe{ position: relative; right: 0px; width: 200%; top: 47px; height: calc( 100% - 47px ); border: none; }
 
-        .code .tools{ position: absolute; left: 0px; top: 47px; width: 100%; height: calc( 200% - 47px ); background-color: red; }
+        .code .tools{ position: absolute; left: 0px; top: 47px; width: 100%; height: calc( 200% - 47px ); background-color: #ffffff; }
+
+        .tools .search{ position: absolute; width: 90%; height: 27px; top: 80px; left: 5%; border: 2px #B1B1B1 solid; }
+        .tools .search input{ position: absolute; left: 0px; top: 0px; font-size: 0.8em; width: 90%; padding: 0% 5%; height: 100%; border: none; }
+
+        .search-animation{ position: fixed; right: 100px; top: 300px; width: 50px; height: 50px; border-radius: 50%; background-color: #074A7F; overflow: visible; }
+        .search-animation:after { position: absolute; content: attr(BF); width: 50px; height: 50px; border-radius: 50%; background-color: #074A7F; left: 0px; top: 0px; }
+        .search-animation:before{ position: absolute; content: attr(BF); width: 50px; height: 50px; border-radius: 50%; background-color: #0C64AF; left: 0px; top: 0px;-webkit-animation: spoio 1s infinite; }
+
+        @-webkit-keyframes spoio {
+            to { -webkit-transform: scale(3); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -133,7 +144,7 @@
                     <!--<li><p data-label="javascript">Javascript</p></li>-->
                     <li><p data-label="css">CSS</p></li>
                     <!--<li><p data-label="ios">IOS</p></li>-->
-                    <!--<li><p data-label="game">Game</p></li>-->
+                    <li><p data-label="game">Game</p></li>
                 </ul>
             </div>
 
@@ -161,7 +172,11 @@
 
             </div>
 
-            <div class="nav-view pages-game-view"></div>
+            <div class="nav-view pages-game-view">
+                <ul class="pages-game-btn">
+                    <li><p data-label="snake">Snake</p></li>
+                </ul>
+            </div>
 
         </section>
     </section>
@@ -182,7 +197,10 @@
         <nav><button class="code-resize-btn"> | </button></nav>
         <!--<iframe id="code-i" src="codesearch.html"></iframe>-->
 
-        <div class="tools"></div>
+        <div class="tools">
+            <div class="search"><input type="text" placeholder="search"></div>
+            <div class="search-animation"></div>
+        </div>
     </section>
 </body>
 <script>
@@ -439,6 +457,15 @@
         var label = e.target.getAttribute('data-label'),
                 h = './pages/web/'      + label +'.html',
                 c = './pages/css/code'  + label +'.html';
+        wrap_el.Icontent.src = h;
+        $('.state-bar').setAttribute('text', label);
+    };
+    $('.pages-game-btn').onclick = function(e){
+        if(e.target == this ) return;
+
+        var label = e.target.getAttribute('data-label'),
+                h = './pages/game/'      + label +'.html',
+                c = './pages/game/code'  + label +'.html';
         wrap_el.Icontent.src = h;
         $('.state-bar').setAttribute('text', label);
     };
