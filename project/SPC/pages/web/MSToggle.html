@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>MSToggle</title>
+    <style>
+        @font-face { font-family: Menlo; src: url('../Menlo.ttc') format('ttc'); }
+
+        @font-face { font-family: Roboto;src: url('../Roboto.woff2') format('woff'); }
+
+        @font-face { font-family: apple-style; src: url('../myriad-set-pro_ultralight.woff') format('woff'); }
+
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; }
+        body{ -webkit-transition: all 0.4s; }
+        body.on{ background-color: #000000; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+        h4       { position: relative; text-align: right; margin: 7px 5%; color: #B32230; font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .MS-toggle{ position: relative; left: 5%; width: 40px; height: 8px; border-radius: 8px; border: 2px #000000 solid; cursor: pointer; -webkit-transition: all 0.4s; }
+        .MS-toggle:before   { position: absolute; content: attr(BF); left: 1px; top: 1px; border-radius: 6px; background-color: #000000; width: 17px; height: 6px; -webkit-transition: all 0.4s; }
+        .MS-toggle.on{ border: 2px solid #ffffff; }
+        .MS-toggle.on:before{ background-color: #ffffff; -webkit-transform: translateX( 20px ); ) }
+    </style>
+</head>
+<body>
+    <header class="on"><h1>MSToggle by Web</h1></header>
+    <h4>Author: Mailman Recat</h4>
+
+    <pre><code>&lt;div class="MS-toggle"&gt;&lt;/div&gt;</code></pre>
+
+    <div class="MS-toggle"></div>
+</body>
+<script>
+    var $ = function(el){ return document.querySelector(el) };
+
+    $('.MS-toggle').onclick = function(){
+        this.classList.toggle('on');
+        $('body').classList.toggle('on');
+    }
+</script>
+</html>
