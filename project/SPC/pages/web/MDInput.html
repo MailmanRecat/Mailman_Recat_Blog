@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MDInput</title>
+    <style>
+        @font-face { font-family: Menlo; src: url('../Menlo.ttc') format('ttc'); }
+
+        @font-face { font-family: Roboto;src: url('../Roboto.woff2') format('woff'); }
+
+        @font-face { font-family: apple-style; src: url('../myriad-set-pro_ultralight.woff') format('woff'); }
+
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; -webkit-font-smoothing: antialiased; -webkit-transform: translateZ(0); }
+        button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
+        input { outline: none; }
+
+        header{ width: 90%; height: 80px; margin: 0% 5%; border-bottom: 2px solid #B32230; }
+        header h1{ line-height: 80px; color: #B32230;  font-family: apple-style; }
+        h4       { position: relative; text-align: right; margin: 7px 5%; color: #B32230; font-family: apple-style; }
+
+        pre { margin: 27px 0px; font-family: Menlo; }
+        code{ position: relative; background-color: #ffffff; border-radius: 2px; margin: 27px 0px 27px 5%; padding: 7px 17px 7px 17px; color: #B32230; font-size: 1em; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .17); }
+
+        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); background-color: transparent; }
+        .icon-search.small { width: 20px; height: 20px; border: solid 2px #0678C9; }
+        .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
+        .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
+        .icon-search:before{ content: attr(BF); width: 12%; height: 67%; background-color: #0678C9; position: absolute; bottom: -67%; left: 50%; -webkit-transform: translateX(-50%); }
+
+        .card{ width: 300px; height: 41px; position: relative; left: 5%; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.27); }
+
+        .MDInput .icon-search { position: absolute; right: 7px; top: 3px; cursor: pointer; z-index: 3; }
+
+        .MDInput{ position: absolute; left: 0px; top: 2px; width: 300px; height: 37px; overflow: hidden; background-color: transparent; border-radius: 4px; z-index: 999; font-size: 1.2em; }
+        .MDInput input{ color: #B32230; position: absolute; padding: 0% 5%; width: 5%; height: 100%; right: 0px; top: 0px; border: none; background-color: transparent; z-index: 6; font-size: 1.2em; -webkit-transition: all 0.4s cubic-bezier( 0.785, 0.135, 0.15, 0.86 ); }
+        .MDInput input::-webkit-input-placeholder{ color: transparent; }
+        .MDInput input:focus::-webkit-input-placeholder{ color: #B1B1B1; }
+        .MDInput input:focus{ width: 90%; background-color: #ffffff; }
+        .MDInput:before{ position: absolute; content: attr(BF); border-radius: 50%; left: 50%; top: 50%; width: 150%; padding-top: 150%; -webkit-transform: translate3d( -50%, -50%, 0 ) scale(0); background-color: #B32230; z-index: 7; }
+        .MDInput.on:before{ -webkit-animation: ind 0.77s cubic-bezier( 0.785, 0.135, 0.15, 0.86 ) 0.3s forwards; }
+
+        @-webkit-keyframes ind {
+            to{ -webkit-transform: translate3d( -50%, -50%, 0 ) scale(1.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <header><h1>MDInput</h1></header>
+    <h4>Author: Mailman Recat</h4>
+
+    <div class="card"><div class="MDInput"><input type="text" placeholder="search"><div class="icon-search small"></div></div></div>
+
+    <pre><code>Example:</code></pre>
+    <pre><code>HmmA, Love bear.</code></pre>
+    <pre><code>&lt;div class="MDInput Demo"&gt;&lt;input type="text" placeholder="search"&gt;&lt;div class="icon-search small"&gt;&lt;/div&gt;&lt;/div&gt;</code></pre>
+    <pre><code>you may need to resize the text field, you should do it in the css:</code></pre>
+    <pre><code>.Demo{ width: 300px; height: 37px; }</code></pre>
+    <pre><code>OR you may need to change the animation color, you should do it in the css too:</code></pre>
+    <pre><code>.Demo:before{ background-color: [your color]; }</code></pre>
+    <pre><code>var $    = function(el){ return document.querySelector(el)             },</code></pre>
+    <pre><code>    de   = { option:  { DidFocus: function(){}, DidBlur: function(){} }},</code></pre>
+    <pre><code>    MDI  = new MDInput(            '.Demo', de                         );</code></pre>
+
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam_Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)};
+
+    var MDInput = function( el, delegate ){
+        var self = this;
+
+        self.wrap     = document.querySelector( el );
+        self.el       = document.querySelector( el + ' input');
+        self.delegate = delegate;
+
+        self.init();
+    };
+    MDInput.prototype = {
+        init    : function(){
+            var self = this;
+
+            self.el.onfocus = function(){
+                self.wrap.classList.add('on');
+                self.DidFocus();
+            };
+            self.el.onblur  = function(){
+                self.wrap.classList.remove('on');
+                self.DidBlur();
+            }
+        },
+        DidFocus: function(){
+            var self = this;
+            typeof self.delegate.option.DidFocus === 'function' && self.delegate.option.DidFocus();
+        },
+        DidBlur : function(){
+            var self = this;
+            typeof self.delegate.option.DidBlur  === 'function' && self.delegate.option.DidBlur();
+        }
+    };
+
+    var dele = {
+        option: { DidFocus: function(){ } }
+    };
+
+    var MDI = new MDInput('.MDInput', dele);
+
+</script>
+</html>

@@ -12,19 +12,40 @@
         *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: roboto; }
         a{ text-decoration: none; }
 
-        .wrap{ position: absolute; margin: 0% 5%; top: 20%; width: 90%; height: 80%; background-color: #ffd700; overflow: hidden; }
-        .wrap .container{ position: absolute; top: 0%; width: 100%; height: 100%; -webkit-transition: all 0.77s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+        .ani{ -webkit-transition: all 0.57s cubic-bezier( 0.77, 0, 0.175, 1 ); }
+
+        .wrap{ position: absolute; margin: 0% 20%; top: 40%; width: 60%; height: 80%; background-color: #ffd700; border-radius: 0px; -webkit-transition: all 0.5s; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .27); overflow: hidden; }
+        .wrap .container{ position: absolute; top: 0%; width: 100%; height: 100%; -webkit-transition: all 0.57s; }
         .wrap .container.up{ -webkit-transform: translateY( -100% ); }
         .container .view{ position: relative; width: 100%; height: 100%; }
+
+        body{ height: 100%; width: 100%; overflow: hidden; background-color: #ffffff; }
+
+        .bg{ position: fixed; width: 100%; height: 300px; background-color: #ffd700; left: 0px; top: 0px; }
+
+        .foo{ position: absolute; width: 100%; height: calc( 100% - 300px ); top: 100%; left: 0px; background-color: #003399; -webkit-transition: all 2s; }
+
+        .demo{ position: absolute; width: 60%; height: 80%; background-color: #ffd700; top: 40%; left: 90%; -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .27); -webkit-transition: all 0.5s; }
+        .demo.on{ -webkit-transform: translateX( -50% ); }
     </style>
 </head>
 <body>
+
+<section class="bg"></section>
+
+<section class="foo"></section>
 
 <section class="wrap">
     <section class="container">
         <div class="view" style="background-color: #ffd700"></div>
         <div class="view" style="background-color: #003399"></div>
+        <div class="view" style="background-color: red"></div>
+        <div class="view" style="background-color: #000000"></div>
     </section>
+</section>
+
+<section class="demo">
+
 </section>
 
 </body>
@@ -43,25 +64,53 @@
         return window.copyright = copyright;
     })(window);
 
-    var $  = function(obj){ return document.querySelector(obj)                    },
-            $$   = function(obj )    { return document.querySelectorAll(obj)      },
-            $n   = function(obj )    { return document.getElementsByClassName(obj)},
-            $ca  = function(el, name){ el.classList.add(name)            },
-            $cr  = function(el, name){ el.classList.remove(name)         },
-            $cc  = function(el, name){ return el.classList.contains(name)},
-            $ct  = function(el, name){ el.classList.toggle(name)         };
+    var $  = function(obj){ return document.querySelector(obj)                        },
+            $$      = function(obj )    { return document.querySelectorAll(obj)       },
+            $n      = function(obj )    { return document.getElementsByClassName(obj) },
+            adCla   = function(el, cl ) { el.classList.add(cl)                        },
+            reCla   = function(el, cl)  { el.classList.remove(cl)                     },
+            coCla   = function(el, cl)  { return el.classList.contains(cl)            };
 
-    var t = - 100;
+    var canS     = true, t = 0;
+
+//    var t = - 100;
     $('.wrap').addEventListener('mousewheel', function( e ){
-        console.log(e.wheelDelta);
-        if( e.wheelDelta > 0 ){
-            $('.container').style.webkitTransform = 'translateY( ' + 100 + '%)';
+        if( !canS ) return;
+
+//        $('.demo').classList.add('on');
+        $('.demo').style.webkitTransform = 'translateX(-116%)';
+        this.style.webkitTransform = 'translateX(-116%)';
+
+//        t++;
+        console.log(t);
+
+//        console.log(e.wheelDelta);
+        var delta = Math.max( -1, Math.min(1, (e.wheelDelta || -e.detail)) );
+        console.log(delta);
+        if( delta > 0 ){
+            t--;
+//            $('.container').style.webkitTransform = 'translateY( ' + 100 + '%)';
         }else{
-            $('.container').style.webkitTransform = 'translateY( -' + 100 + '%)';
+            t++;
+//            $('.container').style.webkitTransform = 'translateY( -' + 100 + '%)';
         }
+        $('.container').style.webkitTransform = 'translateY( -' + 100 * t + '%)';
+//        $('.wrap').style.top = 100 + '%';
+//        $('.foo').style.top  = 300 + 'px';
+
+
+        canS = false;
+        setTimeout(function(){
+          canS = true;
+        }, 1200);
 //        $('.container').classList.add('up');
 //        $('.container').style.webkitTransform = 'translateY( ' + t + '%)';
         console.log('ok');
+        console.log('-------')
     }, false);
+
+    if( 'classList' in document ){
+        alert('ok');
+    }
 </script>
 </html>

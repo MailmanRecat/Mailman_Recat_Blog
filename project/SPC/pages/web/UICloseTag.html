@@ -4,22 +4,13 @@
     <title>UICloseTag</title>
     <meta charset="utf-8">
     <style>
-        @font-face {
-            font-family: Menlo roboto;
-            src: url('../Menlo.ttc') format('ttc');
-        }
+        @font-face { font-family: Menlo; src: url('../Menlo.ttc') format('ttc'); }
 
-        @font-face {
-            font-family: Roboto;
-            src: url('../Roboto.woff2') format('woff');
-        }
+        @font-face { font-family: Roboto;src: url('../Roboto.woff2') format('woff'); }
 
-        @font-face {
-            font-family: apple-style;
-            src: url('../myriad-set-pro_ultralight.woff') format('woff');
-        }
+        @font-face { font-family: apple-style; src: url('../myriad-set-pro_ultralight.woff') format('woff'); }
 
-        * { padding: 0px; margin: 0px; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
+        * { padding: 0px; margin: 0px; -webkit-user-select: none; -webkit-font-smoothing: antialiased; -webkit-transform: translateZ(0); }
         button{ outline: none; cursor: pointer; -webkit-transition: all 0.4s; }
         input { outline: none; }
 
@@ -63,8 +54,8 @@
         .app{ -webkit-transform: scale(0); -webkit-transition: all 0.4s; opacity: 0; }
         .app.start{ -webkit-transform: scale(1); opacity: 1; }
 
-        .app .bar, .push-view .bar    { position: relative; width: 100%; height: 47px; background-color: #0C64AF; }
-        .app .bar button{ position: absolute; width: 80px; height: 27px; top: 10px; border: none; background-color: transparent; font-size: 1.2em; color: #ffd700; right: 17px; font-family: Roboto; }
+        .bar, .push-view .bar    { position: relative; width: 100%; height: 47px; background-color: #0C64AF; }
+        .bar button{ position: absolute; width: 80px; height: 27px; top: 10px; border: none; background-color: transparent; font-size: 1.2em; color: #ffd700; right: 17px; font-family: Roboto; }
         .bar p{ position: relative; width: calc( 100% - 87px ); color: #ffd700; font-size: 0.7em; line-height: 18px; top: 7px; margin: 0px 20px; }
 
         .hamburg{ position: absolute; width: 47px; height: 47px; right: 0px; top: 10px; background-color: transparent; cursor: pointer; }
@@ -118,17 +109,18 @@
     <header><h1>UICloseTag by javascript</h1></header>
     <h4>Author: Mailman Recat</h4>
 
-    <pre><code>FeedBack is very important to user who just do a action.</code></pre>
-    <pre><code>so in this page, I will introduce you the feedback close-tag.</code></pre>
+    <pre><code>FeedBack is very important to user who just did an action.</code></pre>
+    <pre><code>So in this page, I will introduce you the feedback close-tag.</code></pre>
     <pre><code>Example:</code></pre>
-    <pre><code>var $ = function( el ){ return document.querySeletor(el) };</code></pre>
-    <pre><code>var delegate = { require:   { DidClicked: function(){} }, option:    {} },</code></pre>
-    <pre><code>C            = new UICloseTag({ wrap: $('.wrap'), el: $('.close-tag'), delegate: delegate });</code></pre>
+    <pre><code>var $        = function( el ){ return document.querySeletor(el) },</code></pre>
+    <pre><code>    delegate = { require:   { DidClicked: function(){} }, option:    {} },</code></pre>
+    <pre><code>    C        = new UICloseTag({ wrap: $('.wrap'), el: $('.close-tag'), delegate: delegate });</code></pre>
     <pre><code>C.init();</code></pre>
     <pre><code>For the close-tag, one single tag is fine.</code></pre>
     <pre><code>You can write in this way: &lt;div class="close-tag"&gt;&lt;/div&gt;</code></pre>
     <pre><code>But For the best experience, you should add a wrap make sure that click area is bigger.</code></pre>
     <pre><code>Like this                : &lt;div class="wrap"&gt;&lt;div class="close-tag"&gt;&lt;/div&gt;&lt;/div&gt;</code></pre>
+
 
     <section class="phone">
 
