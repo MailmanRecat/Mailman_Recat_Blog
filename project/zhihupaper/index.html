@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link rel="icon" type="image/x-icon" href="icon.png" media="screen">
     <style>
         *     { padding: 0px; margin: 0px; }
         html  { font-family: sans-serif; -webkit-text-size-adjust: 100%; -webkit-user-select: none; }
@@ -14,9 +16,8 @@
         .header-shadow         { background-color: #ffffff; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.35); }
         .header-shadow h1      { color: #0098CE; }
         .header-shadow .cycleBtn, .header-shadow .cycleBtn:before, .header-shadow .cycleBtn:after
-                               { background-color: #0098CE; }
+        { background-color: #0098CE; }
         header h1              { line-height: 80px; text-align: center; color: #ffffff; }
-
         footer         { position: fixed; width: 100%; height: 48px; bottom: -48px; left: 0px; background-color: #ffffff; -webkit-transition: all 0.4s; z-index: 997; }
         .footer-show   { bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
         footer p       { color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
@@ -29,7 +30,7 @@
         .cycleBtn:before { content: ''; left: 0px; top: 8px; }
         .cycleBtn:after  { content: ''; left: 0px; top: 16px; }
 
-        .settingBox                   { overflow: hidden; position: fixed; width: 270px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.4s; }
+        .settingBox                   { overflow: hidden; position: fixed; width: 270px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.57s cubic-bezier( 0, 0.01, 0.01, 1 ); }
         .settingBox-show              { height: 570px; width: 270px; }
         .settingBox ul                { list-style: none; }
         .settingBox ul li             { width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
@@ -90,7 +91,7 @@
         .content-wrap .headline .headline-title { position: absolute; width: 80%; height: auto; left: 27px; bottom: 27px; z-index: 2; color: #ffffff; }
         .content-wrap .headline .img-source     { position: absolute; width: 80%; height: auto; text-align: right; right: 27px; bottom: 7px; z-index: 2; color: #ffffff; }
         .content-wrap .headline .img-wrap img   { position: absolute; left: 0px; top: 0px; width: 100%; z-index: 0; color: rgba(255,255,255,.6); text-shadow: 0px 1px 2px rgba(0,0,0,.3); }
-        .img-mask                               { position: absolute; height: 100%; border: none; width: 100%; bottom: 0px; left: 0px; background: -webkit-gradient(linear, left top, left bottom, color-stop(25%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.6))); z-index: 1; }
+        .img-mask                               { position: absolute; height: 100%; width: 100%; bottom: 0px; left: 0px; background: -webkit-gradient(linear, left top, left bottom, color-stop(25%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.6))); z-index: 1; }
         .content-wrap .headline .headline-background        { width: 100%; height: auto; padding: 17px 27px; }
         .content-wrap .headline .headline-background a      { color: #000000; }
         .content-wrap .headline .headline-background a:hover{ color: #000000; -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.15); }
@@ -213,8 +214,9 @@
         Author  : 'Mailmam_Recat',
         Date    : '2015',
         Mail    : 'MailmanRecat@gmail.com',
-        Blog    : 'http://zhihupaper.com',
+        blog    : 'http://zhihupaper.com',
         Browser : 'chrome only',
+        tucao   : 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html',
         info    : function(){ console.log( 'Anthor: '+this.Author+' | Date: '+this.Date+' | Mail: '+this.Mail+' | Browser: '+ this.Browser ) }
     };
 
@@ -231,7 +233,6 @@
             zhihu       : 'http://zhihu.com',
             app_iphone  : 'https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8',
             app_android : 'https://play.google.com/store/apps/details?id=com.zhihu.daily.android',
-            tucao       : 'http://rbearblog.sinaapp.com/project/zhihupaper/tucao.html',
             blog        : 'http://zhihupaper.com',
             github      : '',
             twitter     : ''
@@ -306,9 +307,6 @@ var navigationVC = function( option ){
     _.InitalV = _.currentView = option.InitalV;
     _.animationDuration       = option.animationDuration || 400;
     _.V                       = [ _.InitalV ];
-
-    console.log(_.InitalV.tag);
-    _.InitalV.ViewDidLoad();
 };
 navigationVC.prototype = {
     push: function( pushView ){
@@ -325,7 +323,6 @@ navigationVC.prototype = {
 
         setTimeout(function(){
             pushView.ele.classList.add('navigation-push');
-            pushView.ViewDidLoad();
             window.scroll(0, -t);
         }, 200);
     },
@@ -341,12 +338,10 @@ navigationVC.prototype = {
         currtentView.ele.classList.remove('navigation-push');
         setTimeout(function(){
             currtentView.ele.style.display = 'none';
-            currtentView.ViewDidDismiss();
             window.scroll(0, t);
         }, 200);
     },
-    currentViewTitle: function(){ return this.currentView.title; },
-    currentViewTag  : function(){ return this.currentView.tag  ; }
+    currentViewTitle: function(){ return this.currentView.title; }
 };
 
 var view  = function( inital ){
@@ -355,73 +350,7 @@ var view  = function( inital ){
     _.scrollMark = inital.scrollMark || 0;
     _.ele        = inital.ele;
     _.title      = inital.title;
-    _.tag        = inital.tag;
 };
-view.prototype = {
-    ViewDidLoad   : function(){},
-    ViewDidDismiss: function(){}
-};
-
-var newsView = function( inital ){
-    view.apply(this, arguments);
-};
-
-   var F           = new function(){}, FA = new function(){}, FB = new function(){};
-       F.prototype = view.prototype;   FA.prototype = view.prototype; FB.prototype = view.prototype;
-newsView.prototype =    F.prototype;
-
-var contentView = function( inital ){
-    view.apply(this, arguments);
-
-    this.id = null;
-};
-
-contentView.prototype  =    FA.prototype;
-
-var commentView = function( inital ){
-    view.apply(this, arguments);
-};
-
-commentView.prototype  =    FB.prototype;
-
-contentView.prototype.ViewDidLoad = function(){
-    console.log('content_ViewDidLoad');
-    if( this.id ){
-        ajax.apost('id='+this.id, 'idcontent.php', function( res ){
-            var json;
-            try{ json = JSON.parse( res ); }
-            catch (e){ console.log(e); return false;}
-
-            var content    = json.content;
-            rehtml($('.content-wrap'), content);
-            UIaction.footer.hide();
-        });
-    }
-};
-
-newsView.prototype.ViewDidLoad = function(){
-
-    console.log('news_ViewDidLoad');
-
-    UIaction.footer.show();
-    ajax.aget('news.php', function( res ){
-        var json;
-        try{ json = JSON.parse( res ); }
-        catch (e){ console.log(e); return false;}
-
-        zhihupaper.day       = json.day;
-        var paper            = json.news,
-                news         = paper.news,
-                display_date = paper.display_date,
-                top_stories  = paper.top_stories;
-
-        zhihupaper.initTopStorise( top_stories, display_date );
-        zhihupaper.initTodayNews( news )        ;
-        UIaction.footer.hide()                  ;
-        zhihupaper.beforeLock = false           ;
-    });
-};
-
 
 UIaction = {
     header     : {
@@ -510,7 +439,7 @@ var zhihupaper = {
                     display_date = paper.display_date,
                     top_stories  = paper.top_stories;
 
-//            zhihupaper.initTopStorise( top_stories, display_date );
+            zhihupaper.initTopStorise( top_stories, display_date );
             zhihupaper.initTodayNews( news )        ;
             UIaction.footer.hide()                  ;
             zhihupaper.beforeLock = false           ;
@@ -636,12 +565,32 @@ window.onscroll = function(){
     }
 };
 
+var view_news     = new view( { ele: $('.news'),          title: '知乎日报'}),
+        view_content  = new view( { ele: $('.content-wrap'), title: '日报'}),
+        view_comments = new view( { ele: $('.comments'),      title: '评论'});
+
+var navVC         = new navigationVC( { InitalV: view_news} );
 
 $('#mainSetting'    ).onclick     = function(){ UIaction.setting.show()        };
 $('.settingBox-hide').onclick     = function(){ UIaction.setting.hide()        };
 
+$('.back').onclick = function(){
+    navVC.pop();
+    if( navVC.currentViewTitle() === view_news.title ) UIaction.back.hide();
+    if( navVC.currentViewTitle() === view_news.title ) view_content.ele.innerHTML = '';
+};
 
-//zhihupaper.init();
+zhihupaper.init();
 
+window.copyright.info();
+</script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-60884970-1', 'auto');
+    ga('send', 'pageview');
 </script>
 </html>
