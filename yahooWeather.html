@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Weather</title>
+
+    <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>
+        *{ padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; }
+        button{ cursor: pointer; }
+
+        .weather-card{ position: relative; margin: 17px auto; width: 40%; height: auto; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); padding-bottom: 29px; }
+        .weather-bar { position: relative; width: 90%; padding: 0px 5%; height: 57px; background: -webkit-linear-gradient(left, #552BD2, #652D98); color: #f5f5f5; line-height: 57px; }
+        .weather-bar .city-btn{ position: absolute; right: 5%; height: 100%; border: none; background-color: transparent; color: white; font-size: 1.2em; }
+
+        .weather-local{ text-align: right; padding: 7px 5%; font-size: 1.2em; }
+
+        .weather-link{ position: absolute; right: 0px; padding: 0% 5%; }
+
+        .weather-content{ position: relative; width: 100%; height: auto; text-align: center; font-size: 1.2em; }
+        .weather-content tr{ height: 37px; }
+
+        .mdi-weather-sunny{ color: #FFE25D; }
+        .high-temp td:first-child{ color: #FF7E00; }
+        .low-temp         { color: #676767; }
+    </style>
+</head>
+<body>
+
+    <div class="weather-card">
+        <div class="weather-bar"><label id="description"></label><button class="city-btn">City<i class="mdi mdi-chevron-down"></i></button></div>
+        <p class="weather-local"><i class="mdi mdi-earth"></i><label id="current-city"></label></p>
+        <table class="weather-content">
+            <tr id="day">
+                <td>FRI</td>
+                <td>SAT</td>
+                <td>SUN</td>
+                <td>MON</td>
+                <td>TUE</td>
+            </tr>
+            <tr id="icon">
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+            </tr>
+            <tr id="high-temp" class="high-temp">
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+            </tr>
+            <tr id="low-temp" class="low-temp">
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+            </tr>
+        </table>
+
+        <a class="weather-link" href="https://www.yahoo.com/?ilc=401" target="_blank"><img src="https://poweredby.yahoo.com/purple_retina.png" width="134" height="29"/></a>
+    </div>
+
+</body>
+<script>
+    var $  = function(el){ return document.querySelector(el)},
+        $$ = function(el){ return [].slice.call( document.querySelectorAll(el) ) };
+
+    (function(window){
+
+        var apost = function(data, url, code){
+
+            var data = data || null;
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return { ER: 'Can not get xmlHttp obj' };
+
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+            xmlHttp.send(data);
+        };
+
+        var aget = function(url, code){
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("GET", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+
+            xmlHttp.send();
+        };
+
+        var getxml = function() {
+            try{ xh = new XMLHttpRequest(); }
+            catch (e){
+                try{ xh = new ActiveXObject("Msxml2.XMLHTTP"); }
+                catch (e){ xh = new ActiveXObject("Microsoft.XMLHTTP"); }
+            }
+            return xh;
+        };
+
+        var ajax = { apost: apost, aget: aget };
+
+        if ( typeof define === 'function' && define.amd ) {
+            define( ajax );
+        } else {
+            window.ajax = ajax;
+        }
+
+    })(window);
+
+    var weatherCode = {
+        0 : 'weather-windy',
+        1 : 'weather-windy',
+        2 : 'weather-windy',
+        3 : 'weather-lightning',
+        4 : 'weather-lightning',
+        5 : 'weather-snowy',
+        6 : 'weather-pouring',
+        7 : 'weather-pouring',
+        8 : 'weather-windy-variant',
+        9 : 'weather-windy-variant',
+        10: 'weather-pouring',
+        11: 'weather-partlycloudy',
+        12: 'weather-partlycloudy',
+        13: 'weather-snowy',
+        14: 'weather-snowy',
+        15: 'weather-hail',
+        16: 'weather-snowy',
+        17: 'weather-hail',
+        18: 'weather-hail',
+        19: 'weather-hail',
+        20: 'weather-hail',
+        21: 'weather-cloudy',
+        22: 'weather-cloudy',
+        23: 'weather-cloudy',
+        24: 'weather-windy-variant',
+        25: 'weather-cloudy',
+        26: 'weather-cloudy',
+        27: 'weather-night',
+        28: 'weather-partlycloudy',
+        29: 'weather-night',
+        30: 'weather-partlycloudy',
+        31: 'weather-night',
+        32: 'weather-sunny',
+        33: 'weather-night',
+        34: 'weather-cloudy',
+        35: 'weather-pouring',
+        36: 'weather-sunny',
+        37: 'weather-lightning',
+        38: 'weather-lightning',
+        39: 'weather-lightning',
+        40: 'weather-snowy',
+        41: 'weather-snowy',
+        42: 'weather-snowy',
+        43: 'weather-snowy',
+        44: 'weather-snowy',
+        45: 'weather-lightning',
+        46: 'weather-lightning',
+        47: 'weather-partlycloudy',
+        3200: 'weather-cloudy'
+    };
+
+
+    var card = {
+        el: {
+            description: $('#description'),
+            currentCity: $('#current-city'),
+            day: $$('#day td'),
+            icon: $$('#icon td'),
+            highTemp: $$('#high-temp td'),
+            lowTemp: $$('#low-temp td')
+        },
+        getIconWithCode: function(code){
+            return weatherCode[code];
+        },
+        initDescription: function(Des){
+            var self = card;
+            self.el.description.innerText = Des;
+        },
+        initCurrentCity: function(name){
+            var self = card;
+            self.el.currentCity.innerText = name;
+        },
+        initDay: function(days){
+            var self = card, i = 0, len = self.el.day.length;
+
+            for( ; i<len; i++){
+                self.el.day[i].innerText = days[i];
+            }
+
+        },
+        initIcon: function(codes){
+            var self = card, i = 0, len = self.el.icon.length, prefix = 'mdi-', icon = '';
+
+            for( ; i<len; i++ ){
+                icon = prefix + self.getIconWithCode(codes[i]);
+                self.el.icon[i].innerHTML = '<i class="mdi ' + icon + '"></i>';
+            }
+        },
+        initHighTemp: function(HighTemp){
+            var self = card, i = 0, len = self.el.highTemp.length;
+
+            for( ; i<len; i++){
+                self.el.highTemp[i].innerHTML = '<label>'+HighTemp[i]+'</label><i class="mdi mdi-temperature-fahrenheit"></i>';
+            }
+        },
+        initLowTemp: function(LowTemp){
+            var self = card, i = 0, len = self.el.lowTemp.length;
+
+            for( ; i<len; i++ ){
+                self.el.lowTemp[i].innerHTML  = '<label>'+LowTemp[i]+'</label><i class="mdi mdi-temperature-fahrenheit"></i>';
+            }
+        }
+    };
+
+    var yweather = function(localtion, delegate){
+        var self = this;
+
+        self.localtion  = localtion || 'NewYork';
+        self.delegate   = delegate;
+        self.DRFn       = self.delegate.require;
+        self.DOFn       = self.delegate.option;
+        self.weather    = {};
+
+        if( typeof self.DRFn.DidGetWeatherData !== 'function' ) return { ER: 'can not find require fn DidGetWeatherData!' };
+        if( typeof self.DRFn.ERCity !== 'function'            ) return { ER: 'can not find that city'         };
+
+        self.init();
+    };
+    yweather.prototype = {
+        init: function(){
+            var self = this;
+
+            self.url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+self.localtion+'%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys';
+
+            ajax.aget(self.url, function( res ){
+                var data = JSON.parse(res);
+
+                if(data.query.count === 0) self.DRFn.ERCity();
+                if(data.query.count === 0) return;
+
+                self.weather.created     = data.query.created;
+                self.weather.lang        = data.query.lang;
+                self.weather.description = data.query.results.channel.description;
+                self.weather.city        = data.query.results.channel.location.city;
+                self.weather.country     = data.query.results.channel.location.country;
+                self.weather.region      = data.query.results.channel.region;
+                self.weather.sunrise     = data.query.results.channel.astronomy.sunrise;
+                self.weather.sunset      = data.query.results.channel.astronomy.sunset;
+
+                (function(weather, data){
+                    weather.codes = [],
+                            weather.date = [],
+                            weather.day  = [],
+                            weather.high = [],
+                            weather.low  = [],
+                            weather.text = [];
+
+                    var     fc = data.query.results.channel.item.forecast,
+                            obj;
+
+                    for( var i in fc ){
+                        obj = fc[i];
+                        weather.codes.push( obj.code );
+                        weather.date.push( obj.date );
+                        weather.day.push( obj.day );
+                        weather.high.push( obj.high );
+                        weather.low.push( obj.low );
+                        weather.text.push( obj.text );
+                    }
+
+                })(self.weather, data);
+
+                self.DRFn.DidGetWeatherData(self.weather);
+            });
+        },
+        localChange: function(localtion){
+            var self = this;
+            self.localtion = localtion;
+            self.init();
+        }
+    };
+
+    var dele = {
+        require: {
+            DidGetWeatherData: function(weather){
+                console.log('delegate');
+                card.initDescription(weather.description);
+                card.initCurrentCity(weather.city);
+                card.initDay(weather.day);
+                card.initIcon(weather.codes);
+                card.initHighTemp(weather.high);
+                card.initLowTemp(weather.low);
+            },
+            ERCity: function(){
+                console.log('city lost');
+            }
+        }
+    };
+
+    var yw = new yweather('jinan', dele);
+
+//    setTimeout(function(){
+//        console.log('new local');
+//
+//        yw.localChange('beijing');
+//    }, 5000);
+</script>
+
+</html>

@@ -98,9 +98,10 @@
                 self.DidFocus();
             };
             self.el.onblur  = function(){
+                self.el.value = '';
                 self.wrap.classList.remove('on');
                 self.DidBlur();
-            }
+            };
         },
         DidFocus: function(){
             var self = this;
