@@ -29,7 +29,7 @@
 
         .search .icon-search{ position: absolute; right: 17px; top: 5px; z-index: 7; }
 
-        .res-box{ display: none; position: absolute; width: 80%; height: auto; max-height: 600px; margin-left: 10%; top: 59px; overflow: scroll; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+        .res-box{ display: block; position: absolute; width: 80%; height: auto; max-height: 600px; margin-left: 10%; top: 59px; overflow: scroll; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
         .res-box ul{ position: relative; height: auto; list-style: none; width: 100%; left: 0px; top:0px; cursor: pointer; }
         .res-box ul li{ height: 77px; line-height: 77px; width: 96%; padding: 0% 2%; }
         .res-box ul li:hover{ background-color: #EDEDED; }
@@ -63,10 +63,12 @@
 </head>
 <body>
 
-<div class="search"><input type="text" placeholder="search"><div class="icon-search small"></div></div>
+<div class="search up"><input type="text" placeholder="search"><div class="icon-search small"></div></div>
 
 <div class="res-box">
-    <ul></ul>
+    <ul>
+
+    </ul>
 </div>
 
 <div class="card">
@@ -129,17 +131,6 @@
         }
     };
 
-    $('.search input').onfocus = function(){
-        UIaction.search.up();
-//        UIaction.keyboard.show();
-        $('.res-box').style.display = 'block';
-    };
-    $('.search input').onblur  = function(){
-//        $('.search').classList.remove('up');
-    };
-
-    var i = '?';
-    console.log(i.toUpperCase());
 
     var special_key = ['delete', 'return', 'number', 'space', 'hide', 'lock'];
     [].slice.call( $$('.keyboard button')).forEach(function(el, i){
@@ -151,19 +142,74 @@
         }
     });
 
-    var dict = {
-        keywords: [],
-        addKeywords: function( word ){
-            dict.keywords.push( word );
-        },
-        getwords: function( word ){
-            if(word.length === 0) return false;
 
-            var word = word.toUpperCase();
+    var SearchE = function(elStr, resElStr, delegate, options){
+        var self = this;
+
+        self.elStr    = elStr;
+        self.el       = document.querySelector(self.elStr);
+        self.resElStr = resElStr;
+        self.resEl    = document.querySelector(self.resElStr);
+        self.delegate = delegate;
+        self.DRFn     = self.delegate.require;
+        self.DOFn     = self.delegate.option;
+
+        if( typeof self.DRFn.DidSelect !== 'function' ) return { ER: 'require fn DidSelect not found!' };
+
+        self.activate = false;
+
+        self.searchV  = '';
+        self.keywords = [];
+        self.max      = 0;
+        self.current  = 0;
+
+        self.options = {
+            noSelectBackgroundColor: '#FFF',
+            onSelectBackgroundColor: '#F4F4F4'
+        };
+
+        for( var key in options ){
+            self.options[key] = options[key];
+        }
+
+        self.init();
+    };
+    SearchE.prototype = {
+        init: function(){
+            var self = this;
+
+            self.el.onfocus = function(){
+                if( self.DOFn.DidFocus === 'function' ) self.DOFn.DidFocus();
+                self.activate = true;
+            };
+            self.el.onblur  = function(){
+                if( self.DOFn.DidBlur === 'function' ) self.DOFn.DidBlur();
+                self.activate = false;
+            };
+            self.el.oninput = function(){
+                if( self.DOFn.OnInput === 'function' ) self.DOFn.OnInput();
+                self.searchV = self.el.value;
+                var keys = self.getKeywords();
+
+                if( self.searchV.length === 0 ) self.resEl.innerHTML = '';
+                else                 self.insert( keys );
+            };
+
+            return true;
+        },
+        addKeyWords: function( word ){
+            var self = this;
+            self.keywords.push(word);
+        },
+        getKeywords: function(){
+            var self = this, len = self.searchV.length;
+            if( len === 0 ) return;
+
+            var word = self.searchV.toUpperCase();
             var T = true, keys = [];
 
-            for( var key in dict.keywords){
-                var keyword = dict.keywords[key].toUpperCase();
+            for( var key in self.keywords){
+                var keyword = self.keywords[key].toUpperCase();
                 for(var i in word){
                     var letter = word[i];
                     if( keyword.indexOf( letter ) === -1 ){
@@ -171,73 +217,71 @@
                     }
                 }
 
-                if( T === true ){
-                    keys.push( dict.keywords[key] );
+                if( T === true && len <= self.keywords[key].length ){
+                    keys.push( self.keywords[key] );
                 }
 
                 T = true;
             }
 
             return keys;
-        }
-    };
-
-    var dictSelect = {
-        activition: true,
-        max: 0,
-        current: 0,
+        },
         onSelect: function(){
-            [].slice.call(document.querySelectorAll( '.res-box li' )).forEach(function(li, i){
-                if(i === dictSelect.current - 1){
-                    li.setAttribute('data-select', 'YES');
-                    li.style.backgroundColor = '#F4F4F4';
+            var self = this;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                if(i === self.current - 1){
+                    el.setAttribute('data-select', 'YES');
+                    el.style.backgroundColor = self.options.onSelectBackgroundColor;
                 }else{
-                    li.setAttribute('data-select', 'NO');
-                    li.style.backgroundColor = '#FFF';
-                }
-            })
-        },
-        insert: function( keys ){
-            var str = '';
-            for(var key in keys){
-                str += '<li data-label='+keys[key]+'>'+keys[key]+'</li>';
-            }
-            if( keys.length === 0 ){
-                str = '<li>NO RESULT</li>';
-            }
-            $('.res-box ul').innerHTML = str;
-            dictSelect.max = keys.length;
-            dictSelect.current = 0;
-        },
-        up: function(){
-            if( this.current == 0 ){
-                this.current = this.max;
-            }else{
-                this.current -= 1;
-            }
-
-            this.onSelect();
-        },
-        down: function(){
-            if( this.current == this.max ){
-                this.current = 1;
-            }else{
-                this.current += 1;
-            }
-
-            this.onSelect();
-        },
-        didSelect: function(){
-            [].slice.call(document.querySelectorAll( '.res-box ul li' )).forEach(function(li, i){
-                var isSelect = li.getAttribute('data-select');
-                if( isSelect === 'YES' ){
-                    console.log(li.getAttribute('data-label'));
-                    $('.res-box ul').innerHTML = '';
-                    $('.card').classList.add('show');
+                    el.setAttribute('data-select', 'NO');
+                    el.style.backgroundColor = self.options.noSelectBackgroundColor;
                 }
             });
+        },
+        insert: function( keys ){
+            var self = this, html = '';
+            for( var key in keys ){
+                html += '<li data-label="' + keys[key] + '">' + keys[key] + '</li>';
+            }
+            if( keys.length === 0 ){
+                html = '<li>NO RESULT</li>';
+            }
+            self.resEl.innerHTML = html;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' )).forEach(function(el, i){
+                el.onclick = function(){ self.DRFn.DidSelect( el.getAttribute('data-label') ) };
+            });
+            self.max     = keys.length;
+            self.current = 0;
+        },
+        up: function(){
+            var self = this;
+            if( self.current == 0 ){ self.current = self.max; }
+            else{ self.current -= 1; }
+
+            self.onSelect();
+        },
+        down: function(){
+            var self = this;
+            if( self.current == self.max ){
+                self.current = 1;
+            }else{
+                self.current += 1;
+            }
+
+            self.onSelect();
+        },
+        didSelect: function(){
+            var self = this, isV = true;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                var isSelect = el.getAttribute('data-select');
+                if( isSelect === 'YES' ){
+                    self.DRFn.DidSelect( el.getAttribute('data-label') );
+                    isV = false;
+                }
+            });
+            if( isV ) self.DRFn.DidSelect( self.searchV );
         }
-    }
+    };
 
     var keys = [
         'UISegmentedControl by javascript',
@@ -246,35 +290,40 @@
         'search icon by css'
     ];
 
-    dict.keywords = keys;
-
-
-
-    $('.search input').oninput = function(){
-        var w = $('input').value;
-        var keys = dict.getwords(w);
-
-        dictSelect.insert( keys );
+    var deleg = {
+        require: {
+            DidSelect: function(el){
+                console.log(el);
+//                alert(el.getAttribute('data-label'));
+            }
+        },
+        option: {
+            DidFocus: function(){
+                console.log('DF');
+            },
+            DidBlur : function(){
+                console.log('DB');
+            }
+        }
     };
 
-    $('.res-box ul').onclick = function( e ){
-        if( e.target == this ) return;
-
-        var page = e.target.getAttribute('data-app');
-    };
+    var o = new SearchE('.search input', '.res-box ul', deleg, {});
+    for( var i = 0, len = keys.length; i<len; i++ ){
+        o.addKeyWords( keys[i] );
+    }
 
     document.onkeydown = function(e){
         if( e.keyCode === 38 ){
-            if( dictSelect.activition === true ){
-                dictSelect.up();
+            if( o.activate === true ){
+                o.up();
             }
         }else if( e.keyCode === 40 ){
-            if( dictSelect.activition === true ){
-                dictSelect.down();
+            if( o.activate === true ){
+                o.down();
             }
         }else if( e.keyCode === 13 ){
-            if( dictSelect.activition === true ){
-                dictSelect.didSelect();
+            if( o.activate === true ){
+                o.didSelect();
             }
         }
     };

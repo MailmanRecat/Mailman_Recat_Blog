@@ -6,12 +6,97 @@
 
     <link href="css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
     <style>
-        *{ padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; }
+        *{ padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
         button{ cursor: pointer; }
+        input, button{ outline: none; }
 
-        .weather-card{ position: relative; margin: 17px auto; width: 40%; height: auto; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); padding-bottom: 29px; }
-        .weather-bar { position: relative; width: 90%; padding: 0px 5%; height: 57px; background: -webkit-linear-gradient(left, #552BD2, #652D98); color: #f5f5f5; line-height: 57px; }
+        ::-webkit-scrollbar-button {
+            height: 0;
+            width: 0;
+        }
+
+        .lj::-webkit-scrollbar-track {
+            background-clip: padding-box;
+            border: solid transparent;
+            border-width: 0;
+        }
+
+        .lj::-webkit-scrollbar-thumb {
+            border-width: 0;
+        }
+
+        .lj::-webkit-scrollbar {
+            height: 16px;
+            overflow: visible;
+            width: 12px;
+        }
+
+        .lj::-webkit-scrollbar-track-piece {
+            border-width: 0;
+        }
+
+        .lj::-webkit-scrollbar-track {
+            background-clip: padding-box;
+            border: solid transparent;
+            border-width: 0;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-clip: padding-box;
+            border: solid transparent;
+            border-width: 0 0 0 4px;
+        }
+
+        body::-webkit-scrollbar-track-piece {
+            background-clip: padding-box;
+            background-color: #f5f5f5;
+            border: solid #fff;
+            border-width: 0 0 0 3px;
+            -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+            box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+        }
+
+        body::-webkit-scrollbar-corner {
+            background-clip: padding-box;
+            background-color: #f5f5f5;
+            border: solid #fff;
+            border-width: 3px 0 0 3px;
+            -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+            box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            height: 16px;
+            overflow: visible;
+            width: 16px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,.2);
+            background-clip: padding-box;
+            border: solid transparent;
+            border-width: 1px 1px 1px 6px;
+            min-height: 28px;
+            padding: 100px 0 0;
+            -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+            box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+        }
+
+        body{ background-color: #E5E5E5; }
+
+        .weather-card{ position: relative; margin: 17px auto; width: 40%; height: auto; background-color: white; border: 1px solid #d8d8d8; border-radius: 3px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.0); padding-bottom: 29px; cursor: pointer; overflow: hidden; }
+        .weather-bar { position: relative; width: 90%; padding: 0px 5%; height: 57px; background: -webkit-linear-gradient(left, #552BD2, #652D98); color: #f5f5f5; line-height: 57px; z-index: 17; }
         .weather-bar .city-btn{ position: absolute; right: 5%; height: 100%; border: none; background-color: transparent; color: white; font-size: 1.2em; }
+
+        .weather-local-search{ position: absolute; bottom: 100%; width: 100%; height: calc( 100% - 57px ); background-color: #000000; overflow-x: hidden; overflow-y: scroll; opacity: 0.8; z-index: 7; -webkit-transition: all 0.37s; }
+        .weather-local-search.show{ -webkit-transform: translateY(calc(100% + 57px)); }
+        .weather-local-search input{ position: relative; width: 88%; height: 27px; padding: 0px 1%; margin: 7px 5%; border-radius: 3px; background-color: #ffffff; border: none; }
+        .weather-local-search .l-s-r{ width: 100%; list-style: none; padding-bottom: 37px; }
+        .weather-local-search .l-s-r li{ width: 88%; padding: 0px 1%; margin: 0px 5%; line-height: 37px; height: 37px; border-bottom: 1px solid #ffffff; color: #ffffff; }
 
         .weather-local{ text-align: right; padding: 7px 5%; font-size: 1.2em; }
 
@@ -20,16 +105,25 @@
         .weather-content{ position: relative; width: 100%; height: auto; text-align: center; font-size: 1.2em; }
         .weather-content tr{ height: 37px; }
 
+        .mdi-map-marker   { color: #552BD2; }
         .mdi-weather-sunny{ color: #FFE25D; }
         .high-temp td:first-child{ color: #FF7E00; }
         .low-temp         { color: #676767; }
     </style>
 </head>
-<body>
+<body class="lj">
 
     <div class="weather-card">
-        <div class="weather-bar"><label id="description"></label><button class="city-btn">City<i class="mdi mdi-chevron-down"></i></button></div>
-        <p class="weather-local"><i class="mdi mdi-earth"></i><label id="current-city"></label></p>
+        <div class="weather-bar"><label id="description"></label><button class="city-btn">City<i class="mdi mdi-chevron-down chevron"></i></button></div>
+
+        <div class="weather-local-search">
+            <input type="text" placeholder="type your location here">
+            <ul class="l-s-r">
+
+            </ul>
+        </div>
+
+        <p class="weather-local"><i class="mdi mdi-map-marker"></i><label id="current-city"></label></p>
         <table class="weather-content">
             <tr id="day">
                 <td>FRI</td>
@@ -64,6 +158,8 @@
         <a class="weather-link" href="https://www.yahoo.com/?ilc=401" target="_blank"><img src="https://poweredby.yahoo.com/purple_retina.png" width="134" height="29"/></a>
     </div>
 
+
+    <div style="height: 2000px; width: 50%;"></div>
 </body>
 <script>
     var $  = function(el){ return document.querySelector(el)},
@@ -232,14 +328,22 @@
         }
     };
 
-    var yweather = function(localtion, delegate){
+    var yweather = function(location, delegate, options){
         var self = this;
 
-        self.localtion  = localtion || 'NewYork';
+        self.location  = location || 'NewYork';
         self.delegate   = delegate;
         self.DRFn       = self.delegate.require;
         self.DOFn       = self.delegate.option;
         self.weather    = {};
+
+        self.options    = {
+            unit:       'f'
+        };
+
+        for(var key in options){
+
+        }
 
         if( typeof self.DRFn.DidGetWeatherData !== 'function' ) return { ER: 'can not find require fn DidGetWeatherData!' };
         if( typeof self.DRFn.ERCity !== 'function'            ) return { ER: 'can not find that city'         };
@@ -250,7 +354,7 @@
         init: function(){
             var self = this;
 
-            self.url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+self.localtion+'%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys';
+            self.url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+self.location+'%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys';
 
             ajax.aget(self.url, function( res ){
                 var data = JSON.parse(res);
@@ -293,9 +397,9 @@
                 self.DRFn.DidGetWeatherData(self.weather);
             });
         },
-        localChange: function(localtion){
+        localChange: function(location){
             var self = this;
-            self.localtion = localtion;
+            self.location = location;
             self.init();
         }
     };
@@ -319,11 +423,299 @@
 
     var yw = new yweather('jinan', dele);
 
-//    setTimeout(function(){
-//        console.log('new local');
-//
-//        yw.localChange('beijing');
-//    }, 5000);
+    var chEl = $('.chevron').classList;
+    var toggleChevron = function(){
+        if( chEl.contains('mdi-chevron-down') ){
+            chEl.remove('mdi-chevron-down');
+            chEl.add('mdi-chevron-up');
+        }else{
+            chEl.add('mdi-chevron-down');
+            chEl.remove('mdi-chevron-up');
+        }
+    };
+
+    $('.city-btn').onclick = function(){
+        toggleChevron();
+        $('.weather-local-search').classList.toggle('show');
+    };
+
+    var dict = {
+        keywords: [],
+        addKeywords: function( word ){
+            dict.keywords.push( word );
+        },
+        getwords: function( word ){
+            if(word.length === 0) return false;
+
+            var word = word.toUpperCase();
+            var T = true, keys = [];
+
+            for( var key in dict.keywords){
+                var keyword = dict.keywords[key].toUpperCase();
+                for(var i in word){
+                    var letter = word[i];
+                    if( keyword.indexOf( letter ) === -1 ){
+                        T = false;
+                    }
+                }
+
+                if( T === true ){
+                    keys.push( dict.keywords[key] );
+                }
+
+                T = true;
+            }
+
+            return keys;
+        }
+    };
+
+    var dictSelect = {
+        activition: true,
+        max: 0,
+        current: 0,
+        onSelect: function(){
+            [].slice.call(document.querySelectorAll( '.res-box li' )).forEach(function(li, i){
+                if(i === dictSelect.current - 1){
+                    li.setAttribute('data-select', 'YES');
+                    li.style.backgroundColor = '#F4F4F4';
+                }else{
+                    li.setAttribute('data-select', 'NO');
+                    li.style.backgroundColor = '#FFF';
+                }
+            })
+        },
+        insert: function( keys ){
+            var str = '';
+            for(var key in keys){
+                str += '<li data-label='+keys[key]+'>'+keys[key]+'</li>';
+            }
+            if( keys.length === 0 ){
+                str = '<li>NO RESULT</li>';
+            }
+            $('.res-box ul').innerHTML = str;
+            dictSelect.max = keys.length;
+            dictSelect.current = 0;
+        },
+        up: function(){
+            if( this.current == 0 ){
+                this.current = this.max;
+            }else{
+                this.current -= 1;
+            }
+
+            this.onSelect();
+        },
+        down: function(){
+            if( this.current == this.max ){
+                this.current = 1;
+            }else{
+                this.current += 1;
+            }
+
+            this.onSelect();
+        },
+        didSelect: function(){
+            [].slice.call(document.querySelectorAll( '.res-box ul li' )).forEach(function(li, i){
+                var isSelect = li.getAttribute('data-select');
+                if( isSelect === 'YES' ){
+                    console.log(li.getAttribute('data-label'));
+                    $('.res-box ul').innerHTML = '';
+                    $('.card').classList.add('show');
+                }
+            });
+        }
+    };
+
+    var SearchE = function(elStr, resElStr, delegate, options){
+        var self = this;
+
+        self.elStr    = elStr;
+        self.el       = document.querySelector(self.elStr);
+        self.resElStr = resElStr;
+        self.resEl    = document.querySelector(self.resElStr);
+        self.delegate = delegate;
+        self.DRFn     = self.delegate.require;
+        self.DOFn     = self.delegate.option;
+
+        if( typeof self.DRFn.DidSelect !== 'function' ) return { ER: 'require fn DidSelect not found!' };
+
+        self.activate = false;
+
+        self.searchV  = '';
+        self.keywords = [];
+        self.max      = 0;
+        self.current  = 0;
+
+        self.options = {
+            noSelectBackgroundColor: '#FFF',
+            onSelectBackgroundColor: '#F4F4F4'
+        };
+
+        for( var key in options ){
+            self.options[key] = options[key];
+        }
+
+        self.init();
+    };
+    SearchE.prototype = {
+        init: function(){
+            var self = this;
+
+            self.el.onfocus = function(){
+                if( self.DOFn.DidFocus === 'function' ) self.DOFn.DidFocus();
+                self.activate = true;
+            };
+            self.el.onblur  = function(){
+                if( self.DOFn.DidBlur === 'function' ) self.DOFn.DidBlur();
+                self.activate = false;
+            };
+            self.el.oninput = function(){
+                if( self.DOFn.OnInput === 'function' ) self.DOFn.OnInput();
+                self.searchV = self.el.value;
+                var keys = self.getKeywords();
+
+                if( self.searchV.length === 0 ) self.resEl.innerHTML = '';
+                else                 self.insert( keys );
+            };
+
+            return true;
+        },
+        addKeyWords: function( word ){
+            var self = this;
+            self.keywords.push(word);
+        },
+        getKeywords: function(){
+            var self = this, len = self.searchV.length;
+            if( len === 0 ) return;
+
+            var word = self.searchV.toUpperCase();
+            var T = true, keys = [];
+
+            for( var key in self.keywords){
+                var keyword = self.keywords[key].toUpperCase();
+                for(var i in word){
+                    var letter = word[i];
+                    if( keyword.indexOf( letter ) === -1 ){
+                        T = false;
+                    }
+                }
+
+                if( T === true && len <= self.keywords[key].length ){
+                    keys.push( self.keywords[key] );
+                }
+
+                T = true;
+            }
+
+            return keys;
+        },
+        onSelect: function(){
+            var self = this;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                if(i === self.current - 1){
+                    el.setAttribute('data-select', 'YES');
+                    el.style.backgroundColor = self.options.onSelectBackgroundColor;
+                }else{
+                    el.setAttribute('data-select', 'NO');
+                    el.style.backgroundColor = self.options.noSelectBackgroundColor;
+                }
+            });
+        },
+        insert: function( keys ){
+            var self = this, html = '';
+            for( var key in keys ){
+                html += '<li data-label="' + keys[key] + '">' + keys[key] + '</li>';
+            }
+            if( keys.length === 0 ){
+                html = '<li>NO RESULT</li>';
+            }
+            self.resEl.innerHTML = html;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' )).forEach(function(el, i){
+                el.onclick = function(){ self.DRFn.DidSelect( el.getAttribute('data-label') ) };
+            });
+            self.max     = keys.length;
+            self.current = 0;
+        },
+        up: function(){
+            var self = this;
+            if( self.current == 0 ){ self.current = self.max; }
+            else{ self.current -= 1; }
+
+            self.onSelect();
+        },
+        down: function(){
+            var self = this;
+            if( self.current == self.max ){
+                self.current = 1;
+            }else{
+                self.current += 1;
+            }
+
+            self.onSelect();
+        },
+        didSelect: function(){
+            var self = this, isV = true;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                var isSelect = el.getAttribute('data-select');
+                if( isSelect === 'YES' ){
+                    console.log(el.getAttribute('data-label'));
+                    self.DRFn.DidSelect( el.getAttribute('data-label') );
+                    isV = false;
+                }
+            });
+            if( isV ) self.DRFn.DidSelect( self.searchV );
+        }
+    };
+
+    var keys = [
+        'guigang',
+        'beijing',
+        'guilin',
+        'shandong'
+    ];
+
+    var deleg = {
+        require: {
+            DidSelect: function(el){
+                var name = el;
+                console.log(name);
+                yw.localChange(name);
+                toggleChevron();
+                $('.weather-local-search').classList.toggle('show');
+            }
+        },
+        option: {
+            DidFocus: function(){
+                console.log('DF');
+            },
+            DidBlur : function(){
+                console.log('DB');
+            }
+        }
+    };
+
+    var o = new SearchE('.weather-local-search input', '.l-s-r', deleg, { onSelectBackgroundColor: '#B1B1B1', noSelectBackgroundColor: 'transparent' });
+    for( var i = 0, len = keys.length; i<len; i++ ){
+        o.addKeyWords( keys[i] );
+    }
+
+    document.onkeydown = function(e){
+        if( e.keyCode === 38 ){
+            if( o.activate === true ){
+                o.up();
+            }
+        }else if( e.keyCode === 40 ){
+            if( o.activate === true ){
+                o.down();
+            }
+        }else if( e.keyCode === 13 ){
+            if( o.activate === true ){
+                o.didSelect();
+            }
+        }
+    };
+
 </script>
 
 </html>
