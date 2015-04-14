@@ -140,18 +140,18 @@
                 <td><i class="mdi mdi-weather-sunny"></i></td>
             </tr>
             <tr id="high-temp" class="high-temp">
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
             </tr>
             <tr id="low-temp" class="low-temp">
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
-                <td><label>0</label><i class="mdi mdi-temperature-fahrenheit"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
             </tr>
         </table>
 
@@ -316,14 +316,14 @@
             var self = card, i = 0, len = self.el.highTemp.length;
 
             for( ; i<len; i++){
-                self.el.highTemp[i].innerHTML = '<label>'+HighTemp[i]+'</label><i class="mdi mdi-temperature-fahrenheit"></i>';
+                self.el.highTemp[i].innerHTML = '<label>'+HighTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
             }
         },
         initLowTemp: function(LowTemp){
             var self = card, i = 0, len = self.el.lowTemp.length;
 
             for( ; i<len; i++ ){
-                self.el.lowTemp[i].innerHTML  = '<label>'+LowTemp[i]+'</label><i class="mdi mdi-temperature-fahrenheit"></i>';
+                self.el.lowTemp[i].innerHTML  = '<label>'+LowTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
             }
         }
     };
@@ -371,6 +371,11 @@
                 self.weather.sunrise     = data.query.results.channel.astronomy.sunrise;
                 self.weather.sunset      = data.query.results.channel.astronomy.sunset;
 
+                var isF    = (function(data){
+                    if( data.query.results.channel.units.temperature.toUpperCase() === 'F' ) return true;
+                    else   return false;
+                })(data);
+
                 (function(weather, data){
                     weather.codes = [],
                             weather.date = [],
@@ -384,6 +389,12 @@
 
                     for( var i in fc ){
                         obj = fc[i];
+
+                        if( isF ){
+                            obj.high = parseInt( (obj.high - 32) / 1.8 );
+                            obj.low  = parseInt( (obj.low  - 32) / 1.8 );
+                        }
+
                         weather.codes.push( obj.code );
                         weather.date.push( obj.date );
                         weather.day.push( obj.day );
@@ -394,7 +405,7 @@
 
                 })(self.weather, data);
 
-                self.DRFn.DidGetWeatherData(self.weather);
+                self.DRFn.DidGetWeatherData( self.weather );
             });
         },
         localChange: function(location){
@@ -437,94 +448,6 @@
     $('.city-btn').onclick = function(){
         toggleChevron();
         $('.weather-local-search').classList.toggle('show');
-    };
-
-    var dict = {
-        keywords: [],
-        addKeywords: function( word ){
-            dict.keywords.push( word );
-        },
-        getwords: function( word ){
-            if(word.length === 0) return false;
-
-            var word = word.toUpperCase();
-            var T = true, keys = [];
-
-            for( var key in dict.keywords){
-                var keyword = dict.keywords[key].toUpperCase();
-                for(var i in word){
-                    var letter = word[i];
-                    if( keyword.indexOf( letter ) === -1 ){
-                        T = false;
-                    }
-                }
-
-                if( T === true ){
-                    keys.push( dict.keywords[key] );
-                }
-
-                T = true;
-            }
-
-            return keys;
-        }
-    };
-
-    var dictSelect = {
-        activition: true,
-        max: 0,
-        current: 0,
-        onSelect: function(){
-            [].slice.call(document.querySelectorAll( '.res-box li' )).forEach(function(li, i){
-                if(i === dictSelect.current - 1){
-                    li.setAttribute('data-select', 'YES');
-                    li.style.backgroundColor = '#F4F4F4';
-                }else{
-                    li.setAttribute('data-select', 'NO');
-                    li.style.backgroundColor = '#FFF';
-                }
-            })
-        },
-        insert: function( keys ){
-            var str = '';
-            for(var key in keys){
-                str += '<li data-label='+keys[key]+'>'+keys[key]+'</li>';
-            }
-            if( keys.length === 0 ){
-                str = '<li>NO RESULT</li>';
-            }
-            $('.res-box ul').innerHTML = str;
-            dictSelect.max = keys.length;
-            dictSelect.current = 0;
-        },
-        up: function(){
-            if( this.current == 0 ){
-                this.current = this.max;
-            }else{
-                this.current -= 1;
-            }
-
-            this.onSelect();
-        },
-        down: function(){
-            if( this.current == this.max ){
-                this.current = 1;
-            }else{
-                this.current += 1;
-            }
-
-            this.onSelect();
-        },
-        didSelect: function(){
-            [].slice.call(document.querySelectorAll( '.res-box ul li' )).forEach(function(li, i){
-                var isSelect = li.getAttribute('data-select');
-                if( isSelect === 'YES' ){
-                    console.log(li.getAttribute('data-label'));
-                    $('.res-box ul').innerHTML = '';
-                    $('.card').classList.add('show');
-                }
-            });
-        }
     };
 
     var SearchE = function(elStr, resElStr, delegate, options){

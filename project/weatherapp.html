@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>weather</title>
+    <meta charset="utf-8">
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <link href="../css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <style>
+        @font-face { font-family: apple-style; src: url('../myriad-set-pro_ultralight.woff') format('woff'); }
+
+        *{ padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
+        button{ cursor: pointer; }
+        input, button{ outline: none; -webkit-tap-highlight-color: transparent; -webkit-user-select: text; }
+
+        .card-wrapper{ position: absolute; width: 100%; height: 100%; background-color: #ffffff; overflow: hidden; }
+        .card-scroller{ width: 100%; height: 100%; left: 0px; top: 0px; -webkit-transition: all 0.7s; }
+
+        .weather-card{ position: absolute; width: 100%; height: 100%; left: 0% top: 0px; overflow: scroll; }
+        .weather-card img{ position: absolute; width: auto; height: 100%; -webkit-filter: blur(3px); }
+        .weather-card.blur img{ -webkit-filter: blur(10px); }
+
+        .weather-card:nth-child(2){ left: 100%; }
+
+        .card-slider-wrapper{ width: 100%; height: 100%; -webkit-transition: all 0.4s; }
+        .card-slider{ position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+        .card-slider-wrapper.update{ -webkit-transform: translateY( 77px ); }
+
+        .current-city{ position: absolute; top: 0px; width: 100%; text-align: center; line-height: 57px; }
+        .current-city .mdi{ margin-right: 17px; }
+
+        .weather-temp-content{ font-size: 1em; position: absolute; bottom: 7px; left: 17px; width: auto; height: auto; color: #ffffff; }
+        .weather-temp-content .mdi{ margin-right: 17px; }
+        .data-source-label   { position: absolute; bottom: 17px; right: 7px; width: auto; color: #ffffff; }
+        .data-c-t{ font-size: 8em; font-family: apple-style; }
+
+        .weather-details-content, .weather-forecast-content{ position: relative; width: 95%; margin: 4% auto 0% auto; height: 46%; background-color: #000000; opacity: 0.6; }
+
+        .weather-forecast-content p:first-child{ position: relative; width: 95%; padding: 17px 0px; margin: 0px auto 7px auto; border-bottom: 1px solid white; color: white; font-size: 1em; }
+        .w-f-t-s, .w-f-t-f{ width: 95%; margin: 0px 2.5%; text-align: center; }
+        .w-f-t-f{}
+        .w-f-t-s { position: relative; color: #f5f5f5; font-size: 1em; }
+        .w-f-t-s tr td:first-child{ width: 20%;  }
+        .w-f-t-s tr td:nth-child(3){ width: 17%; }
+        .w-f-t-s tr td:last-child{ width: 17%;   }
+
+        .d-c-i-w{ position: relative; width: 95%; margin: 0px auto; height: auto; }
+        .d-c-i-w .detail-icon{ position: relative; top: 0px; width: 50%; height: 180px; line-height: 180px; font-size: 4em; color: white; text-align: center; }
+        .d-c-i-w ul   { position: absolute; width: 50%; right: 0px; top: 0px; height: 180px; list-style: none; }
+        .d-c-i-w ul li{ position: relative; width: 100%; height: 59px; line-height: 60px; font-size: 1em; border-bottom: 1px solid white; color: white; }
+        .d-c-i-w ul li label{ position: absolute; right: 0px; }
+
+        .weather-details-content p:first-child{ position: relative; width: 95%; padding: 17px 0px; margin: 0px auto 7px auto; border-bottom: 1px solid white; color: white; font-size: 1em; }
+        .weather-details-content p.detail-info{ position: relative; color: white; font-size: 1em; width: 95%; margin: 0px 2.5%; }
+
+        .weather-sunmoon-content              { position: relative; width: 95%; margin: 4% auto; background-color: #000000; opacity: 0.6; }
+        .weather-sunmoon-content p:first-child{ position: relative; width: 95%; padding: 17px 0px; margin: 0px auto 7px auto; border-bottom: 1px solid white; color: white; font-size: 1em; }
+        .weather-sunmoon-content P{ color: #ffffff; width: 95%; margin: 17px auto; }
+        .weather-sunmoon-content p:last-child { padding-bottom: 17px; }
+        .weather-sunmoon-content p .mdi       { margin-right: 17px; }
+
+        .setting{ position: absolute; left: 7px; line-height: 57px; font-size: 2em; border: none; background-color: transparent; cursor: pointer; z-index: 577; }
+        .search { position: absolute; right: 7px; line-height: 57px; font-size: 2em; border: none; background-color: transparent; cursor: pointer; z-index: 577; }
+
+        .msk{ display: none; position: fixed; top: 0px; left: 0px; height: 100%; width: 100%; background-color: #000000; opacity: 0.6; z-index: 677;}
+        nav { position: fixed; top: 0px; left: -70%; height: 100%; background-color: white; width: 70%; -webkit-transition: all 0.4s cubic-bezier( 0, 0.01, 0.01, 1 ); -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); z-index: 777; }
+        nav ul{ position: relative; background-color: transparent; width: 100%; list-style: none; padding-top: 37px; }
+        nav ul li{ position: relative; width: 70%; top: 0px; margin: 0px 15%; font-size: 1em; height: 57px; line-height: 57px; }
+        nav ul li .mdi{ margin-right: 17px; }
+
+        nav.nav-show{ -webkit-transform: translateX(100%); }
+
+        nav ul:before{ position: absolute; content: attr(BF); top: 0px; left: 17px; height: 37px; line-height: 37px; font-size: 0.8em; }
+        /*nav ul.options:before { position: absolute; content: attr(BF); top: 0px; left: 17px; height: 37px; line-height: 37px; font-size: 0.8em; }*/
+
+        nav .bg{ position: relative; width: 100%; height: 137px; overflow: hidden; }
+        nav .bg img{ width: 100%; height: auto; }
+
+        .city-choose-view{ position: fixed; width: 100%; height: 100%; top: 100%; left: 0px; background-color: #000000; z-index: 597; -webkit-transition: all 0.4s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+        .city-choose-view.choose-view-show{ -webkit-transform: translateY(-100%); }
+        .city-choose-view input{ position: relative; border-radius: 0px; width: 78%; padding: 0% 1%; font-size: 1.2em; height: 57px; border: none; background-color: #393939; color: white; }
+        .city-choose-view button{ position: absolute; right: 0px; top: 0px; background-color: #393939; color: white; border: none; width: 20%; height: 57px; font-size: 1em; }
+
+        .city-choose-view ul    { list-style: none; width: 100%; }
+        .city-choose-view ul li { width: 95%; margin: 0px auto; line-height: 47px; border-bottom: 1px #B1B1B1 solid; color: #ffffff; }
+
+        .setting-view{ position: fixed; width: 100%; height: 100%; top: 100%; left: 0px; background-color: #000000; z-index: 597; -webkit-transition: all 0.4s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+        .setting-view.setting-view-show{ -webkit-transform: translateY( -100% ); }
+        .setting-view .nav-bar{ position: relative; background-color: #000000; color: #ffffff; width: 100%; height: 57px; border-bottom: 0px solid #B1B1B1; }
+        .setting-view .nav-bar .nav-bar-title{ line-height: 57px; font-size: 1.2em; text-align: center; z-index: 1; }
+        .setting-view .nav-bar .back-btn { display: none; position: absolute; background-color: inherit; left: 17px; width: auto; color: #ffffff; font-size: 1em; padding: 0px 0px 0px 23px; border: none; height: 57px; }
+        .setting-view .nav-bar .back-btn:before
+        { position: absolute; left: 7px; top: 20px; display: block; content: ''; border-bottom: 2px solid #ffffff; border-left: 2px solid #ffffff; width: 17px; height: 17px; -webkit-transform: rotate(45deg); }
+        .setting-view .nav-bar .bar-item-search{ position: absolute; width: auto; padding: 0px 7px; top: 0px; height: 100%; border: none; background-color: inherit; color: #ffffff; font-size: 1em; right: 0px; }
+
+        .setting-view .view-wrap{ position: relative; width: 100%; height: calc( 100% - 57px ); overflow-y: scroll; overflow-x: hidden; background-color: #000000; }
+        .setting-view .nav-view.view-push{ -webkit-transform: translateX(-100%); }
+        .setting-view .nav-view  { position: absolute; top: 0px; -webkit-transition: all 0.57s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+
+        .setting-view .view-wrap .nav-view:nth-child( n + 2 ) { left: 100%; }
+
+        .setting-view .mdi-chevron-right{ position: absolute; right: 0px; line-height: 47px; text-align: right; }
+
+        .view-wrap .main-view  { width: 100%; height: 100%; background-color: #393939; color: #ffffff; font-size: 1em; }
+        .view-wrap .units-view { width: 100%; height: 100%; background-color: #393939; color: #ffffff; font-size: 1em; }
+        .view-wrap .info-view  { width: 100%; height: 100%; background-color: #393939; color: #ffffff; font-size: 1em; }
+
+        .nav-view.main-view ul   { position: relative; width: 100%; list-style: none; }
+        .nav-view.main-view ul li{ position: relative; width: 95%; margin: 0px auto; line-height: 47px; border-bottom: 1px #000000 solid; }
+
+        .nav-view.units-view ul   { position: relative; width: 100%; list-style: none; }
+        .nav-view.units-view ul li{ position: relative; width: 95%; margin: 0px auto; line-height: 47px; border-bottom: 1px #000000 solid; }
+
+        .nav-view.info-view ul    { position: relative; width: 100%; list-style: none; }
+        .nav-view.info-view ul li { position: relative; width: 95%; margin: 0px auto; padding-top: 17px; height: auto; line-height: 47px; border-bottom: 1px #000000 solid; }
+        .nav-view.info-view ul li:before{ position: absolute; top: 5px; content: attr(BF); height: 11px; line-height: 11px; color: #ffffff; font-size: 0.7em; }
+
+        .segment{ position: relative; margin: 7px 0px; border-radius: 8px; overflow: hidden; }
+        .segment button{ width: 25%; height: 37px; border: none; color: #9D9D9D; background-color: #616161; font-size: 1em; -webkit-transition: all 0.4s; }
+        .segment button:last-child{ border-right: none; }
+        .segment button.selected{ background-color: #0678C9; color: #ffffff; }
+
+        .temp-segment{ width: 50%; }
+        .temp-segment button{ width: 50%; }
+        .ws-segment  { width: 100%; }
+
+        .msg-bar{ position: fixed; width: 100%; height: 77px; left: 0px; top: -77px; background-color: #E43C0F; opacity: 0.97; z-index: 977; -webkit-transition: all 0.4s cubic-bezier( 0, 0.01, 0.01, 1 ); }
+        .msg-bar.msg-bar-show{ -webkit-transform: translateY(77px); }
+        .msg-bar .loading{ display: none; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; color: #ffffff; text-align: center; line-height: 77px; font-size: 3em; }
+        .msg-bar .loading i{ -webkit-animation: 2.1s loading infinite; }
+
+        .msg-bar .msg{ display: none; position: relative; margin: 0px auto; left: 0px; top: 0px; width: 90%; height: 100%; line-height: 77px; color: #ffffff; font-size: 2em; }
+
+        @-webkit-keyframes loading {
+            to{ -webkit-transform: rotate(360deg) }
+        }
+
+        .mdi-information{ color: #562EC8; line-height: 29px; }
+        .mdi-weather-sunny { color: #ffd700; }
+    </style>
+</head>
+<body>
+
+    <section class="msg-bar">
+        <div class="loading"><i class="mdi mdi-compass-outline"></i></div>
+        <div class="msg">
+            <p>adasdas</p>
+        </div>
+    </section>
+
+    <div class="msk"></div>
+    <nav>
+        <div class="bg"><img src="../android.png"></div>
+        <ul class="location" BF="Locations" >
+            <li><i class="mdi mdi-map-marker-radius"></i>Jinan</li>
+            <li><i class="mdi mdi-map-marker-radius"></i>Bejing</li>
+        </ul>
+        <ul class="options" BF="Tools">
+            <li class="setting-btn"><i class="mdi mdi-settings"></i>Setting</li>
+            <li><i class="mdi mdi-email"></i>Send Feedback</li>
+        </ul>
+        <ul BF="Weather">
+            <li><a class="weather-link" href="https://www.yahoo.com/?ilc=401" target="_blank"><img src="https://poweredby.yahoo.com/purple_retina.png" width="134" height="29"/></a>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="city-choose-view">
+        <input type="text" placeholder="type your city name here"><button class="search-cancel-btn">Cancel</button>
+        <ul class="r-b"></ul>
+    </section>
+
+    <section class="setting-view">
+            <div class="nav-bar">
+                <button class="back-btn">back</button>
+                <p class="nav-bar-title">Title</p>
+                <button class="bar-item-search">Done</button>
+            </div>
+
+            <section class="view-wrap">
+
+                <div class="nav-view main-view">
+                    <ul>
+                        <li class="units-btn">Units<i class="mdi mdi-chevron-right"></i></li>
+                        <li class="info-view-btn">about<i class="mdi mdi-chevron-right"></i></li>
+                    </ul>
+                </div>
+
+                <div class="nav-view units-view">
+                    <ul>
+                        <li>
+                            <p>Temperature</p>
+                            <div class="segment temp-segment">
+                                <button data-index="0">F</button><button data-index="1" class="selected">C</button>
+                            </div>
+                        </li>
+                        <li>
+                            <p>Wind Speed</p>
+                            <div class="segment ws-segment">
+                                <button data-index="0">mph</button><button data-index="1" class="selected">km/h</button><button data-index="2">m/s</button><button data-index="3">knots</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-view info-view">
+                    <ul>
+                        <li BF="Author:">Mailman Recat</li>
+                        <li BF="Gmail:">MailmanRecat@gmail.com</li>
+                        <li BF="Version:">7.0.1</li>
+                        <li BF="Thanks:"><p>materialdesignicons</p><p>yahoo weather</p></li>
+                        <li BF="FeedBack:">Gmail me: MailmanRecat@gmail.com</li>
+                        <li BF="Donate:">Gmail me: MailmanRecat@gmail.com</li>
+                    </ul>
+                </div>
+
+            </section>
+    </section>
+
+    <section class="card-wrapper">
+        <section class="card-scroller">
+
+            <div class="weather-card jinan">
+                <img src="../jonsaHansel.jpg">
+
+                <div class="card-slider-wrapper active-slide-one">
+
+                    <button class="setting"><i class="mdi mdi-view-headline"></i></button>
+                    <button class="search"><i class="mdi mdi-map-marker"></i></button>
+
+                    <div class="card-slider" >
+                        <p class="current-city"><i class="mdi mdi-map-marker-radius"></i><label class="data-cr-c">current city</label></p>
+                        <div class="weather-temp-content">
+                            <p><i class="mdi mdi-weather-sunny"></i><label class="data-c-text">Sunny</label></p>
+                            <p><i class="mdi mdi-debug-step-out"></i><label class="data-h-t">0</label><i class="mdi mdi-temperature-celsius"></i><i class="mdi mdi-debug-step-into"></i><label class="data-l-t">0</label><i class="mdi mdi-temperature-celsius"></i></p>
+                            <p class="current-temp"><label class="data-c-t">0</label><i class="mdi mdi-temperature-celsius"></i></p>
+                        </div>
+                        <p class="data-source-label">by jonsa Hansel on FLICKR</p>
+                    </div>
+                    <div class="card-slider">
+                        <div class="weather-forecast-content">
+                            <p>Forecast</p>
+                            <table class="w-f-t-s">
+                                <tr>
+                                    <td class="w-f-t-s-d">Monday</td>
+                                    <td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td>
+                                    <td class="w-f-t-s-a">19<i class="mdi mdi-temperature-celsius"></i></td>
+                                    <td class="w-f-t-s-n">12<i class="mdi mdi-temperature-celsius"></i></td>
+                                </tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                            </table>
+                        </div>
+                        <div class="weather-details-content">
+                            <p>Wind</p>
+                            <div class="d-c-i-w">
+                                <i class="mdi mdi-weather-windy detail-icon"></i>
+                                <ul>
+                                    <li>Chill<label class="data-wind-chill">0</label></li>
+                                    <li>direction<label class="data-wind-d">0</label></li>
+                                    <li>speed<label class="data-wind-s">0</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-slider">
+                        <div class="weather-sunmoon-content">
+                            <p>Sun & Moon</p>
+                            <p><i class="mdi mdi-weather-sunset-up"></i><label class="data-sun-rise">5:46am</label></p>
+                            <p><i class="mdi mdi-weather-sunset-down"></i><label class="data-sun-set">6:67pm</label></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="weather-card beijing">
+                <img src="../Brittany.jpg">
+
+                <div class="card-slider-wrapper active-slide-two">
+
+                    <button class="setting"><i class="mdi mdi-view-headline"></i></button>
+                    <button class="search"><i class="mdi mdi-map-marker"></i></button>
+
+                    <div class="card-slider" >
+                        <p class="current-city"><i class="mdi mdi-map-marker-radius"></i><label class="data-cr-c">current city</label></p>
+                        <div class="weather-temp-content">
+                            <p><i class="mdi mdi-weather-sunny"></i><label class="data-c-text">Sunny</label></p>
+                            <p><i class="mdi mdi-debug-step-out"></i><label class="data-h-t">0</label><i class="mdi mdi-temperature-celsius"></i><i class="mdi mdi-debug-step-into"></i><label class="data-l-t">0</label><i class="mdi mdi-temperature-celsius"></i></p>
+                            <p class="current-temp"><label class="data-c-t">0</label><i class="mdi mdi-temperature-celsius"></i></p>
+                        </div>
+                        <p class="data-source-label">by Brittany on FLICKR</p>
+                    </div>
+                    <div class="card-slider">
+                        <div class="weather-forecast-content">
+                            <p>Forecast</p>
+                            <table class="w-f-t-s">
+                                <tr>
+                                    <td class="w-f-t-s-d">Monday</td>
+                                    <td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td>
+                                    <td class="w-f-t-s-a">19<i class="mdi mdi-temperature-celsius"></i></td>
+                                    <td class="w-f-t-s-n">12<i class="mdi mdi-temperature-celsius"></i></td>
+                                </tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                                <tr><td class="w-f-t-s-d">Monday</td><td class="w-f-t-s-i"><i class="mdi mdi-weather-sunny"></i></td><td class="w-f-t-s-a">0<i class="mdi mdi-temperature-celsius"></i></td><td class="w-f-t-s-n">0<i class="mdi mdi-temperature-celsius"></i></td></tr>
+                            </table>
+                        </div>
+                        <div class="weather-details-content">
+                            <p>Wind</p>
+                            <div class="d-c-i-w">
+                                <i class="mdi mdi-weather-windy detail-icon"></i>
+                                <ul>
+                                    <li>Chill<label class="data-wind-chill">0</label></li>
+                                    <li>direction<label class="data-wind-d">0</label></li>
+                                    <li>speed<label class="data-wind-s">0</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-slider">
+                        <div class="weather-sunmoon-content">
+                            <p>Sun & Moon</p>
+                            <p><i class="mdi mdi-weather-sunset-up"></i><label class="data-sun-rise">5:46am</label></p>
+                            <p><i class="mdi mdi-weather-sunset-down"></i><label class="data-sun-set">6:67pm</label></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </section>
+</body>
+<script>
+    (function(window){
+        var copyright = {
+            Author  : 'Mailmam Recat',
+            Date    : '2015',
+            Mail    : 'MailmanRecat@gmail.com',
+            Blog    : 'http://zhihupaper.com',
+            Browser : 'chrome only',
+            saying  : '',
+            info    : function(){ var self = copyright; console.log( 'Anthor: '+self.Author+' | Date: '+self.Date+' | saying: '+self.saying+' | Mail: '+self.Mail+' | Browser: '+self.Browser ) }
+        };
+
+        copyright.info();
+        return window.copyright = copyright;
+    })(window);
+
+    var $  = function(obj){ return document.querySelector(obj)                    },
+            $$   = function(obj )    { return document.querySelectorAll(obj)      },
+            $n   = function(obj )    { return document.getElementsByClassName(obj)};
+
+    (function(window){
+
+        var link_url = {
+            chrome      : 'https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha',
+            zhihu       : 'http://zhihu.com',
+            app_iphone  : 'https://itunes.apple.com/cn/app/zhi-hu-ri-bao-mei-ri-ti-gong/id639087967?mt=8',
+            app_android : 'https://play.google.com/store/apps/details?id=com.zhihu.daily.android',
+            blog        : 'http://rbearblog.sinaapp.com/project/SPC/',
+            zhihupaper  : 'http://rbearblog.sinaapp.com/project/zhihupaper/',
+            github      : '',
+            twitter     : ''
+        };
+
+        var link = (function(){
+            [].slice.call( document.querySelectorAll('.link')).forEach(function(obj, i){
+                var label = obj.getAttribute('data-label'); obj.href = link_url[ label ];
+            });
+        })();
+
+    })(window);
+
+    var weatherCode = {
+        0 : 'weather-windy',
+        1 : 'weather-windy',
+        2 : 'weather-windy',
+        3 : 'weather-lightning',
+        4 : 'weather-lightning',
+        5 : 'weather-snowy',
+        6 : 'weather-pouring',
+        7 : 'weather-pouring',
+        8 : 'weather-windy-variant',
+        9 : 'weather-windy-variant',
+        10: 'weather-pouring',
+        11: 'weather-partlycloudy',
+        12: 'weather-partlycloudy',
+        13: 'weather-snowy',
+        14: 'weather-snowy',
+        15: 'weather-hail',
+        16: 'weather-snowy',
+        17: 'weather-hail',
+        18: 'weather-hail',
+        19: 'weather-hail',
+        20: 'weather-hail',
+        21: 'weather-cloudy',
+        22: 'weather-cloudy',
+        23: 'weather-cloudy',
+        24: 'weather-windy-variant',
+        25: 'weather-cloudy',
+        26: 'weather-cloudy',
+        27: 'weather-night',
+        28: 'weather-partlycloudy',
+        29: 'weather-night',
+        30: 'weather-partlycloudy',
+        31: 'weather-night',
+        32: 'weather-sunny',
+        33: 'weather-night',
+        34: 'weather-cloudy',
+        35: 'weather-pouring',
+        36: 'weather-sunny',
+        37: 'weather-lightning',
+        38: 'weather-lightning',
+        39: 'weather-lightning',
+        40: 'weather-snowy',
+        41: 'weather-snowy',
+        42: 'weather-snowy',
+        43: 'weather-snowy',
+        44: 'weather-snowy',
+        45: 'weather-lightning',
+        46: 'weather-lightning',
+        47: 'weather-partlycloudy',
+        3200: 'weather-cloudy'
+    };
+
+    (function(window){
+
+        var apost = function(data, url, code){
+
+            var data = data || null;
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return { ER: 'Can not get xmlHttp obj' };
+
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+            xmlHttp.send(data);
+        };
+
+        var aget = function(url, code){
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("GET", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+
+            xmlHttp.send();
+        };
+
+        var getxml = function() {
+            try{ xh = new XMLHttpRequest(); }
+            catch (e){
+                try{ xh = new ActiveXObject("Msxml2.XMLHTTP"); }
+                catch (e){ xh = new ActiveXObject("Microsoft.XMLHTTP"); }
+            }
+            return xh;
+        };
+
+        var ajax = { apost: apost, aget: aget };
+
+        if ( typeof define === 'function' && define.amd ) {
+            define( ajax );
+        } else {
+            window.ajax = ajax;
+        }
+
+    })(window);
+
+//    var prefixStr = ['jinan', 'beijing'];
+
+    var jinan = {
+        el:  {
+            dct        : $('.jinan .data-c-text'),
+            currentCity: $('.jinan .data-cr-c'),
+            currentTemp: $('.jinan .data-c-t'),
+            HT         : $('.jinan .data-h-t'),
+            LT         : $('.jinan .data-l-t'),
+            windC      : $('.jinan .data-wind-chill'),
+            windD      : $('.jinan .data-wind-d'),
+            windS      : $('.jinan .data-wind-s'),
+            sunSet     : $('.jinan .data-sun-set'),
+            sunRise    : $('.jinan .data-sun-rise'),
+            day        : $$('.jinan .w-f-t-s-d'),
+            icon       : $$('.jinan .w-f-t-s-i'),
+            highTemp   : $$('.jinan .w-f-t-s-a'),
+            lowTemp    : $$('.jinan .w-f-t-s-n')
+        }
+    };
+
+    var beijing = {
+        el: {
+            dct        : $('.beijing .data-c-text'),
+            currentCity: $('.beijing .data-cr-c'),
+            currentTemp: $('.beijing .data-c-t'),
+            HT         : $('.beijing .data-h-t'),
+            LT         : $('.beijing .data-l-t'),
+            windC      : $('.beijing .data-wind-chill'),
+            windD      : $('.beijing .data-wind-d'),
+            windS      : $('.beijing .data-wind-s'),
+            sunSet     : $('.beijing .data-sun-set'),
+            sunRise    : $('.beijing .data-sun-rise'),
+            day        : $$('.beijing .w-f-t-s-d'),
+            icon       : $$('.beijing .w-f-t-s-i'),
+            highTemp   : $$('.beijing .w-f-t-s-a'),
+            lowTemp    : $$('.beijing .w-f-t-s-n')
+        }
+    };
+
+
+    var card = {
+        getIconWithCode: function(code){
+            return weatherCode[code];
+        },
+        initDCT : function(t){
+            var self = this;
+            self.el.dct.innerText = t;
+        },
+        initDescription: function(Des){
+            var self = this;
+            self.el.description.innerText = Des;
+        },
+        initCurrentCity: function(name){
+            var self = this;
+            self.el.currentCity.innerText = name;
+        },
+        initCurrentTemp: function( temp ){
+            var self = this;
+            self.el.currentTemp.innerText = temp;
+        },
+        initWind:   function(c, d, s){
+            var self = this;
+
+            self.el.windC.innerText = c;
+            self.el.windD.innerText = d;
+            self.el.windS.innerText = s;
+        },
+        initHighTempOnly: function(H){
+            var self = this;
+            self.el.HT.innerText = H;
+        },
+        initLowTempOnly:  function(L){
+            var self = this;
+            self.el.LT.innerText = L;
+        },
+        initSunSet: function(t){
+            var self = this;
+            self.el.sunSet.innerText = t;
+        },
+        initSunRise: function(t){
+            var self = this;
+            self.el.sunRise.innerText = t;
+        },
+        initDay: function(days){
+            var self = this, i = 0, len = self.el.day.length;
+
+            for( ; i<len; i++){
+                self.el.day[i].innerText = days[i];
+            }
+
+        },
+        initIcon: function(codes){
+            var self = this, i = 0, len = self.el.icon.length, prefix = 'mdi-', icon = '';
+
+            for( ; i<len; i++ ){
+                icon = prefix + self.getIconWithCode(codes[i]);
+                self.el.icon[i].innerHTML = '<i class="mdi ' + icon + '"></i>';
+            }
+        },
+        initHighTemp: function(HighTemp){
+            var self = this, i = 0, len = self.el.highTemp.length;
+
+            for( ; i<len; i++){
+//                if( i == 0 ) self.initCurrentTemp( HighTemp[0] );
+                if( i == 0 ) self.initHighTempOnly( HighTemp[0] );
+                self.el.highTemp[i].innerHTML = '<label>'+HighTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
+            }
+        },
+        initLowTemp: function(LowTemp){
+            var self = this, i = 0, len = self.el.lowTemp.length;
+
+            for( ; i<len; i++ ){
+                if( i == 0 ) self.initLowTempOnly( LowTemp[0] );
+                self.el.lowTemp[i].innerHTML  = '<label>'+LowTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
+            }
+        }
+    };
+
+    for( var key in card ){
+        jinan[key] = card[key];
+        beijing[key] = card[key];
+    };
+
+    var yweather = function(location, delegate, options){
+        var self = this;
+
+        self.location  = location || 'NewYork';
+        self.delegate   = delegate;
+        self.DRFn       = self.delegate.require;
+        self.DOFn       = self.delegate.option;
+        self.weather    = {};
+
+        self.options    = {
+            unit:       'f'
+        };
+
+        for(var key in options){
+
+        }
+
+        if( typeof self.DRFn.DidGetWeatherData !== 'function' ) return { ER: 'can not find require fn DidGetWeatherData!' };
+        if( typeof self.DRFn.ERCity !== 'function'            ) return { ER: 'can not find that city'         };
+
+        self.init();
+    };
+    yweather.prototype = {
+        init: function(){
+            var self = this;
+
+            self.url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+self.location+'%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys';
+
+            ajax.aget(self.url, function( res ){
+                var data = JSON.parse(res);
+
+                if(data.query.count === 0) self.DRFn.ERCity();
+                if(data.query.count === 0) return;
+
+                self.weather.currentTemp = data.query.results.channel.item.condition.temp;
+                self.weather.created     = data.query.created;
+                self.weather.lang        = data.query.lang;
+                self.weather.description = data.query.results.channel.description;
+                self.weather.city        = data.query.results.channel.location.city;
+                self.weather.country     = data.query.results.channel.location.country;
+                self.weather.region      = data.query.results.channel.region;
+                self.weather.sunrise     = data.query.results.channel.astronomy.sunrise;
+                self.weather.sunset      = data.query.results.channel.astronomy.sunset;
+                self.weather.todayText   = data.query.results.channel.item.condition.text;
+
+                self.weather.wind        = {
+                    chill                : data.query.results.channel.wind.chill,
+                    direction            : data.query.results.channel.wind.direction,
+                    speed                : data.query.results.channel.wind.speed
+                };
+
+                var isF    = (function(data){
+                    if( data.query.results.channel.units.temperature.toUpperCase() === 'F' ) return true;
+                    else   return false;
+                })(data);
+
+                if( isF ) self.weather.currentTemp = parseInt( ( self.weather.currentTemp - 32 ) / 1.8);
+
+                (function(weather, data){
+                    weather.codes = [],
+                            weather.date = [],
+                            weather.day  = [],
+                            weather.high = [],
+                            weather.low  = [],
+                            weather.text = [];
+
+                    var     fc = data.query.results.channel.item.forecast,
+                            obj;
+
+                    for( var i in fc ){
+                        obj = fc[i];
+
+                        if( isF ){
+                            obj.high = parseInt( (obj.high - 32) / 1.8 );
+                            obj.low  = parseInt( (obj.low  - 32) / 1.8 );
+                        }
+
+                        weather.codes.push( obj.code );
+                        weather.date.push( obj.date );
+                        weather.day.push( obj.day );
+                        weather.high.push( obj.high );
+                        weather.low.push( obj.low );
+                        weather.text.push( obj.text );
+                    }
+
+                })(self.weather, data);
+
+                self.DRFn.DidGetWeatherData( self.weather );
+            });
+        },
+        localChange: function(location){
+            var self = this;
+            self.location = location;
+            self.init();
+        }
+    };
+
+    var jinanWD = {
+        require: {
+            DidGetWeatherData: function(weather){
+                jinan.initCurrentCity(weather.city);
+                jinan.initDCT(weather.todayText);
+                jinan.initDay(weather.day);
+                jinan.initIcon(weather.codes);
+                jinan.initHighTemp(weather.high);
+                jinan.initLowTemp(weather.low);
+                jinan.initWind( weather.wind.chill, weather.wind.direction, weather.wind.speed );
+                jinan.initSunRise( weather.sunrise );
+                jinan.initSunSet( weather.sunset );
+                jinan.initCurrentTemp( weather.currentTemp );
+
+                console.log('jinan');
+                MSGBAR.hide();
+            },
+            ERCity: function(){
+                alert('invalid city');
+            }
+        }
+    };
+
+    var beijingWD = {
+        require: {
+            DidGetWeatherData: function(weather){
+                beijing.initCurrentCity(weather.city);
+                beijing.initDCT(weather.todayText);
+                beijing.initDay(weather.day);
+                beijing.initIcon(weather.codes);
+                beijing.initHighTemp(weather.high);
+                beijing.initLowTemp(weather.low);
+                beijing.initWind( weather.wind.chill, weather.wind.direction, weather.wind.speed );
+                beijing.initSunRise( weather.sunrise );
+                beijing.initSunSet( weather.sunset );
+                beijing.initCurrentTemp( weather.currentTemp );
+
+                MSGBAR.hide();
+            },
+            ERCity: function(){
+                alert('invalid city');
+            }
+        }
+    };
+
+    var jinanYW = new yweather('jinan', jinanWD),
+            beijingYW = new yweather( 'beijing', beijingWD );
+
+    var utils = (function () {
+        var me = {};
+
+        var _elementStyle = document.createElement('div').style;
+        var _vendor = (function () {
+            var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
+                    transform,
+                    i = 0,
+                    l = vendors.length;
+
+            for ( ; i < l; i++ ) {
+                transform = vendors[i] + 'ransform';
+                if ( transform in _elementStyle ) return vendors[i].substr(0, vendors[i].length-1);
+            }
+
+            return false;
+        })();
+
+        function _prefixStyle (style) {
+            if ( _vendor === false ) return false;
+            if ( _vendor === '' ) return style;
+            return _vendor + style.charAt(0).toUpperCase() + style.substr(1);
+        }
+
+        me.extend = function (target, obj) {
+            for ( var i in obj ) {
+                target[i] = obj[i];
+            }
+        };
+
+        me.addEvent = function (el, type, fn, capture) {
+            el.addEventListener(type, fn, !!capture);
+        };
+
+        me.removeEvent = function (el, type, fn, capture) {
+            el.removeEventListener(type, fn, !!capture);
+        };
+
+        me.prefixPointerEvent = function (pointerEvent) {
+            return window.MSPointerEvent ?
+            'MSPointer' + pointerEvent.charAt(9).toUpperCase() + pointerEvent.substr(10):
+                    pointerEvent;
+        };
+
+        var _transform = _prefixStyle('transform');
+
+        me.extend(me, {
+            hasTransform   : _transform !== false,
+            hasPerspective : _prefixStyle('perspective') in _elementStyle,
+            hasTouch       : 'ontouchstart' in window,
+            hasPointer     : window.PointerEvent || window.MSPointerEvent, // IE10 is prefixed
+            hasTransition  : _prefixStyle('transition') in _elementStyle
+        });
+
+        me.extend(me.style = {}, {
+            transform               : _transform,
+            transition              : _prefixStyle('transition'),
+            transitionTimingFunction: _prefixStyle('transitionTimingFunction'),
+            transitionDuration      : _prefixStyle('transitionDuration'),
+            transitionDelay         : _prefixStyle('transitionDelay'),
+            transformOrigin         : _prefixStyle('transformOrigin')
+        });
+
+        me.css      = function(el, props){
+            var key;
+            for( key in props ){
+                if( props.hasOwnProperty(key) && key !== null ){ el.style[key] = props[key] };
+            }
+            return el;
+        };
+
+        me.num_arr = function( arr, start, end ){
+            if( end == 0 ){ return 0; };
+            var num = 0,
+                    i   = start || 0,
+                    len = end || arr.length;
+            for( ; i < len; i++ ){
+                num += arr[i];
+            }
+            return num;
+        };
+
+        me.hasClass = function (e, c) {
+            var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
+            return re.test(e.className);
+        };
+
+        me.addClass = function (e, c) {
+            if ( me.hasClass(e, c) ) { return; }
+
+            var newclass = e.className.split(' ');
+            newclass.push(c);
+            e.className = newclass.join(' ');
+        };
+
+        me.removeClass = function (e, c) {
+            if ( !me.hasClass(e, c) ) { return; }
+
+            var re = new RegExp("(^|\\s)" + c + "(\\s|$)", 'g');
+            e.className = e.className.replace(re, ' ');
+        };
+
+        me.extend(me.ease = {}, {
+            quadratic: {
+                style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                fn: function (k) {
+                    return k * ( 2 - k );
+                }
+            },
+            circular: {
+                style: 'cubic-bezier(0.1, 0.57, 0.1, 1)',	// Not properly "circular" but this looks better, it should be (0.075, 0.82, 0.165, 1)
+                fn: function (k) {
+                    return Math.sqrt( 1 - ( --k * k ) );
+                }
+            },
+            back: {
+                style: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                fn: function (k) {
+                    var b = 4;
+                    return ( k = k - 1 ) * k * ( ( b + 1 ) * k + b ) + 1;
+                }
+            },
+            bounce: {
+                style: '',
+                fn: function (k) {
+                    if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
+                        return 7.5625 * k * k;
+                    } else if ( k < ( 2 / 2.75 ) ) {
+                        return 7.5625 * ( k -= ( 1.5 / 2.75 ) ) * k + 0.75;
+                    } else if ( k < ( 2.5 / 2.75 ) ) {
+                        return 7.5625 * ( k -= ( 2.25 / 2.75 ) ) * k + 0.9375;
+                    } else {
+                        return 7.5625 * ( k -= ( 2.625 / 2.75 ) ) * k + 0.984375;
+                    }
+                }
+            },
+            elastic: {
+                style: '',
+                fn: function (k) {
+                    var f = 0.22,
+                            e = 0.4;
+
+                    if ( k === 0 ) { return 0; }
+                    if ( k == 1 ) { return 1; }
+
+                    return ( e * Math.pow( 2, - 10 * k ) * Math.sin( ( k - f / 4 ) * ( 2 * Math.PI ) / f ) + 1 );
+                }
+            }
+        });
+
+        return me;
+    })();
+
+    var view = function( arg ){
+        var _ = this;
+
+        _.el    = arg.el;
+        _.title = arg.title;
+        _.tag   = arg.tag;
+
+        if( typeof arg.viewDidLoad == 'function') _.viewDidLoad = arg.viewDidLoad;
+        if( typeof arg.viewDidMove == 'function') _.viewDidMove = arg.viewDidMove;
+    };
+
+    var bar = function( arg ){
+        var _ = this;
+
+        _.el      = arg.ele;
+        _.title   = arg.title;
+        _.backBtn = arg.backBtn;
+    };
+    bar.prototype = {
+        titleChange: function( title, back ){
+            var _ = this;
+            _.title.innerText   = title;
+            _.backBtn.innerText = back || 'back';
+        }
+    };
+
+    var navigationVC = function( arg ){
+        var _ = this;
+        _.title         = arg.title;
+        _.currentView   = arg.view;
+        _.preView       = _.currentView;
+        _.bar           = arg.bar;
+        _.view          = [ _.currentView ];
+
+        _.push_class  = arg.push_class || 'view-push';
+
+        _.changeTitle();
+        _.currentView.viewDidLoad();
+        _.bar.backBtn.onclick = function(){ _.pop() };
+
+    };
+    navigationVC.prototype = {
+        init: function(){
+
+        },
+        changeTitle: function(){
+            this.bar.titleChange( this.currentView.title, this.preView.title );
+        },
+        pop:  function(){
+            var _ = this;
+
+            var view_len = _.view.length;
+            _.preView = _.view[ view_len - 3 ];
+            if( view_len == 1 ) return;
+            if( view_len == 2 ) _.bar.backBtn.style.display = 'none';
+            if( view_len == 2 ) _.preView = _.view[0];
+
+            _.currentView.el.classList.remove( _.push_class );
+//            _.currentView.viewDidMove();
+
+            _.view.pop();
+            _.currentView = _.view[ view_len - 2 ];
+            _.changeTitle();
+
+        },
+        push: function( view ){
+            var _ = this;
+
+            _.bar.backBtn.style.display = 'block';
+            _.changeTitle( view.title );
+
+            view.viewDidLoad();
+            _.view.push(view);
+            _.preView = _.currentView;
+            _.currentView = view;
+            view.el.classList.add( _.push_class );
+            _.changeTitle();
+            console.log(_.view);
+        }
+    };
+
+    var bar      = new bar ({ el: $('.nav-bar'), title: $('.nav-bar-title'), backBtn: $('.nav-bar .back-btn') }),
+
+            mainView              = new view({ el: $('.main-view'), title: 'Setting', tag: 0, viewDidLoad: function(){
+                console.log('main view load');
+            }}),
+
+            unitsView           = new view({ el: $('.units-view'), title: 'Units', tag: 1, viewDidLoad: function(){
+                console.log('archive view load');
+            }}),
+
+            infoView            = new view({ el: $('.info-view'), title: 'about', tag: 2, viewDidLoad: function(){
+
+            }}),
+
+            NC       = new navigationVC({ view: mainView, bar: bar });
+
+    $('.units-btn').onclick = function(){ NC.push( unitsView ) };
+    $('.info-view-btn').onclick = function(){ NC.push( infoView ) };
+
+    var touchController = function( el, delegate, options ){
+        var self = this;
+
+        self.el            = el;
+        self.delegate      = delegate;
+        self.DRFn          = self.delegate.require;
+        self.DOFn          = self.delegate.option;
+        self.isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
+        self.isTouch       = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
+
+        self.touchStartY   = 0;
+        self.touchStartX   = 0;
+        self.touchEndY     = 0;
+        self.touchEndX     = 0;
+
+        self.options       = {
+            touchSensitivity: 10,
+            autoScrolling: true
+        };
+
+        for ( var i in options ) {
+            self.options[i] = options[i];
+        }
+
+        if( typeof self.DRFn.DidScrollUp    !== 'function' ) return { ER: 'require fn DidScrollUp lost!'   };
+        if( typeof self.DRFn.DidScrollDown  !== 'function' ) return { ER: 'require fn DidScrollDown lost!' };
+        if( typeof self.DRFn.DidScrollLeft  !== 'function' ) return { ER: 'require fn DidScrollLeft lost!' };
+        if( typeof self.DRFn.DidScrollRight !== 'function' ) return { ER: 'require fn DidScrollRight lost!'};
+
+        self.init();
+    };
+    touchController.prototype = {
+        init: function(){
+            var self = this;
+            self.addTouchHandler();
+        },
+        addListenerMulti : function( el, s, fn ){
+            var self = this;
+            var evts = s.split(' '), i = 0;
+            for ( iLen = evts.length; i < iLen; i++ ) {
+                if  ( document.addEventListener){ self.el.addEventListener(evts[i], fn, false);}
+                else{ self.el.attachEvent(evts[i], fn, false);                                 }
+            }
+        },
+        getWindowHeight  : function(){
+            return  'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth;
+        },
+        getWindowWidth   : function(){
+            return  'innerWidth' in window ? window.innerWidth : document.documentElement.offsetWidth;
+        },
+        isReallyTouch    : function( e ){
+            return typeof e.pointerType === 'undefined' || e.pointerType != 'mouse';
+        },
+        preventDefault   : function(e){
+            e.preventDefault ? e.preventDefault() : e.returnValue = false;
+        },
+        getMSPointer     : function(){
+            var pointer;
+
+            //IE >= 11 & rest of browsers
+            if( window.PointerEvent ){ pointer = { down: 'pointerdown', move: 'pointermove'}; }
+
+            //IE < 11
+            else{ pointer = { down: 'MSPointerDown', move: 'MSPointerMove'}; }
+
+            return pointer;
+        },
+        getEventsPage    : function( e ){
+            var self = this;
+            var events = [];
+
+            events.y = (typeof e.pageY !== 'undefined' && (e.pageY || e.pageX) ? e.pageY : e.touches[0].pageY);
+            events.x = (typeof e.pageX !== 'undefined' && (e.pageY || e.pageX) ? e.pageX : e.touches[0].pageX);
+
+            //in touch devices with scrollBar:true, e.pageY is detected, but we have to deal with touch events. #1008
+            if( self.isTouch && self.isReallyTouch(e) ){
+                events.y = e.touches[0].pageY;
+                events.x = e.touches[0].pageX;
+            }
+
+            return events;
+        },
+        addTouchHandler  : function(){
+            var self = this;
+            if( self.isTouchDevice || self.isTouch ){
+
+                if (document.addEventListener) {
+                    //Microsoft pointers
+                    var MSPointer = self.getMSPointer();
+
+                    self.addListenerMulti( self.el, 'touchstart ' + MSPointer.down, self.bindFn(self, self.touchStartHandler) );
+                    self.addListenerMulti( self.el, 'touchmove ' + MSPointer.move, self.bindFn(self, self.touchMoveHandler) );
+                }
+            }else{
+                if( typeof self.DOFn.NoTouchDevice === 'function' ){ self.DOFn.NoTouchDevice(); }
+            }
+        },
+        DtouchStartHandler: function(){ console.log('start'); },
+        touchStartHandler: function(event){
+            var self = this;
+            var e = window.event || e || e.originalEvent;
+
+            if( self.isReallyTouch(e) ){
+                var touchEvents = self.getEventsPage(e);
+                self.touchStartY = touchEvents.y;
+                self.touchStartX = touchEvents.x;
+            }
+
+        },
+        DtouchMoveHandler: function(){ console.log('move'); },
+        touchMoveHandler : function(event){
+            var self = this;
+            var e = window.event || e || e.originalEvent;
+
+            if( self.isReallyTouch(e) ){
+                if( self.options.autoScrolling ){
+                    self.preventDefault(event);
+                }
+
+                var i = 0;
+
+                if( i == 0 ) {
+                    var touchEvents = self.getEventsPage(e);
+
+                    self.touchEndY = touchEvents.y;
+                    self.touchEndX = touchEvents.x;
+
+                    //if movement in the X axys is greater than in the Y and the currect section has slides...
+                    if ( Math.abs(self.touchStartX - self.touchEndX) > (Math.abs(self.touchStartY - self.touchEndY))) {
+
+                        //is the movement greater than the minimum resistance to scroll?
+                        if (Math.abs(self.touchStartX - self.touchEndX) > (self.getWindowWidth() / 100 * self.options.touchSensitivity)) {
+                            if (self.touchStartX > self.touchEndX) {
+                                self.DRFn.DidScrollRight();
+                            } else {
+                                self.DRFn.DidScrollLeft();
+                            }
+                        }
+                    }
+
+                    //vertical scrolling (only when autoScrolling is enabled)
+                    else if( self.options.autoScrolling ){
+
+                        //is the movement greater than the minimum resistance to scroll?
+                        if (Math.abs(self.touchStartY - self.touchEndY) > (self.getWindowHeight() / 100 * self.options.touchSensitivity)) {
+                            if (self.touchStartY > self.touchEndY) {
+                                self.DRFn.DidScrollDown();
+                            } else if (self.touchEndY > self.touchStartY) {
+                                self.DRFn.DidScrollUp();
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        bindFn: function(obj, fn){
+            return function(){ fn.apply(obj, arguments); }
+        }
+    };
+
+    document.addEventListener('touchmove', function(e) { if(e.target.type == 'range') return; e.preventDefault(); });
+    var canS = false;
+    document.addEventListener('touchstart', function(e){ canS = true; }, false);
+
+    var MSGBAR = {
+        el     : $('.msg-bar'),
+        loading: $('.msg-bar .loading'),
+        msg    : $('.msg-bar .msg'),
+        msgEl  : $('.msg-bar .msg p'),
+        hide:  function(){
+            var self = this;
+            self.el.classList.remove('msg-bar-show');
+        },
+        showWithLoading: function(){
+            var self = MSGBAR;
+            self.loading.style.display = 'block';
+            self.msg.style.display = 'none';
+            self.el.classList.add('msg-bar-show');
+        },
+        showWithMsg: function(msg){
+            var self = MSGBAR;
+            msgEl.innerText = msg;
+            self.loading.style.display = 'none';
+            self.msg.style.display = 'block';
+            self.el.classList.add('msg-bar-show');
+        },
+        isLoading: function(){
+            var self = MSGBAR;
+            if( self.el.classList.contains('msg-bar-show') && self.msg.style.display === 'block' ) return true;
+            else return false;
+        }
+    };
+
+    var activeS   = $('.active-slide-one').style,
+            activeST = $('.active-slide-two').style,
+            AC = 0,
+            n = 2,
+            current = 0,
+            currentT = 0;
+
+    var activeSA  = {
+        update: function(){
+
+        },
+        up  : function(){
+            if( AC == 0 ){
+                if( current == 0 ) {
+                    activeS.webkitTransform = 'translateY(77px)';
+                    MSGBAR.showWithLoading();
+                    setTimeout(function(){
+                        activeS.webkitTransform = 'translateY(0px)';
+                        MSGBAR.hide();
+                    }, 1000);
+                    return;
+                };
+                current -= 1;
+            }else{
+                if( currentT == 0 ) {
+                    activeST.webkitTransform = 'translateY(77px)';
+                    MSGBAR.showWithLoading();
+                    setTimeout(function(){
+                        activeST.webkitTransform = 'translateY(0px)';
+                        MSGBAR.hide();
+                    }, 1000);
+                    return;
+                };
+                currentT -= 1;
+            }
+            activeSA.move();
+        },
+        down: function(){
+            if( AC == 0 ){
+                if( current == n ) return;
+                current += 1;
+            }else{
+                if( currentT == n ) return;
+                currentT += 1;
+            }
+            activeSA.move();
+        },
+        move: function(){
+            MSGBAR.hide();
+            console.log(current);
+            if( AC == 0 ){
+                activeS.webkitTransform = 'translateY( -'+ current * 100 +'% )';
+            }else{
+                activeST.webkitTransform = 'translateY( -'+ currentT * 100 +'% )';
+            }
+        }
+    };
+
+    var toggleACV = function(){
+        [].slice.call( $$('.card-slider-wrapper')).forEach(function(el, i){
+            if( el.classList.contains('active-slide') ){
+                el.classList.remove('active-slide');
+            }else{
+                el.classList.add('active-slide');
+                activeS = el.classList;
+            }
+        });
+    };
+
+    var touchControllerDelegate = {
+        require: {
+            DidScrollUp   : function(){
+                if( !canS ) return;
+//                if( page.getCurrentIndex() == 0 ) return;
+                console.log('DidScrollUp');
+                activeSA.up();
+                canS = false;
+            },
+            DidScrollDown : function(){
+                if( !canS ) return;
+//                if( page.getCurrentIndex() == 0 ) return;
+                console.log('DidScrollDown');
+                activeSA.down();
+                canS = false;
+            },
+            DidScrollLeft : function(){
+                if( !canS ) return;
+                console.log('DidScrollLeft');
+                if( AC == 0 ){ slideBar.navShow().mskShow(); }
+                AC = 0;
+                $('.card-scroller').style.webkitTransform = 'translateX(0%)';
+                canS = false;
+            },
+            DidScrollRight: function(){
+                if( !canS ) return;
+                console.log('DidScrollRight');
+                AC = 1;
+                $('.card-scroller').style.webkitTransform = 'translateX(-100%)';
+                canS = false;
+            }
+        },
+        option : {
+            NoTouchDevice: function(){
+//                var t = new mouseWheelController( $('.active-slide'), Mde, {} );
+            }
+        }
+    };
+
+    var tn = new touchController($('.card-scroller'), touchControllerDelegate, { touchSensitivity: 20 } );
+
+    var slideBar = {
+        navEl: $('nav'),
+        mskEl: $('.msk'),
+        mskShow: function(){
+            var self = slideBar;
+            self.mskEl.style.display = 'block';
+            return self;
+        },
+        mskHide: function(){
+            var self = slideBar;
+            self.mskEl.style.display = 'none';
+            return self;
+        },
+        navShow: function(){
+            var self = slideBar;
+            self.navEl.classList.add('nav-show');
+            return self;
+        },
+        navHide: function(){
+            var self = slideBar;
+            self.navEl.classList.remove('nav-show');
+            return self;
+        }
+    };
+
+    slideBar.mskEl.onclick = function(){
+        slideBar.navHide().mskHide();
+    };
+    var settingBtns = [], searchBtns = [];
+
+    var searchView = $('.city-choose-view').classList;
+    $('.search-cancel-btn').onclick = function(){
+        searchView.remove('choose-view-show');
+    };
+
+    settingBtns.slice.call( $$('.setting')).forEach(function(el, i){
+        el.onclick = function(){
+            slideBar.navShow().mskShow();
+        }
+    });
+    searchBtns.slice.call( $$('.search')).forEach(function(el, i){
+        el.onclick = function(){
+            searchView.add('choose-view-show');
+        }
+    });
+
+    var settingView = $('.setting-view').classList;
+    $('.setting-btn').onclick = function(){
+        slideBar.navHide().mskHide();
+        settingView.add('setting-view-show');
+    };
+
+    $('.bar-item-search').onclick = function(){
+        settingView.remove('setting-view-show');
+    };
+
+    var UISegmentedControl = function( arg ){
+        var _ = this;
+
+        _.segments             = arg.segments;
+        _.selectedClass        = arg.selectedClass        || 'selected';
+        _.selectedSegmentIndex = arg.selectedSegmentIndex || 0;
+        _.delegate             = arg.delegate;
+
+        if( typeof _.delegate.require.didSelectAtIndex !== 'function' ) return {  };
+
+    };
+    UISegmentedControl.prototype = {
+        init: function(){
+            var _ = this;
+            [].slice.call( _.segments ).forEach(function( el, i ){
+                var index  = el.getAttribute('data-index');
+
+                el.onclick = function(){
+                    _.segments[ _.selectedSegmentIndex ].classList.remove('selected');
+                    this.classList.add('selected');
+                    _.selectedSegmentIndex = index;
+                    _.delegate.require.didSelectAtIndex( index );
+                };
+            });
+        }
+    };
+
+    var de = {
+        require: {
+            didSelectAtIndex: function( Index ){
+                $('.demo-one').innerText =  'data-index = "' + Index + '" button was selected';
+            }
+        },
+        option: {
+            isEnableForSegmentAtIndex: function(){}
+        }
+    };
+
+
+    var UISCDe= {
+        require: {
+            didSelectAtIndex: function( Index ){
+//                $('.demo-two').innerText = 'I feel ' + feels[ Index ] + '!';
+//                alert(Index);
+            }
+        }
+    };
+
+    var TSS = new UISegmentedControl({ segments: $$('.temp-segment button'), delegate: UISCDe, selectedSegmentIndex: 1 }); TSS.init();
+    var WSS = new UISegmentedControl({ segments: $$('.ws-segment button'), delegate: UISCDe, selectedSegmentIndex: 1 }); WSS.init();
+
+    var SearchE = function(elStr, resElStr, delegate, options){
+        var self = this;
+
+        self.elStr    = elStr;
+        self.el       = document.querySelector(self.elStr);
+        self.resElStr = resElStr;
+        self.resEl    = document.querySelector(self.resElStr);
+        self.delegate = delegate;
+        self.DRFn     = self.delegate.require;
+        self.DOFn     = self.delegate.option;
+
+        if( typeof self.DRFn.DidSelect !== 'function' ) return { ER: 'require fn DidSelect not found!' };
+
+        self.activate = false;
+
+        self.searchV  = '';
+        self.keywords = [];
+        self.max      = 0;
+        self.current  = 0;
+
+        self.options = {
+            noSelectBackgroundColor: '#FFF',
+            onSelectBackgroundColor: '#F4F4F4'
+        };
+
+        for( var key in options ){
+            self.options[key] = options[key];
+        }
+
+        self.init();
+    };
+    SearchE.prototype = {
+        init: function(){
+            var self = this;
+
+            self.el.onfocus = function(){
+                if( self.DOFn.DidFocus === 'function' ) self.DOFn.DidFocus();
+                self.activate = true;
+            };
+            self.el.onblur  = function(){
+                if( self.DOFn.DidBlur === 'function' ) self.DOFn.DidBlur();
+                self.activate = false;
+            };
+            self.el.oninput = function(){
+                if( self.DOFn.OnInput === 'function' ) self.DOFn.OnInput();
+                self.searchV = self.el.value;
+                var keys = self.getKeywords();
+
+                if( self.searchV.length === 0 ) self.resEl.innerHTML = '';
+                else                 self.insert( keys );
+            };
+
+            return true;
+        },
+        addKeyWords: function( word ){
+            var self = this;
+            self.keywords.push(word);
+        },
+        getKeywords: function(){
+            var self = this, len = self.searchV.length;
+            if( len === 0 ) return;
+
+            var word = self.searchV.toUpperCase();
+            var T = true, keys = [];
+
+            for( var key in self.keywords){
+                var keyword = self.keywords[key].toUpperCase();
+                for(var i in word){
+                    var letter = word[i];
+                    if( keyword.indexOf( letter ) === -1 ){
+                        T = false;
+                    }
+                }
+
+                if( T === true && len <= self.keywords[key].length ){
+                    keys.push( self.keywords[key] );
+                }
+
+                T = true;
+            }
+
+            return keys;
+        },
+        onSelect: function(){
+            var self = this;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                if(i === self.current - 1){
+                    el.setAttribute('data-select', 'YES');
+                    el.style.backgroundColor = self.options.onSelectBackgroundColor;
+                }else{
+                    el.setAttribute('data-select', 'NO');
+                    el.style.backgroundColor = self.options.noSelectBackgroundColor;
+                }
+            });
+        },
+        insert: function( keys ){
+            var self = this, html = '';
+            for( var key in keys ){
+                html += '<li data-label="' + keys[key] + '">' + keys[key] + '</li>';
+            }
+            if( keys.length === 0 ){
+                html = '<li data-label="'+ self.searchV +'">' + self.searchV + '</li>';
+            }
+            self.resEl.innerHTML = html;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' )).forEach(function(el, i){
+                el.onclick = function(){ self.DRFn.DidSelect( el.getAttribute('data-label') ) };
+            });
+            self.max     = keys.length;
+            self.current = 0;
+        },
+        up: function(){
+            var self = this;
+            if( self.current == 0 ){ self.current = self.max; }
+            else{ self.current -= 1; }
+
+            self.onSelect();
+        },
+        down: function(){
+            var self = this;
+            if( self.current == self.max ){
+                self.current = 1;
+            }else{
+                self.current += 1;
+            }
+
+            self.onSelect();
+        },
+        didSelect: function(){
+            var self = this, isV = true;
+            [].slice.call( document.querySelectorAll( self.resElStr + ' li' ) ).forEach(function(el, i){
+                var isSelect = el.getAttribute('data-select');
+                if( isSelect === 'YES' ){
+                    self.DRFn.DidSelect( el.getAttribute('data-label') );
+                    isV = false;
+                }
+            });
+            if( isV ) self.DRFn.DidSelect( self.searchV );
+        }
+    };
+
+    var keys = [
+        'beijing',
+        'qingdao',
+        'xianggang',
+        'jinan',
+        'newyork'
+    ];
+
+    var deleg = {
+        require: {
+            DidSelect: function(value){
+                console.log(value);
+                MSGBAR.showWithLoading();
+                if( AC == 0 ){
+                    jinanYW.localChange(value);
+                }else{
+                    beijingYW.localChange(value);
+                }
+                searchView.remove('choose-view-show');
+            }
+        },
+        option: {
+            DidFocus: function(){
+            },
+            DidBlur : function(){
+            }
+        }
+    };
+
+    var o = new SearchE('.city-choose-view input', '.r-b', deleg, {});
+    for( var i = 0, len = keys.length; i<len; i++ ){
+        o.addKeyWords( keys[i] );
+    }
+
+    document.onkeydown = function(e){
+        if( e.keyCode === 38 ){
+            if( o.activate === true ){
+                o.up();
+            }
+        }else if( e.keyCode === 40 ){
+            if( o.activate === true ){
+                o.down();
+            }
+        }else if( e.keyCode === 13 ){
+            if( o.activate === true ){
+                o.didSelect();
+            }
+        }
+    };
+</script>
+</html>
