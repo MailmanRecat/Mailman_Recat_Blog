@@ -3,24 +3,39 @@
     <meta charset="utf-8">
     <style>
 
-        @font-face {
-            font-family: roboto;
-            src:url('Roboto.woff2') format('woff');
-        }
+        @font-face { font-family: Menlo roboto; src: url('Menlo.ttc') format('ttc'); }
 
-        *{ padding: 0px; margin: 0px; -webkit-user-select: none; font-family: roboto; }
+        @font-face { font-family: Roboto; src: url('Roboto.woff2') format('woff2'); }
+
+        @font-face { font-family: apple-style; src: url('myriad-set-pro_ultralight.woff') format('woff'); }
+
+        * { padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
+        button       { cursor: pointer; }
+        input, button{ outline: none; }
+        input        { -webkit-user-select: text; }
+
         a{ text-decoration: none; }
-        .animation-fast  { -webkit-transition: all 0.4s; }
-        .animation-normal{ -webkit-transition: all 0.6s; }
-        .animation-slow  { -webkit-transition: all 0.8s; }
 
-        body{ background-color: #FBFBFB; }
+        ::-webkit-scrollbar-button { height: 0; width: 0; }
+        .lj::-webkit-scrollbar-track { background-clip: padding-box; border: solid transparent; border-width: 0; }
+        .lj::-webkit-scrollbar-thumb { border-width: 0; }
+        .lj::-webkit-scrollbar { height: 16px; overflow: visible; width: 12px; }
+        .lj::-webkit-scrollbar-track-piece { border-width: 0; }
+        .lj::-webkit-scrollbar-track { background-clip: padding-box; border: solid transparent; border-width: 0; }
+        ::-webkit-scrollbar-track { background-clip: padding-box; border: solid transparent; border-width: 0 0 0 4px; }
+        body::-webkit-scrollbar-track-piece { background-clip: padding-box; background-color: #f5f5f5; border: solid #fff; border-width: 0 0 0 3px; -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07); box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07); }
+        body::-webkit-scrollbar-corner { background-clip: padding-box; background-color: #f5f5f5; border: solid #fff; border-width: 3px 0 0 3px; -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.14); box-shadow: inset 1px 1px 0 rgba(0,0,0,.14); }
+        ::-webkit-scrollbar-corner { background: transparent; }
+        ::-webkit-scrollbar { height: 16px; overflow: visible; width: 16px; }
+        ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,.2); background-clip: padding-box; border: solid transparent; border-width: 1px 1px 1px 6px; min-height: 28px; padding: 100px 0 0; -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07); box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07); }
 
-        header{ position: fixed; top: 0px; left: 0px; width: 100%; height: 80px; background-color: #0678C9; z-index: 977; -webkit-transition: all 0.4s; }
-        .header-shadow{ height: 44px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); background-color: #ffffff }
-        .header-shadow .cycleBtn, .header-shadow .cycleBtn:before, .header-shadow .cycleBtn:after{ background-color: #0678C9; }
+        body{ background-color: #E5E5E5; }
 
-        header .setting{ top: 6px; left: 7px; }
+        header{ position: fixed; top: 0px; left: 0px; width: 100%; height: 80px; background-color: #3E82F7; z-index: 977; -webkit-transition: all 0.4s; }
+        .header-shadow{ height: 57px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.27); background-color: #F7F7F7; }
+        .header-shadow .cycleBtn, .header-shadow .cycleBtn:before, .header-shadow .cycleBtn:after{ background-color: #3E82F7; }
+
+        header .setting{ top: 12px; left: 7px; }
 
         .setting{ position: absolute; background-color: transparent; width: 32px; height: 32px; cursor: pointer; }
         .cycleBtn, .cycleBtn:before, .cycleBtn:after{ position: absolute; width: 4px; height: 4px; border-radius: 50%; background-color: #ffffff; }
@@ -28,7 +43,7 @@
         .cycleBtn:before{ content: ''; left: 0px; top: 8px; }
         .cycleBtn:after{ content: ''; left: 0px; top: 16px; }
 
-        .settingBox{ overflow: hidden; position: fixed; width: 250px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; }
+        .settingBox{ overflow: hidden; position: fixed; width: 250px; height: 0px; background-color: #ffffff; left: 7px; top: 7px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); z-index: 1000; -webkit-transition: all 0.37s; }
         .settingBox-show{ height: 570px; width: 250px; }
         .settingBox ul{ list-style: none; }
         .settingBox ul li{ width: 100%; height: 37px; color: orangered; line-height: 37px; padding-left: 17px; cursor: pointer; }
@@ -40,7 +55,7 @@
         .footer-show{ bottom: 0px; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
         footer p{ color: #000000; margin-right: 17px; line-height: 48px; text-align: right; cursor: pointer; }
 
-        #search input{ display: none; position: fixed; font-size: 1.8em; outline: none; padding: 0px 7px; width: 60%; height: 48px; border: none; border-radius: 4px; top: 16px; left: 50%; -webkit-transform: translatex(-50%); z-index: 999; -webkit-box-shadow: 1px 1px 8px rgba(120, 120, 120, 1); }
+        #search input{ display: block; position: fixed; font-size: 1.8em; outline: none; padding: 0px 7px; width: 60%; height: 37px; border: none; border-radius: 2px; top: 10px; left: 50%; -webkit-transform: translatex(-50%); z-index: 999; }
         #searchBox{ display: none; position: fixed; width: 100%; height: 100%; left: 0px; top: 0px; background-color: #ffffff; opacity: 0.98; z-index: 998; }
         #searchBox .searchSuggest{ position: absolute; top: 80px; margin: 17px 17px; line-height: 16px; }
         #searchBox .searchRes{ position: absolute; width: 100%; bottom: 80px; top: 144px; left: 0px; overflow-y: scroll; list-style: none; border-bottom: solid 1px #1573BD; border-top: solid 1px #1573BD; }
@@ -48,15 +63,15 @@
         #searchBox .searchRes li p{ margin-left: 17px; }
         #searchBox .cancel{ position: absolute; bottom: 0px; left: 0px; width: 100%; height: 80px; background-color: #ffffff; outline: none; border: none; color: #1573BD; cursor: pointer; }
 
-        .ANIMATIONBG{ position: fixed; width: 100%; height: 277px; background-color: #0678C9; left: 0px; top: 0px; -webkit-transition: all 0.4s; z-index: -1 }
+        .ANIMATIONBG{ position: fixed; width: 100%; height: 317px; background-color: #3E82F7; left: 0px; top: 0px; -webkit-transition: all 0.4s; z-index: -1 }
         .ANIMATIONBG-HIDE{ height: 44px }
 
-        .icon{ overflow: hidden; position: fixed; width: 120px; height: 120px; border-radius: 4px; right: 10%; -webkit-transform: translateX(50%); top: 217px; background-color: #000000; -webkit-transition: all 0.4s; z-index: 987; }
+        .icon{ overflow: hidden; position: fixed; width: 120px; height: 120px; border-radius: 4px; right: 10%; -webkit-transform: translateX(50%); top: 257px; background-color: #000000; -webkit-transition: all 0.4s; z-index: 987; }
         .icon img{ width: 100%; }
-        .icon-up{ top: 10px; width: 60px; height: 60px; }
+        .icon-up{ top: 5px; width: 47px; height: 47px; }
 
         .contain{ position: absolute; margin: 120px 0px; width: 100%; height: auto; }
-        .contain section{ position: relative; margin: 27px 0px; width: 60%; min-height: 77px; -webkit-box-shadow:0 1px 6px rgba(0,0,0,.27); left: 50%; -webkit-transform: translateX(-50%); }
+        .contain section{ position: relative; margin: 27px 0px; width: 60%; min-height: 77px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); left: 50%; -webkit-transform: translateX(-50%); }
         .contain section h1{ text-align: center; line-height: 77px }
         .contain section p{ text-align: center; margin: 0px 17px; }
         .contain section .normal-btn{ position: absolute; left: 50%; -webkit-transform: translateX(-50%); bottom: 17px; border: none; outline: none; border-radius: 2px; cursor: pointer; width: auto; padding: 0px 17px; height: 37px; font-size: 1.7em; }
@@ -65,22 +80,22 @@
         .contain section .toggle:before{ right: 0px; top: 0px; border-right: solid 2px #a9a9a9; border-top: solid 2px #a9a9a9; }
         .contain section .toggle:after { bottom: 0px; left: 0px; border-left: solid 2px #a9a9a9; border-bottom: solid 2px #a9a9a9;  }
 
-        .chrome{ position: relative; background-color: #ffffff; height: 217px; }
+        .chrome{ position: relative; background-color: #ffffff; height: 300px; }
         .chrome button a{ color: #000000 }
         .chrome button a:visited{ color: #000000 }
 
-        .info{ height: 277px; background-color: #445A65; }
+        .info{ height: 300px; background-color: #445A65; }
         .info h1{ color: #55DCBF; }
         .info p{ color: #55DCBF; }
         .info button{ background-color: #55DCBF; color: #445A65; }
 
-        .SPC{ background-color: #ffffff; height: 217px; }
+        .SPC{ background-color: #ffffff; height: 300px; }
         .SPC h1, .SPC p{ color: #0678C9; }
         .SPC button{ background-color: #0678C9; color: #ffffff; }
         .SPC button a{ color: #ffffff; }
         .SPC button a:visited{ color: #ffffff; }
 
-        .zhihupaper{ background-color: #0098CE; height: 217px; }
+        .zhihupaper{ background-color: #0098CE; height: 300px; }
         .zhihupaper h1{ color: #ffffff; }
         .zhihupaper p{ color: #ffffff; }
         .zhihupaper button{ background-color: #ffffff; border: none; color: #0098CE; }
@@ -88,11 +103,11 @@
         .zhihupaper button a{ color: orangered; }
         .zhihupaper button a:visited{ color: orangered; }
 
-        .node-chatroom{ background-color: #1D1D1D; height: 277px; }
+        .node-chatroom{ display: none; background-color: #1D1D1D; height: 300px; }
         .node-chatroom h1, .node-chatroom p{ color: #7EBF00; }
         .node-chatroom .normal-btn{ background-color: #7EBF00; color: #1d1d1d; }
 
-        .hatejavascript{ height: 177px; background-color: #000000; }
+        .hatejavascript{ display: none; height: 300px; background-color: #000000; }
         .hatejavascript h1{ color: #ffffff; }
         .hatejavascript p{ color: #ffffff; }
 
@@ -109,156 +124,156 @@
         .RHC button a:visited{ color: orangered; }
     </style>
 </head>
-<body>
+<body class="lj">
 
-<section id="search">
-    <input type="text" placeholder="Start here" list="sv">
-    <section id="searchBox">
-        <p class="searchSuggest">There are some search suggest here: just type a project name so far.</p>
-        <ul class="searchRes">
-            <li><p>null</p></li>
+    <section id="search">
+        <input type="text" placeholder="Start here" list="sv">
+        <section id="searchBox">
+            <p class="searchSuggest">There are some search suggest here: just type a project name so far.</p>
+            <ul class="searchRes">
+                <li><p>null</p></li>
+            </ul>
+            <button class="cancel">Cancel</button>
+        </section>
+    </section>
+
+    <section class="ANIMATIONBG"></section>
+
+    <header>
+        <div class="setting" id="mainSetting">
+            <div class="cycleBtn"></div>
+        </div>
+    </header>
+
+    <section class="settingBox animation-fast">
+        <ul>
+            <li>Saying:</li>
+            <li>Need a job.</li>
+            <li><a href="#">Author:</a></li>
+            <li><a href="#">Mailman_Recat</a></li>
+            <li>Email:</li>
+            <li><a href="#">MailmanRecat@gmail.com</a></li>
+            <li><a href="https://github.com/MailmanRecat/Mailman_Recat_Blog">Github</a></li>
+            <li><a href="#">Twitter</a></li>
         </ul>
-        <button class="cancel">Cancel</button>
-    </section>
-</section>
-
-<section class="ANIMATIONBG"></section>
-
-<header>
-    <div class="setting" id="mainSetting">
-        <div class="cycleBtn"></div>
-    </div>
-</header>
-
-<section class="settingBox animation-fast">
-    <ul>
-        <li>Saying:</li>
-        <li>Need a job.</li>
-        <li><a href="#">Author:</a></li>
-        <li><a href="#">Mailman_Recat</a></li>
-        <li>Email:</li>
-        <li><a href="#">MailmanRecat@gmail.com</a></li>
-        <li><a href="https://github.com/MailmanRecat/Mailman_Recat_Blog">Github</a></li>
-        <li><a href="#">Twitter</a></li>
-    </ul>
-    <button class="settingBox-hide">Hide</button>
-</section>
-
-<section class="icon">
-</section>
-
-<section class="contain">
-    <section class="chrome card">
-
-        <h1>Warning</h1>
-        <p>Sorry, if you're not using chrome browser, you will not get the best experience in this website, download chrome now. and there is no mobile support.</p>
-        <button class="normal-btn"><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">download</a></button>
+        <button class="settingBox-hide">Hide</button>
     </section>
 
-    <section class="info card">
-        <h1>Library</h1>
-        <p>This website is some kind of my personal Library, but call it personal blog is fine. sure u can browse what ever u like at here. lots of UIaction will be add or remove in the future.</p>
-        <button class="normal-btn">Welcome</button>
+    <section class="icon">
     </section>
 
-    <section class="SPC card">
-        <h1>start my column</h1>
-        <p>All in a word, welcome.</p>
-        <button class="normal-btn"><a href="project/SPC">Visit</a></button>
+    <section class="contain">
+        <section class="chrome card">
+
+            <h1>Warning</h1>
+            <p>Sorry, if you're not using chrome browser, you will not get the best experience in this website, download chrome now. and there is no mobile support.</p>
+            <button class="normal-btn"><a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha">download</a></button>
+        </section>
+
+        <section class="info card">
+            <h1>Library</h1>
+            <p>This website is some kind of my personal Library, but call it personal blog is fine. sure u can browse what ever u like at here. lots of UIaction will be add or remove in the future.</p>
+            <button class="normal-btn">Welcome</button>
+        </section>
+
+        <section class="SPC card">
+            <h1>SPC</h1>
+            <p></p>
+            <button class="normal-btn"><a href="project/SPC">Visit</a></button>
+        </section>
+
+        <section class="zhihupaper card">
+            <h1>zhihupaper</h1>
+            <p>New project.</p>
+            <button class="normal-btn"><a href="project/zhihupaper">Visit</a></button>
+        </section>
+
+        <section class="node-chatroom card">
+            <h1>node.js</h1>
+            <p>This article is showing how to build a web chatroom by node.js</p>
+            <button class="normal-btn"><a class="link" data-label="node-chatroom">Go</a></button>
+        </section>
+
+        <section class="hatejavascript card" data-index="2">
+            <h1>Hate Javascript!</h1>
+            <p>FUCK javascript!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+            <button class="normal-btn">HATE!!</button>
+        </section>
+
+        <section class="game-snake card">
+
+            <h1>A snake game</h1>
+            <p>a Unfinish html game but good to go.</p>
+
+            <ul class="snake">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li style="background-color: orangered"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li style="background-color: orangered"></li>
+                <li style="background-color: orangered"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+
+            <button class="normal-btn"><a href="project/snake.html">play</a></button>
+        </section>
+
+
     </section>
 
-    <section class="zhihupaper card">
-        <h1>zhihupaper</h1>
-        <p>New project.</p>
-        <button class="normal-btn"><a href="project/zhihupaper">Visit</a></button>
-    </section>
-
-    <section class="node-chatroom card">
-        <h1>node.js</h1>
-        <p>This article is showing how to build a web chatroom by node.js</p>
-        <button class="normal-btn"><a class="link" data-label="node-chatroom">Go</a></button>
-    </section>
-
-    <section class="hatejavascript card" data-index="2">
-        <h1>Hate Javascript!</h1>
-        <p>FUCK javascript!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
-        <button class="normal-btn">HATE!!</button>
-    </section>
-
-    <section class="game-snake card">
-
-        <h1>A snake game</h1>
-        <p>a Unfinish html game but good to go.</p>
-
-        <ul class="snake">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li style="background-color: orangered"></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li style="background-color: orangered"></li>
-            <li style="background-color: orangered"></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-
-        <button class="normal-btn"><a href="project/snake.html">play</a></button>
-    </section>
-
-
-</section>
-
-<footer>
-    <p>Author: Mailman_Recat | MailmenRecat@gmail.com | <a href="https://github.com/MailmanRecat/Mailman_Recat_Blog">Github</a> | <a>Twitter</a></p>
-</footer>
+    <footer>
+        <p>Author: Mailman_Recat | MailmenRecat@gmail.com | <a href="https://github.com/MailmanRecat/Mailman_Recat_Blog">Github</a> | <a>Twitter</a></p>
+    </footer>
 </body>
 <script>
     var $ = function(obj){ return document.querySelector(obj) };

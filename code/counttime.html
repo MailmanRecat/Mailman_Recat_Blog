@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>count time</title>
+    <link href="../css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>
+        @font-face { font-family: apple-style; src: url('../myriad-set-pro_ultralight.woff') format('woff'); }
+        *{ padding: 0px; margin: 0px; -webkit-user-select: none; -webkit-font-smoothing: antialiased; font-family: apple-style; }
+        input{ -webkit-user-select: text; }
+        button, input{ outline: none; cursor: pointer; }
+
+        .options{ height: 117px; }
+        .options button
+        { position: absolute; top: 30px; right: 57px; line-height: 57px; height: 57px; width: auto; border-radius: 4px; padding: 0px 57px; font-size: 1.5em; background-color: white; border: none; -webkit-transition: all 0.37s; }
+        .options button:hover{ -webkit-box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); }
+        h1{ text-align: center; margin-top: 57px; }
+        .time{ position: relative; margin: 0% auto; text-align: center; color: #E43C0F; font-size: 5em; }
+    </style>
+</head>
+<body>
+    <div class="options"><button><i class="mdi mdi-apps"></i></button></div>
+    <h1>INFORMATION</h1>
+    <section class="time">
+        <label id="data-day">0</label><label>Day </label>
+        <label id="data-hour">00</label><label>:</label>
+        <label id="data-min">00</label><label>:</label>
+        <label id="data-second">00</label><label></label>
+    </section>
+</body>
+<script>
+
+    var $ = function(el){ return document.querySelector(el) };
+
+    var T = new Date(),
+            nt = parseInt( T.getTime() / 1000 );
+
+    var     dataD = $('#data-day'),
+            dataH = $('#data-hour'),
+            dataM = $('#data-min'),
+            dataS = $('#data-second');
+
+    var s = 777689;
+    setInterval(function(){
+//        var s =  parseInt( new Date().getTime() / 1000 ) - nt;
+        dataD.innerText = getDay(s);
+        dataH.innerText = getHour(s);
+        dataM.innerText = getMin(s);
+        dataS.innerText = getSecond(s);
+        s--;
+    }, 1000);
+
+    var getSecond = function(s){
+        var S =  parseInt( s % 60 );
+        return S < 9 ? '0' + S : S;
+    };
+
+    var getHour   = function(s){
+        var H = parseInt( (s / 3600) % 60 );
+        return H < 9 ? '0' + H : H;
+    };
+
+    var getMin    = function(s){
+        var M = parseInt( (s / 60) % 60 );
+        return M < 9 ? '0' + M : M;
+    };
+
+    var getDay    = function(s){
+        return parseInt( s / 86400 );
+    };
+
+
+</script>
+</html>

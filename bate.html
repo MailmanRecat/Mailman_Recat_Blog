@@ -11,8 +11,6 @@
 
         @font-face { font-family: apple-style; src: url('myriad-set-pro_ultralight.woff') format('woff'); }
 
-        /*{ background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,rgba(0,0,0,0)), color-stop(80%,rgba(0,0,0,0.2))); }*/
-
         * { padding: 0px; margin: 0px; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
         button       { cursor: pointer; }
         input, button{ outline: none; }
@@ -30,13 +28,17 @@
         ::-webkit-scrollbar { height: 16px; overflow: visible; width: 16px; }
         ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,.2); background-clip: padding-box; border: solid transparent; border-width: 1px 1px 1px 6px; min-height: 28px; padding: 100px 0 0; -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07); box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07); }
 
-        body{ background-color: #E5E5E5; }
+        body{ background-color: #E5E5E5; height: 3000px; }
 
+        header{ position: fixed; height: 57px; width: 100%; left: 0px; top: 0px; background-color: #3E82F7; z-index: 777; }
+        header.on{ -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+
+        .animation-BG{ position: fixed; height: 377px; width: 100%; left: 0px; top: 0px; background-color: #3E82F7; z-index: 7; }
     </style>
 
 </head>
 <body class="lj">
-    <section></section>
+    <section class="animation-BG"></section>
     <header></header>
 
 </body>
@@ -58,6 +60,7 @@
     var $  = function(obj){ return document.querySelector(obj)                    },
             $$   = function(obj )    { return document.querySelectorAll(obj)      },
             $n   = function(obj )    { return document.getElementsByClassName(obj)};
+
 
 
 </script>

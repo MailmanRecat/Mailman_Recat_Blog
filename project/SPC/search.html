@@ -2,34 +2,27 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Search</title>
+    <link href="../../css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
     <style>
-        @font-face {
-            font-family: roboto;
-            src:url('Roboto.woff2') format('woff2');
-        }
+        @font-face { font-family: roboto; src:url('Roboto.woff2') format('woff2'); }
 
-        *{ padding: 0px; margin: 0px; }
-        button, input, select{ outline: none; }
+        *{ padding: 0px; margin: 0px; font-family: "Helvetica Neue", Arial, sans-serif; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
         button{ cursor: pointer; }
+        input { -webkit-user-select: text; }
+        input, button, select{ outline: none; -webkit-tap-highlight-color: transparent; }
 
         body{ background-color: #ffffff; opacity: 1; z-index: 0; }
 
-        .icon-search{ position: relative; border-radius: 50%; -webkit-transform: rotate( -45deg ); background-color: transparent; }
-        .icon-search.small { width: 20px; height: 20px; border: solid 2px #0678C9; }
-        .icon-search.middle{ width: 57px; height: 57px; border: solid 2px #0678C9; }
-        .icon-search.big   { width: 77px; height: 77px; border: solid 3px #0678C9; }
-        .icon-search:before{ content: attr(BF); width: 12%; height: 77%; background-color: #0678C9; position: absolute; bottom: -77%; left: 50%; -webkit-transform: translateX(-50%); }
+        header{ position: fixed; width: 100%; left: 0px; top: 0px; background-color: #3C93F7; height: 57px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); z-index: 77; }
 
         .search, .keyboard{  -webkit-transition: all 0.4s; z-index: 1; }
 
-        .search      { position: relative; height: 42px; width: 80%; left: 50%; top: 177px; -webkit-transform: translateX(-50%); }
-        .search input{ position: relative; width: 96%; height: 100%; padding: 0% 2%; border: 2px #0678C9 solid; background-color: #ffffff; border-radius: 0px; color: #000000; font-size: 1.6em; }
-        .search.up   { top: 17px; }
+        .search      { position: relative; height: 37px; width: 80%; left: 50%; top: 10px; -webkit-transform: translateX(-50%); }
+        .search i    { position: absolute; left: 0px; font-size: 1.5em; width: 5%; text-align: center; top: 0px; line-height: 37px; z-index: 7; }
+        .search input{ position: relative; width: 95%; height: 100%; border: none; padding-left: 5%; background-color: #ffffff; border-radius: 2px; color: #000000; font-size: 1.6em; }
 
-        .search .icon-search{ position: absolute; right: 17px; top: 5px; z-index: 7; }
-
-        .res-box{ display: block; position: absolute; width: 80%; height: auto; max-height: 600px; margin-left: 10%; top: 59px; overflow: scroll; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+        .res-box{ display: block; position: absolute; width: 80%; height: auto; max-height: 400px; margin-left: 10%; top: 42px; padding-top: 5px; overflow: scroll; background-color: #ffffff; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); z-index: 67; }
         .res-box ul{ position: relative; height: auto; list-style: none; width: 100%; left: 0px; top:0px; cursor: pointer; }
         .res-box ul li{ height: 77px; line-height: 77px; width: 96%; padding: 0% 2%; }
         .res-box ul li:hover{ background-color: #EDEDED; }
@@ -53,46 +46,114 @@
         .keyboard .row:nth-child(5) button{ left: 2.5%; width: calc( 12.5% - 10px ); }
         .keyboard .row button.space { width: calc( 70% - 10px ); }
 
-        .card{ position: absolute; left: 50%; top: 100%; width: 47%; background-color: #ffffff; height: auto; -webkit-transform: translate3d(-50%, 0%, 0); -webkit-transition: all 0.4s; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
+        .card{ position: absolute; left: 50%; top: -100%; width: 80%; background-color: #ffffff; height: auto; -webkit-transform: translate3d(-50%, 0%, 0); -webkit-transition: all 0.4s; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.17); }
         .card.show{ top: 117px; }
-        .card .content{ position: relative; width: 100%; min-height: 200px; background-color: #0678C9; }
+        .card .content .mdi-close-circle{ position: absolute; right: 7px; top: 7px; color: #ffffff; cursor: pointer; }
+        .card .content{ position: relative; width: 100%; min-height: 200px; background-color: #3C93F7; }
         .card .content p{ width: 100%; line-height: 200px; color: #ffffff; text-align: center; }
 
-        .card button.view-page{ font-size: 1.2em; position: relative; margin: 27px auto; left: 50%; -webkit-transform: translateX(-50%); border: none; background-color: #0678C9; color: #ffffff; border-radius: 2px; width: auto; padding: 5px 17px; }
+        .card button.view-page{ font-size: 1.2em; position: relative; margin: 27px auto; left: 50%; -webkit-transform: translateX(-50%); border: none; background-color: #3C93F7; color: #ffffff; border-radius: 2px; width: auto; padding: 5px 17px; }
+
+        .weather-card{ position: relative; margin: 77px auto; width: 80%; height: auto; background-color: white; border: 1px solid #d8d8d8; border-radius: 3px; -webkit-box-shadow:0 1px 4px rgba(0,0,0,.0); padding-bottom: 29px; cursor: pointer; overflow: hidden; }
+        .weather-bar { position: relative; width: 90%; padding: 0px 5%; height: 57px; background: -webkit-linear-gradient(left, #552BD2, #652D98); color: #f5f5f5; line-height: 57px; z-index: 17; }
+        .weather-bar .city-btn{ position: absolute; right: 5%; height: 100%; border: none; background-color: transparent; color: white; font-size: 1.2em; }
+
+        .weather-local-search{ position: absolute; bottom: 100%; width: 100%; height: calc( 100% - 57px ); background-color: #000000; overflow-x: hidden; overflow-y: scroll; opacity: 0.8; z-index: 7; -webkit-transition: all 0.37s; }
+        .weather-local-search.show{ -webkit-transform: translateY(calc(100% + 57px)); }
+        .weather-local-search input{ position: relative; width: 88%; height: 27px; padding: 0px 1%; margin: 7px 5%; border-radius: 3px; background-color: #ffffff; border: none; }
+        .weather-local-search .l-s-r{ width: 100%; list-style: none; padding-bottom: 37px; }
+        .weather-local-search .l-s-r li{ width: 88%; padding: 0px 1%; margin: 0px 5%; line-height: 37px; height: 37px; border-bottom: 1px solid #ffffff; color: #ffffff; }
+
+        .weather-local{ text-align: right; padding: 7px 5%; font-size: 1.2em; }
+
+        .weather-link{ position: absolute; right: 0px; padding: 0% 5%; }
+
+        .weather-content{ position: relative; width: 100%; height: auto; text-align: center; font-size: 1.2em; }
+        .weather-content tr{ height: 37px; }
+
+        .mdi-map-marker   { color: #552BD2; }
+        .mdi-weather-sunny{ color: #FFE25D; }
+        .high-temp td:first-child{ color: #FF7E00; }
+        .low-temp         { color: #676767; }
     </style>
 </head>
-<body>
+<body class="lj">
 
-<div class="search up"><input type="text" placeholder="search"><div class="icon-search small"></div></div>
+    <header>
+        <div class="search"><i class="mdi mdi-magnify"></i><input type="text" placeholder="search"><div class="icon-search small"></div></div>
+    </header>
+    <div class="res-box">
+        <ul></ul>
+    </div>
 
-<div class="res-box">
-    <ul>
+    <div class="weather-card">
+        <div class="weather-bar"><label id="description"></label><button class="city-btn">City<i class="mdi mdi-chevron-down chevron"></i></button></div>
 
-    </ul>
-</div>
+        <div class="weather-local-search">
+            <input type="text" placeholder="type your location here">
+            <ul class="l-s-r">
 
-<div class="card">
-    <div class="content"><p>UISegmentedControler</p></div>
-    <button class="view-page">view page</button>
-</div>
+            </ul>
+        </div>
 
-<div class="keyboard">
-    <div class="row">
-        <button data-value="@">@</button><button data-value="0">0</button><button data-value="1">1</button><button data-value="2">2</button><button data-value="3">3</button><button data-value="4">4</button><button data-value="5">5</button><button data-value="6">6</button><button data-value="7">7</button><button data-value="8">8</button><button data-value="9">9</button>
+        <p class="weather-local"><i class="mdi mdi-map-marker"></i><label id="current-city"></label></p>
+        <table class="weather-content">
+            <tr id="day">
+                <td>FRI</td>
+                <td>SAT</td>
+                <td>SUN</td>
+                <td>MON</td>
+                <td>TUE</td>
+            </tr>
+            <tr id="icon">
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+                <td><i class="mdi mdi-weather-sunny"></i></td>
+            </tr>
+            <tr id="high-temp" class="high-temp">
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+            </tr>
+            <tr id="low-temp" class="low-temp">
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+                <td><label>0</label><i class="mdi mdi-temperature-celsius"></i></td>
+            </tr>
+        </table>
+
+        <a class="weather-link" href="https://www.yahoo.com/?ilc=401" target="_blank"><img src="https://poweredby.yahoo.com/purple_retina.png" width="134" height="29"/></a>
     </div>
-    <div class="row">
-        <button data-value="q">q</button><button data-value="w">w</button><button data-value="e">e</button><button data-value="r">r</button><button data-value="t">t</button><button data-value="y">y</button><button data-value="u">u</button><button data-value="i">i</button><button data-value="o">o</button><button data-value="p">p</button><button data-value="delete">delete</button>
+
+
+    <div class="card">
+        <div class="content"><i class="mdi mdi-close-circle"></i><p class="data-title">UISegmentedControler</p></div>
+        <button class="view-page">view page</button>
     </div>
-    <div class="row">
-        <button data-value="a">a</button><button data-value="s">s</button><button data-value="d">d</button><button data-value="f">f</button><button data-value="g">g</button><button data-value="h">h</button><button data-value="j">j</button><button data-value="k">k</button><button data-value="l">l</button><button data-value="return">return</button>
+
+    <div class="keyboard">
+        <div class="row">
+            <button data-value="@">@</button><button data-value="0">0</button><button data-value="1">1</button><button data-value="2">2</button><button data-value="3">3</button><button data-value="4">4</button><button data-value="5">5</button><button data-value="6">6</button><button data-value="7">7</button><button data-value="8">8</button><button data-value="9">9</button>
+        </div>
+        <div class="row">
+            <button data-value="q">q</button><button data-value="w">w</button><button data-value="e">e</button><button data-value="r">r</button><button data-value="t">t</button><button data-value="y">y</button><button data-value="u">u</button><button data-value="i">i</button><button data-value="o">o</button><button data-value="p">p</button><button data-value="delete">delete</button>
+        </div>
+        <div class="row">
+            <button data-value="a">a</button><button data-value="s">s</button><button data-value="d">d</button><button data-value="f">f</button><button data-value="g">g</button><button data-value="h">h</button><button data-value="j">j</button><button data-value="k">k</button><button data-value="l">l</button><button data-value="return">return</button>
+        </div>
+        <div class="row">
+            <button data-value="lock">lock</button><button data-value=",">,</button><button data-value="z">z</button><button data-value="x">x</button><button data-value="c">c</button><button data-value="v">v</button><button data-value="b">b</button><button data-value="n">n</button><button data-value="m">m</button><button data-value=".">.</button><button data-value="?">?</button>
+        </div>
+        <div class="row">
+            <button data-value="number" class="number">123</button><button data-value="space" class="space">space</button><button data-value="hide" class="hide">hide</button>
+        </div>
     </div>
-    <div class="row">
-        <button data-value="lock">lock</button><button data-value=",">,</button><button data-value="z">z</button><button data-value="x">x</button><button data-value="c">c</button><button data-value="v">v</button><button data-value="b">b</button><button data-value="n">n</button><button data-value="m">m</button><button data-value=".">.</button><button data-value="?">?</button>
-    </div>
-    <div class="row">
-        <button data-value="number" class="number">123</button><button data-value="space" class="space">space</button><button data-value="hide" class="hide">hide</button>
-    </div>
-</div>
 
 </body>
 <script>
@@ -142,6 +203,15 @@
         }
     });
 
+    var RC = {
+        el: $('.card'),
+        title: $('.card .data-title'),
+        currentLink: './pages/web/UISegmentedControl.html',
+        setCurrentLink: function(link){ var self = RC; self.currentLink = link; return self },
+        setTitle: function(title){ var self = RC; self.title.innerText = title; return self },
+        show    : function(     ){ var self = RC; self.el.classList.add('show'); return self },
+        hide    : function(     ){ var self = RC; self.el.classList.remove('show'); return self }
+    };
 
     var SearchE = function(elStr, resElStr, delegate, options){
         var self = this;
@@ -179,11 +249,11 @@
             var self = this;
 
             self.el.onfocus = function(){
-                if( self.DOFn.DidFocus === 'function' ) self.DOFn.DidFocus();
+                if( typeof self.DOFn.DidFocus === 'function' ) self.DOFn.DidFocus();
                 self.activate = true;
             };
             self.el.onblur  = function(){
-                if( self.DOFn.DidBlur === 'function' ) self.DOFn.DidBlur();
+                if( typeof self.DOFn.DidBlur === 'function' ) self.DOFn.DidBlur();
                 self.activate = false;
             };
             self.el.oninput = function(){
@@ -244,7 +314,7 @@
                 html += '<li data-label="' + keys[key] + '">' + keys[key] + '</li>';
             }
             if( keys.length === 0 ){
-                html = '<li>NO RESULT</li>';
+                html = '<li data-label="'+ self.searchV +'">' + self.searchV + '</li>';
             }
             self.resEl.innerHTML = html;
             [].slice.call( document.querySelectorAll( self.resElStr + ' li' )).forEach(function(el, i){
@@ -287,44 +357,397 @@
         'UISegmentedControl by javascript',
         'UINavigationControl by javascript',
         'exclamation icon by css',
-        'search icon by css'
+        'search icon by css',
+        'UIAlertView by javascript',
+        'MDInput',
+        'MDPlayNewsHeader by web',
+        'MSToggle',
+        'UIActionSheet by javascript',
+        'UICloseTag by javascript',
+        'snake game'
     ];
 
-    var deleg = {
+    var link = {
+        'UISegmentedControl by javascript': './pages/web/UISegmentedControl.html',
+        'UINavigationControl by javascript': './pages/web/UINavigationControl.html',
+        'exclamation icon by css': './pages/css/icon-exclamation.html',
+        'search icon by css': './pages/css/icon-search.html',
+        'UIAlertView by javascript': './pages/web/UIAlertView.html',
+        'MDInput': './pages/web/MDInput.html',
+        'MDPlayNewsHeader by web': './pages/web/MDPlayNewsHeader.html',
+        'MSToggle': './pages/web/MSToggle.html',
+        'UIActionSheet by javascript': './pages/web/UIActionSheet.html',
+        'UICloseTag by javascript': './pages/web/UICloseTag.html',
+        'snake game': './pages/game/snake.html'
+    };
+
+    var WeatherCard = $('.weather-card');
+
+    $('.card .content .mdi-close-circle').onclick = function(){ RC.hide(); WeatherCard.style.display = 'block' };
+
+    $('.card .view-page').onclick = function(){
+        location.href = RC.currentLink;
+    };
+
+    var MDE = {
         require: {
             DidSelect: function(el){
-                console.log(el);
-//                alert(el.getAttribute('data-label'));
+                $('.res-box ul').innerHTML = '';
+                console.log( link[el] );
+                RC.setCurrentLink( link[el] ).setTitle(el).show();
             }
         },
         option: {
             DidFocus: function(){
-                console.log('DF');
+                WeatherCard.style.display = 'none';
             },
             DidBlur : function(){
-                console.log('DB');
+                if( o.searchV === '' ) WeatherCard.style.display = 'block';
             }
         }
     };
 
-    var o = new SearchE('.search input', '.res-box ul', deleg, {});
+    var o = new SearchE('.search input', '.res-box ul', MDE, {});
     for( var i = 0, len = keys.length; i<len; i++ ){
         o.addKeyWords( keys[i] );
     }
 
+    (function(window){
+
+        var apost = function(data, url, code){
+
+            var data = data || null;
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return { ER: 'Can not get xmlHttp obj' };
+
+            xmlHttp.open("POST", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+            xmlHttp.send(data);
+        };
+
+        var aget = function(url, code){
+
+            var xmlHttp = getxml();
+            if(!xmlHttp) return false;
+
+            xmlHttp.open("GET", url, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xmlHttp.onreadystatechange = function(){
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    if(code != null && typeof code === 'function' ) code(xmlHttp.responseText);
+                    else                                            return { ER: 'require fn code can not find!' };
+                }
+            };
+
+            xmlHttp.send();
+        };
+
+        var getxml = function() {
+            try{ xh = new XMLHttpRequest(); }
+            catch (e){
+                try{ xh = new ActiveXObject("Msxml2.XMLHTTP"); }
+                catch (e){ xh = new ActiveXObject("Microsoft.XMLHTTP"); }
+            }
+            return xh;
+        };
+
+        var ajax = { apost: apost, aget: aget };
+
+        if ( typeof define === 'function' && define.amd ) {
+            define( ajax );
+        } else {
+            window.ajax = ajax;
+        }
+
+    })(window);
+
+    var weatherCode = {
+        0 : 'weather-windy',
+        1 : 'weather-windy',
+        2 : 'weather-windy',
+        3 : 'weather-lightning',
+        4 : 'weather-lightning',
+        5 : 'weather-snowy',
+        6 : 'weather-pouring',
+        7 : 'weather-pouring',
+        8 : 'weather-windy-variant',
+        9 : 'weather-windy-variant',
+        10: 'weather-pouring',
+        11: 'weather-partlycloudy',
+        12: 'weather-partlycloudy',
+        13: 'weather-snowy',
+        14: 'weather-snowy',
+        15: 'weather-hail',
+        16: 'weather-snowy',
+        17: 'weather-hail',
+        18: 'weather-hail',
+        19: 'weather-hail',
+        20: 'weather-hail',
+        21: 'weather-cloudy',
+        22: 'weather-cloudy',
+        23: 'weather-cloudy',
+        24: 'weather-windy-variant',
+        25: 'weather-cloudy',
+        26: 'weather-cloudy',
+        27: 'weather-night',
+        28: 'weather-partlycloudy',
+        29: 'weather-night',
+        30: 'weather-partlycloudy',
+        31: 'weather-night',
+        32: 'weather-sunny',
+        33: 'weather-night',
+        34: 'weather-cloudy',
+        35: 'weather-pouring',
+        36: 'weather-sunny',
+        37: 'weather-lightning',
+        38: 'weather-lightning',
+        39: 'weather-lightning',
+        40: 'weather-snowy',
+        41: 'weather-snowy',
+        42: 'weather-snowy',
+        43: 'weather-snowy',
+        44: 'weather-snowy',
+        45: 'weather-lightning',
+        46: 'weather-lightning',
+        47: 'weather-partlycloudy',
+        3200: 'weather-cloudy'
+    };
+
+
+    var card = {
+        el: {
+            description: $('#description'),
+            currentCity: $('#current-city'),
+            day: $$('#day td'),
+            icon: $$('#icon td'),
+            highTemp: $$('#high-temp td'),
+            lowTemp: $$('#low-temp td')
+        },
+        getIconWithCode: function(code){
+            return weatherCode[code];
+        },
+        initDescription: function(Des){
+            var self = card;
+            self.el.description.innerText = Des;
+        },
+        initCurrentCity: function(name){
+            var self = card;
+            self.el.currentCity.innerText = name;
+        },
+        initDay: function(days){
+            var self = card, i = 0, len = self.el.day.length;
+
+            for( ; i<len; i++){
+                self.el.day[i].innerText = days[i];
+            }
+
+        },
+        initIcon: function(codes){
+            var self = card, i = 0, len = self.el.icon.length, prefix = 'mdi-', icon = '';
+
+            for( ; i<len; i++ ){
+                icon = prefix + self.getIconWithCode(codes[i]);
+                self.el.icon[i].innerHTML = '<i class="mdi ' + icon + '"></i>';
+            }
+        },
+        initHighTemp: function(HighTemp){
+            var self = card, i = 0, len = self.el.highTemp.length;
+
+            for( ; i<len; i++){
+                self.el.highTemp[i].innerHTML = '<label>'+HighTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
+            }
+        },
+        initLowTemp: function(LowTemp){
+            var self = card, i = 0, len = self.el.lowTemp.length;
+
+            for( ; i<len; i++ ){
+                self.el.lowTemp[i].innerHTML  = '<label>'+LowTemp[i]+'</label><i class="mdi mdi-temperature-celsius"></i>';
+            }
+        }
+    };
+
+    var yweather = function(location, delegate, options){
+        var self = this;
+
+        self.location  = location || 'NewYork';
+        self.delegate   = delegate;
+        self.DRFn       = self.delegate.require;
+        self.DOFn       = self.delegate.option;
+        self.weather    = {};
+
+        self.options    = {
+            unit:       'f'
+        };
+
+        for(var key in options){
+
+        }
+
+        if( typeof self.DRFn.DidGetWeatherData !== 'function' ) return { ER: 'can not find require fn DidGetWeatherData!' };
+        if( typeof self.DRFn.ERCity !== 'function'            ) return { ER: 'can not find that city'         };
+
+        self.init();
+    };
+    yweather.prototype = {
+        init: function(){
+            var self = this;
+
+            self.url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+self.location+'%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys';
+
+            ajax.aget(self.url, function( res ){
+                var data = JSON.parse(res);
+
+                if(data.query.count === 0) self.DRFn.ERCity();
+                if(data.query.count === 0) return;
+
+                self.weather.created     = data.query.created;
+                self.weather.lang        = data.query.lang;
+                self.weather.description = data.query.results.channel.description;
+                self.weather.city        = data.query.results.channel.location.city;
+                self.weather.country     = data.query.results.channel.location.country;
+                self.weather.region      = data.query.results.channel.region;
+                self.weather.sunrise     = data.query.results.channel.astronomy.sunrise;
+                self.weather.sunset      = data.query.results.channel.astronomy.sunset;
+
+                var isF    = (function(data){
+                    if( data.query.results.channel.units.temperature.toUpperCase() === 'F' ) return true;
+                    else   return false;
+                })(data);
+
+                (function(weather, data){
+                    weather.codes = [],
+                            weather.date = [],
+                            weather.day  = [],
+                            weather.high = [],
+                            weather.low  = [],
+                            weather.text = [];
+
+                    var     fc = data.query.results.channel.item.forecast,
+                            obj;
+
+                    for( var i in fc ){
+                        obj = fc[i];
+
+                        if( isF ){
+                            obj.high = parseInt( (obj.high - 32) / 1.8 );
+                            obj.low  = parseInt( (obj.low  - 32) / 1.8 );
+                        }
+
+                        weather.codes.push( obj.code );
+                        weather.date.push( obj.date );
+                        weather.day.push( obj.day );
+                        weather.high.push( obj.high );
+                        weather.low.push( obj.low );
+                        weather.text.push( obj.text );
+                    }
+
+                })(self.weather, data);
+
+                self.DRFn.DidGetWeatherData( self.weather );
+            });
+        },
+        localChange: function(location){
+            var self = this;
+            self.location = location;
+            self.init();
+        }
+    };
+
+    var dele = {
+        require: {
+            DidGetWeatherData: function(weather){
+                console.log('delegate');
+                card.initDescription(weather.description);
+                card.initCurrentCity(weather.city);
+                card.initDay(weather.day);
+                card.initIcon(weather.codes);
+                card.initHighTemp(weather.high);
+                card.initLowTemp(weather.low);
+            },
+            ERCity: function(){
+                console.log('city lost');
+            }
+        }
+    };
+
+    var yw = new yweather('jinan', dele);
+
+    var chEl = $('.chevron').classList;
+    var toggleChevron = function(){
+        if( chEl.contains('mdi-chevron-down') ){
+            chEl.remove('mdi-chevron-down');
+            chEl.add('mdi-chevron-up');
+        }else{
+            chEl.add('mdi-chevron-down');
+            chEl.remove('mdi-chevron-up');
+        }
+    };
+
+    $('.city-btn').onclick = function(){
+        toggleChevron();
+        $('.weather-local-search').classList.toggle('show');
+    };
+
+
+    var CityKeys = [
+        'guigang',
+        'beijing',
+        'guilin',
+        'shandong'
+    ];
+
+    var YDE = {
+        require: {
+            DidSelect: function(el){
+                var name = el;
+                console.log(name);
+                yw.localChange(name);
+                toggleChevron();
+                $('.weather-local-search').classList.toggle('show');
+            }
+        },
+        option: {
+            DidFocus: function(){
+                console.log('YSDF');
+            },
+            DidBlur : function(){
+                console.log('YSDB');
+            }
+        }
+    };
+
+    var y = new SearchE('.weather-local-search input', '.l-s-r', YDE, { onSelectBackgroundColor: '#B1B1B1', noSelectBackgroundColor: 'transparent' });
+
+    for( var i = 0, len = CityKeys.length; i<len; i++ ){
+        y.addKeyWords( CityKeys[i] );
+    };
+
+    var KEYCODE = {
+        up  : 38,
+        down: 40,
+        confirm: 13
+    };
+
     document.onkeydown = function(e){
-        if( e.keyCode === 38 ){
-            if( o.activate === true ){
-                o.up();
-            }
-        }else if( e.keyCode === 40 ){
-            if( o.activate === true ){
-                o.down();
-            }
-        }else if( e.keyCode === 13 ){
-            if( o.activate === true ){
-                o.didSelect();
-            }
+
+        if( e.keyCode === KEYCODE.up ){
+            if( y.activate === true ) y.up();
+            if( o.activate === true ) o.up();
+        }else if( e.keyCode === KEYCODE.down ){
+            if( y.activate === true ) y.down();
+            if( o.activate === true ) o.down();
+        }else if( e.keyCode === KEYCODE.confirm ){
+            if( y.activate === true ) y.didSelect();
+            if( o.activate === true ) o.didSelect();
         }
     };
 
